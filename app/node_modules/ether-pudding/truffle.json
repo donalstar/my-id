@@ -1,0 +1,11 @@
+{
+  "build": "webpack",
+  "deploy": [
+    "Example",
+    "TestWithConstructor"
+  ],
+  "rpc": {
+    "host": "localhost",
+    "port": 8545
+  }
+}

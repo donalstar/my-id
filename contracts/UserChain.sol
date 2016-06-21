@@ -27,7 +27,7 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         dl = dl_address;
     }
 
-	function buyTicket() public {
+	function buyTick() public {
 		if (numRegistrants >= quota) { 
 			throw; // throw ensures funds will be returned
 		}
@@ -55,7 +55,7 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		return;
 	}
 
-    function getSSN() public returns (uint ssn) {
+    function getSSN(address addr) public returns (uint ssn) {
         return ssn;
     }
 
@@ -66,6 +66,11 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     function getBalance() public returns (uint balance) {
         return balance;
     }
+
+    function getValu(address addr) returns(uint) {
+    	return balance;
+  	}
+
 
 	function destroy() {
 		if (msg.sender == organizer) { // without this funds could be locked in the contract forever!
