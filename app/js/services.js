@@ -24,4 +24,15 @@ var services = angular.module('todoService', [])
 		}
 	}]);
 
+	services.factory('Value', ['$http',function($http) {
+		return {
+			get : function(id) {
+				return $http.get('/api/value/' + id);
+			},
+			update : function(value) {
+				return $http.post('/api/value', value);
+			},
+		}
+	}]);
+
 

@@ -8,6 +8,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     uint public balance;
     address public dl;
 
+    uint public value;
+
 	event Deposit(address _from, uint _amount); // so you can log the event
 	event Refund(address _to, uint _amount); // so you can log the event
 
@@ -17,6 +19,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		numRegistrants = 0;
 		ssn = 0;
 		balance = 800;
+
+		value = 10;
 	}
 
     function setSSN(uint newssn) public {
@@ -26,6 +30,15 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     function setDL(address dl_address) public {
         dl = dl_address;
     }
+
+    function setValue(uint new_value) public {
+        value = new_value;
+    }
+
+    function getValue() returns(uint) {
+    	return value;
+  	}
+
 
 	function buyTick() public {
 		if (numRegistrants >= quota) { 
