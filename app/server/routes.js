@@ -1,6 +1,9 @@
 var Web3 = require('web3');
 var Pudding = require("ether-pudding");
 var UserChain = require("../contracts/UserChain.sol.js");
+var ipfsAPI = require('ipfs-api')
+
+var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'})
 
 var web3 = new Web3();
 
@@ -30,6 +33,46 @@ module.exports = function (app) {
 
             userChain.setValue(req.body.text, {from: accs[0]}).then(function(value) {
                 console.log("update succeeded");
+
+
+                        // test -- add data to IPFS
+
+
+
+                const f1 = 'Hello'
+                const f2 = 'World'
+
+                ipfs.files.add([new Buffer(f1), new Buffer(f2)], function (err, res) {
+                  if (err || !res) return console.log(err)
+
+                  for (let i = 0; i < res.length; i++) {
+                    console.log(res[i])
+
+                    console.log("file: " + res[i].path);
+
+
+                    ipfs.object.get([res[i].path])
+                        .then(function (result) {
+                        console.log('READ FILE ' + i + ': ', result.data);
+
+
+                        if (i == 0) {
+                            userChain.setLocation(res[i].path, {from: accs[0]}).then(function(value) {
+                                console.log("Set location addr - " + res[i].path + " : " + value);
+                            }).catch(function(e) {
+                              console.log("ERR " + e);
+                            });
+                        }
+                      })
+                      .catch(function(err) {
+                        console.log('Fail: ', err)
+                      })
+                  }
+
+                })
+
+
+
             }).catch(function(e) {
               console.log("ERR " + e);
             });
@@ -66,7 +109,30 @@ module.exports = function (app) {
           return;
         }
 
+
+
         userChain.getValue.call({from: accs[0]}).then(function(value) {
+                // test -- get location
+                userChain.getLocation.call({from: accs[0]}).then(function(value) {
+                  console.log("GOT VALUE " + value);
+
+
+
+                    ipfs.object.get([value])
+                        .then(function (result) {
+                        console.log('FROM IPFS --- '  + result.data );
+
+
+                      })
+                      .catch(function(err) {
+                        console.log('Fail: ', err)
+                      })
+
+
+                }).catch(function(e) {
+                  console.log("GET LOC ERR " + e);
+                });
+
           res.send(JSON.stringify({ value: value }));
 
         }).catch(function(e) {

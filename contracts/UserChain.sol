@@ -8,6 +8,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     uint public balance;
     address public dl;
 
+    string public location;
+
     uint public value;
 
 	event Deposit(address _from, uint _amount); // so you can log the event
@@ -39,6 +41,13 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     	return value;
   	}
 
+    function setLocation(string loc_address) {
+        location = loc_address;
+    }
+
+    function getLocation() returns(string) {
+        return location;
+    }
 
 	function buyTick() public {
 		if (numRegistrants >= quota) { 
