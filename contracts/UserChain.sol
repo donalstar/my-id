@@ -4,7 +4,7 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 	mapping (address => uint) public registrantsPaid;
 	uint public numRegistrants;
 	uint public quota;
-    uint public ssn;
+    string public ssn_address;
     uint public balance;
     address public dl;
 
@@ -19,14 +19,21 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		organizer = msg.sender;		
 		quota = 100;
 		numRegistrants = 0;
-		ssn = 0;
 		balance = 800;
 
 		value = 10;
+
+        ssn_address = "0";
 	}
 
-    function setSSN(uint newssn) public {
-        ssn = newssn;
+    // SSN
+
+    function setSSN(string location) public {
+       ssn_address = location;
+    }
+
+    function getSSN() public returns (string) {
+        return ssn_address;
     }
 
     function setDL(address dl_address) public {
@@ -77,9 +84,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		return;
 	}
 
-    function getSSN(address addr) public returns (uint ssn) {
-        return ssn;
-    }
 
     function getDL() returns (address dl) {
         return dl;
@@ -88,11 +92,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     function getBalance() public returns (uint balance) {
         return balance;
     }
-
-    function getValu(address addr) returns(uint) {
-    	return balance;
-  	}
-
 
 	function destroy() {
 		if (msg.sender == organizer) { // without this funds could be locked in the contract forever!

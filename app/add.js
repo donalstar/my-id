@@ -1,34 +1,48 @@
-
 'use strict'
 
-const ipfs = require('ipfs-api')('localhost', 5001)
+var Web3 = require('web3');
+var Pudding = require("ether-pudding");
+var UserChain = require("./contracts/UserChain.sol.js");
+var ipfsAPI = require('ipfs-api');
 
-const f1 = 'Hello'
-const f2 = 'World'
+var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'});
 
-//ipfs.files.add()
-//
-//  .then(function (id) {
-//    console.log('my id is: ', id)
-//  })
-//  .catch(function(err) {
-//    console.log('Fail: ', err)
-//  })
+var web3 = new Web3();
 
-ipfs.files.add([new Buffer(f1), new Buffer(f2)], function (err, res) {
-  if (err || !res) return console.log(err)
+var provider = new web3.providers.HttpProvider();
 
-    console.log("HASH " + res[0].path);
+web3.setProvider(provider);
 
-  for (let i = 0; i < res.length; i++) {
-    console.log(res[i])
-  }
-})
+Pudding.setWeb3(web3);
 
-//ipfs.add(['./files/hello.txt', './files/ipfs.txt'], function (err, res) {
-//  if (err || !res) return console.log(err)
-//
-//  for (let i = 0; i < res.length; i++) {
-//    console.log(res[i])
-//  }
-//})
+UserChain.load(Pudding);
+
+
+var userChain = UserChain.deployed();
+
+web3.eth.getAccounts(function (err, accs) {
+
+    userChain.getSSN.call({from: accs[0]}).then(function (value) {
+        //  console.log("SSN location " + value);
+
+        console.log("value " + value);
+
+        if (value && value != 0) {
+            ipfs.object.get([value])
+                .then(function (result) {
+                    console.log('FROM IPFS --- ' + result.data);
+
+                    res.send(JSON.stringify({value: result.data}));
+                })
+                .catch(function (err) {
+                    console.log('getSSN Fail: ', err)
+                })
+
+        }
+        else {
+            console.log("value not set");
+        }
+
+    });
+});
+

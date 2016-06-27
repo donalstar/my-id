@@ -1,46 +1,44 @@
-application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Value', 'SNAP_VERSION', 'snapRemote',
-    function($scope, $rootScope, SSN, Value, SNAP_VERSION, snapRemote ) {
+application.controller('controller', ['$scope', '$rootScope', 'SSN', 'SNAP_VERSION', 'snapRemote',
+    function ($scope, $rootScope, SSN, SNAP_VERSION, snapRemote) {
 
-    $scope.formData = {};
+        $scope.formData = {};
+        
+        SSN.get(1)
+            .success(function (data) {
+                $scope.ssn = data.value;
 
+                console.log("SSN " + $scope.ssn);
 
-    SSN.get(1)
-    	.success(function(data) {
-		$scope.ssn = data.a;
+                $scope.formData.text = data.value;
+            });
 
-		console.log("SSN " + $scope.ssn);
-	});
+        $scope.snapVersion = SNAP_VERSION.full;
 
-    Value.get(1)
-    	.success(function(data) {
-		$scope.value = data.value;
+        snapRemote.getSnapper().then(function (snapper) {
+            snapper.open('left');
+        });
 
-		$scope.formData.text = data.value;
-	});
+        $scope.updateValue = function () {
 
-    $scope.snapVersion = SNAP_VERSION.full;
+            // validate the formData to make sure that something is there
+            // if form is empty, nothing will happen
+            if ($scope.formData != undefined) {
+                $scope.loading = true;
 
-    snapRemote.getSnapper().then(function(snapper) {
-        snapper.open('left');
-    });
+                console.log("Updating... ");
 
-	$scope.updateValue = function() {
+                // call the create function from our service (returns a promise object)
+                SSN.update($scope.formData)
 
-		// validate the formData to make sure that something is there
-		// if form is empty, nothing will happen
-		if ($scope.formData != undefined) {
-			$scope.loading = true;
+                // if successful creation, call our get function to get all the new todos
+                    .success(function (data) {
+                        console.log("Updating... success");
 
-			// call the create function from our service (returns a promise object)
-			Value.update($scope.formData)
+                        $scope.loading = false;
 
-				// if successful creation, call our get function to get all the new todos
-				.success(function(data) {
-					$scope.loading = false;
-					$scope.formData = {}; // clear the form so our user is ready to enter another
-					$scope.todos = data; // assign our new list of todos
-				});
-		}
-	};
-}]);
+                        $scope.ssn = $scope.formData.text;
+                    });
+            }
+        };
+    }]);
 

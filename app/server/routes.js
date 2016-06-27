@@ -19,72 +19,33 @@ var userChain = UserChain.deployed();
 
 module.exports = function (app) {
 
-    app.get('/api/value/:id', function (req, res) {
+    app.post('/api/ssn', function (req, response) {
 
-        web3.eth.getAccounts(function(err, accs) {
-            getValue(err, accs, res);
-        });
+        web3.eth.getAccounts(function (err, accs) {
 
-    });
+            var updatedValue = req.body.text;
 
-    app.post('/api/value', function (req, res) {
+            console.log("SET VALUE " + updatedValue);
 
-        web3.eth.getAccounts(function(err, accs) {
-
-            userChain.setValue(req.body.text, {from: accs[0]}).then(function(value) {
+            userChain.setValue(updatedValue, {from: accs[0]}).then(function (value) {
                 console.log("update succeeded");
 
+                response.send({result: "success"});
 
-                        // test -- add data to IPFS
-
-
-
-                const f1 = 'Hello'
-                const f2 = 'World'
-
-                ipfs.files.add([new Buffer(f1), new Buffer(f2)], function (err, res) {
-                  if (err || !res) return console.log(err)
-
-                  for (let i = 0; i < res.length; i++) {
-                    console.log(res[i])
-
-                    console.log("file: " + res[i].path);
+                addSSN(updatedValue, accs);
 
 
-                    ipfs.object.get([res[i].path])
-                        .then(function (result) {
-                        console.log('READ FILE ' + i + ': ', result.data);
-
-
-                        if (i == 0) {
-                            userChain.setLocation(res[i].path, {from: accs[0]}).then(function(value) {
-                                console.log("Set location addr - " + res[i].path + " : " + value);
-                            }).catch(function(e) {
-                              console.log("ERR " + e);
-                            });
-                        }
-                      })
-                      .catch(function(err) {
-                        console.log('Fail: ', err)
-                      })
-                  }
-
-                })
-
-
-
-            }).catch(function(e) {
-              console.log("ERR " + e);
+            }).catch(function (e) {
+                console.log("ERR " + e);
             });
         });
-
-
-
     });
 
     app.get('/api/ssn/:id', function (req, res) {
 
-        web3.eth.getAccounts(function(err, accs) {
+        console.log("Get ssn");
+
+        web3.eth.getAccounts(function (err, accs) {
             getSSN(err, accs, res);
         });
 
@@ -93,75 +54,86 @@ module.exports = function (app) {
 
     // application -------------------------------------------------------------
     app.get('*', function (req, res) {
-    console.log("send to " + __dirname + '/public/index.html');
+        console.log("send to " + __dirname + '/public/index.html');
         res.sendFile(__dirname + '/public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
     });
 
+    function addSSN(value, accs) {
 
-    function getValue(err, accs, res) {
-        if (err != null) {
-          console.log("There was an error fetching your accounts.");
-          return;
-        }
+        console.log("ADD SSN VALUE " + value);
 
-        if (accs.length == 0) {
-          console.log("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
-          return;
-        }
+        ipfs.files.add([new Buffer(value)], function (err, res) {
+            if (err || !res) return console.log(err);
 
+            for (let i = 0; i < res.length; i++) {
+                console.log(res[i]);
 
+                ipfs.object.get([res[i].path])
+                    .then(function (result) {
+                        console.log('READ FILE ' + i + ': ', result.data);
 
-        userChain.getValue.call({from: accs[0]}).then(function(value) {
-                // test -- get location
-                userChain.getLocation.call({from: accs[0]}).then(function(value) {
-                  console.log("GOT VALUE " + value);
-
-
-
-                    ipfs.object.get([value])
-                        .then(function (result) {
-                        console.log('FROM IPFS --- '  + result.data );
-
-
-                      })
-                      .catch(function(err) {
+                        if (i == 0) {
+                            userChain.setSSN(res[i].path, {from: accs[0]}).then(function (value) {
+                                console.log("Set location addr - " + res[i].path + " : " + value);
+                            }).catch(function (e) {
+                                console.log("ERR " + e);
+                            });
+                        }
+                    })
+                    .catch(function (err) {
                         console.log('Fail: ', err)
-                      })
+                    })
+            }
 
-
-                }).catch(function(e) {
-                  console.log("GET LOC ERR " + e);
-                });
-
-          res.send(JSON.stringify({ value: value }));
-
-        }).catch(function(e) {
-          console.log("ERR " + e);
-        });
+        })
     }
 
+
     function getSSN(err, accs, res) {
-        console.log("get SSN");
+        console.log("getSSN");
 
         if (err != null) {
-          console.log("There was an error fetching your accounts.");
-          return;
+            console.log("There was an error fetching your accounts.");
+            return;
         }
 
         if (accs.length == 0) {
-          console.log("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
-          return;
+            console.log("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+            return;
         }
 
-        console.log("accounts " + accs);
+        checkValues();
 
-        userChain.getValu.call(accs[0], {from: accs[0]}).then(function(value) {
-            console.log("User Chain bal " + value);
+        console.log("Owner " + userChain.organizer.call());
 
-            res.send(JSON.stringify({ a: value }));
+        userChain.getSSN.call({from: accs[0]}).then(function (value) {
 
-        }).catch(function(e) {
+            if (value && value != 0) {
+                ipfs.object.get([value])
+                    .then(function (result) {
+                        console.log('FROM IPFS --- ' + result.data);
+
+                        res.send(JSON.stringify({value: result.data}));
+                    })
+                    .catch(function (err) {
+                        console.log('getSSN Fail: ', err)
+                    })
+
+            }
+            else {
+                console.log("getSSN : SSN value not set");
+            }
+        }).catch(function (e) {
             console.log("ERR " + e);
         });
+
+
+    }
+
+    function checkValues() {
+        userChain.organizer.call().then(
+            function(organizer) {
+                console.log("Got organizer " + organizer);
+            });
     }
 };
