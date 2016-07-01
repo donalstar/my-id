@@ -106,6 +106,8 @@ module.exports = function (app) {
 
         console.log("Owner " + userChain.organizer.call());
 
+        console.log("Now get SSN");
+
         userChain.getSSN.call({from: accs[0]}).then(function (value) {
 
             if (value && value != 0) {

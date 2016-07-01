@@ -6,11 +6,12 @@ module.exports = {
     ]
   },
   deploy: [
-    "UserChain",
-    "ConvertLib"
+    "UserChain"
   ],
   rpc: {
     host: "localhost",
     port: 8545
   }
 };
+
+

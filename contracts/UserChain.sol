@@ -21,7 +21,7 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		numRegistrants = 0;
 		balance = 800;
 
-		value = 10;
+		value = 0;
 
         ssn_address = "0";
 	}
