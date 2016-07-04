@@ -1,7 +1,11 @@
-application.controller('controller', ['$scope', '$rootScope', 'SSN', 'SNAP_VERSION', 'snapRemote',
-    function ($scope, $rootScope, SSN, SNAP_VERSION, snapRemote) {
+application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account',  'SNAP_VERSION', 'snapRemote',
+    function ($scope, $rootScope, SSN, Account, SNAP_VERSION, snapRemote) {
+
+        $scope.loggedIn = false;
 
         $scope.formData = {};
+
+        $scope.accountFormData = {};
         
         SSN.get(1)
             .success(function (data) {
@@ -17,6 +21,23 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'SNAP_VERSI
         snapRemote.getSnapper().then(function (snapper) {
             snapper.open('left');
         });
+
+        $scope.logIn = function() {
+            console.log("Log in... ");
+
+            $scope.loggedIn = true;
+        };
+
+        $scope.createAccount = function() {
+            console.log("Create account... ");
+
+            Account.create($scope.accountFormData)
+                .success(function (data) {
+                    console.log("Updating... success --- using password " + $scope.accountFormData.text);
+
+                    console.log("Created new account! - " + data.value);
+                });
+        };
 
         $scope.updateValue = function () {
 

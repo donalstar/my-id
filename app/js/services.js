@@ -11,6 +11,13 @@ services.factory('SSN', ['$http', function ($http) {
     }
 }]);
 
+services.factory('Account', ['$http', function ($http) {
+    return {
 
+        create: function (value) {
+            return $http.post('/api/account', value);
+        }
+    }
+}]);
 
 

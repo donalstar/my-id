@@ -12,7 +12,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
     uint public value;
 
-	event Deposit(address _from, uint _amount); // so you can log the event
+	event GetSSN(string ssn_address);
+
 	event Refund(address _to, uint _amount); // so you can log the event
 
 	function UserChain() {
@@ -29,6 +30,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     // SSN
 
     function setSSN(string location) public {
+       GetSSN(ssn_address);
+
        ssn_address = location;
     }
 
@@ -62,7 +65,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		}
 		registrantsPaid[msg.sender] = msg.value;
 		numRegistrants++;
-		Deposit(msg.sender, msg.value);
 	}
 
 	function changeQuota(uint newquota) public {
