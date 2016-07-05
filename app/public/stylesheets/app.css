@@ -1,3 +1,9 @@
 .section {
 	margin: 20px;
 }
+
+.error {
+	color: #8a6d3b;
+	background-color: #fcf8e3;
+	border-color: #8a6d3b;
+}

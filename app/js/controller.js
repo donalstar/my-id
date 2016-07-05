@@ -1,4 +1,4 @@
-application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account',  'SNAP_VERSION', 'snapRemote',
+application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 'SNAP_VERSION', 'snapRemote',
     function ($scope, $rootScope, SSN, Account, SNAP_VERSION, snapRemote) {
 
         $scope.loggedIn = false;
@@ -6,7 +6,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
         $scope.formData = {};
 
         $scope.accountFormData = {};
-        
+
         SSN.get(1)
             .success(function (data) {
                 $scope.ssn = data.value;
@@ -22,13 +22,26 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
             snapper.open('left');
         });
 
-        $scope.logIn = function() {
-            console.log("Log in... ");
+        $scope.logIn = function () {
 
-            $scope.loggedIn = true;
+            Account.get($scope.accountFormData.key, $scope.accountFormData.password)
+                .success(function (data) {
+                    if (data.result == true) {
+                        console.log("Login successful " + data.result + " err " + data.error );
+                        $scope.loggedIn = true;
+                    }
+                    else {
+                        console.log("Login error " + data.error.message );
+                        $scope.loginFailed = true;
+                    }
+                })
+                .error(function (error) {
+                    console.log(":Error logging in " + error);
+                });
+
         };
 
-        $scope.createAccount = function() {
+        $scope.createAccount = function () {
             console.log("Create account... ");
 
             Account.create($scope.accountFormData)

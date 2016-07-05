@@ -79,9 +79,8 @@
                     <div class="panel panel-default" style="width:500px">
                         <div class="panel-heading">
                             <h4 class="panel-title">Main</h4>
-
-
                         </div>
+
                         <div class="panel-body">
                             <div class="well" style="margin: 0 auto 5px; text-align:right">
 
@@ -105,17 +104,36 @@
                             <div class="well" style="margin-bottom:10px;">
                                 <div class="form-group">
                                     <form name="form" ng-submit="logIn()">
-                                        <label class="col-sm-3 control-label">Key:</label>
+                                        <div class="row">
+                                            <label class="col-sm-3 control-label">Key:</label>
 
-                                        <div class="col-sm-6">
-                                            <input type="text" name="name" class="form-control input-sm"
-                                                   ng-model="key" placeholder="Value" tabindex="1"
-                                                   required/>
+                                            <div class="col-sm-6">
+                                                <input type="text" name="name" class="form-control input-sm"
+                                                       ng-model="accountFormData.key" placeholder="Key" tabindex="1"
+                                                       required/>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <label class="col-sm-3 control-label">Password:</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="name" class="form-control input-sm"
+                                                       ng-model="accountFormData.password" placeholder="Password"
+                                                       tabindex="1"
+                                                       required/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" ng-show="loginFailed">
+                                            <div ng-message="required">Login failed</div>
                                         </div>
 
                                         <button type="submit" class="btn btn-primary"
                                                 style="width:100px">Sign In
                                         </button>
+
                                     </form>
                                 </div>
                             </div>
