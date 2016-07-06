@@ -61,14 +61,14 @@ module.exports = function (app) {
     /**
      * Account
      */
-    app.get('/api/account/:key/:password', function (req, response) {
-        console.log("Get account " + req.params.key);
+    app.get('/api/account/:username/:password', function (req, response) {
+        console.log("Get account " + req.params.username);
         
-        account.getAccount(req.params.key, req.params.password, response);
+        account.getAccount(req.params.username, req.params.password, response);
     });
     
     app.post('/api/account', function (req, response) {
-       account.createAccount(req.body.text, response);
+       account.createAccount(req.body.username, req.body.password, response);
     });
 
     // application -------------------------------------------------------------
@@ -125,7 +125,7 @@ module.exports = function (app) {
 
         checkValues();
 
-        console.log("Owner " + userChain.organizer.call());
+        console.log("Owner " + userChain.owner.call());
 
         console.log("Now get SSN");
 
@@ -154,9 +154,9 @@ module.exports = function (app) {
     }
 
     function checkValues() {
-        userChain.organizer.call().then(
-            function (organizer) {
-                console.log("Got organizer " + organizer);
+        userChain.owner.call().then(
+            function (owner) {
+                console.log("Got owner " + owner);
             });
     }
 };

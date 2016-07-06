@@ -86,12 +86,28 @@
 
                                 <div class="form-group">
                                     <form name="form" ng-submit="createAccount()">
-                                        <label class="col-sm-3 control-label">Password:</label>
 
-                                        <div class="col-sm-6">
-                                            <input type="text" name="name" class="form-control input-sm"
-                                                   ng-model="accountFormData.text" placeholder="Password" tabindex="1"
-                                                   required/>
+                                        <div class="row">
+                                            <label class="col-sm-3 control-label">Username:</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="text" name="name" class="form-control input-sm"
+                                                       ng-model="accountFormData.username" placeholder="Key"
+                                                       tabindex="0"
+                                                       required/>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <label class="col-sm-3 control-label">Password:</label>
+
+                                            <div class="col-sm-6">
+                                                <input type="password" name="name" class="form-control input-sm"
+                                                       ng-model="accountFormData.password" placeholder="Password"
+                                                       tabindex="1"
+                                                       required/>
+                                            </div>
                                         </div>
 
                                         <button type="submit" class="btn btn-primary"
@@ -109,7 +125,8 @@
 
                                             <div class="col-sm-6">
                                                 <input type="text" name="name" class="form-control input-sm"
-                                                       ng-model="accountFormData.key" placeholder="Key" tabindex="1"
+                                                       ng-model="loginFormData.username" placeholder="Username"
+                                                       tabindex="1"
                                                        required/>
                                             </div>
                                         </div>
@@ -119,8 +136,8 @@
                                             <label class="col-sm-3 control-label">Password:</label>
 
                                             <div class="col-sm-6">
-                                                <input type="text" name="name" class="form-control input-sm"
-                                                       ng-model="accountFormData.password" placeholder="Password"
+                                                <input type="password" name="name" class="form-control input-sm"
+                                                       ng-model="loginFormData.password" placeholder="Password"
                                                        tabindex="1"
                                                        required/>
                                             </div>

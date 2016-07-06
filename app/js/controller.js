@@ -3,6 +3,8 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
         $scope.loggedIn = false;
 
+        $scope.loginFormData = {};
+        
         $scope.formData = {};
 
         $scope.accountFormData = {};
@@ -24,7 +26,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
         $scope.logIn = function () {
 
-            Account.get($scope.accountFormData.key, $scope.accountFormData.password)
+            Account.get($scope.loginFormData.username, $scope.loginFormData.password)
                 .success(function (data) {
                     if (data.result == true) {
                         console.log("Login successful " + data.result + " err " + data.error );
@@ -46,7 +48,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
             Account.create($scope.accountFormData)
                 .success(function (data) {
-                    console.log("Updating... success --- using password " + $scope.accountFormData.text);
+                    console.log("Updating... success --- using username " + $scope.accountFormData.username);
 
                     console.log("Created new account! - " + data.value);
                 });

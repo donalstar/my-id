@@ -13,8 +13,8 @@ services.factory('SSN', ['$http', function ($http) {
 
 services.factory('Account', ['$http', function ($http) {
     return {
-        get: function (key, password) {
-            return $http.get('/api/account/' + key + "/" + password);
+        get: function (username, password) {
+            return $http.get('/api/account/' + username + "/" + password);
         },
         create: function (value) {
             return $http.post('/api/account', value);

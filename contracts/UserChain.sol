@@ -1,6 +1,6 @@
 contract UserChain {  // can be killed, so the owner gets sent the money in the end
 
-	address public organizer;
+	address public owner;
 	mapping (address => uint) public registrantsPaid;
 	uint public numRegistrants;
 	uint public quota;
@@ -16,8 +16,9 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
 	event Refund(address _to, uint _amount); // so you can log the event
 
-	function UserChain() {
-		organizer = msg.sender;		
+    event SetOwner(address _owner);
+
+	function UserChain(address account_address) {
 		quota = 100;
 		numRegistrants = 0;
 		balance = 800;
@@ -25,6 +26,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		value = 0;
 
         ssn_address = "0";
+
+        owner = account_address;
 	}
 
     // SSN
@@ -59,6 +62,14 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         return location;
     }
 
+    function setOwner(address new_owner) {
+        if (msg.sender != owner) { return; }
+
+        SetOwner(new_owner);
+
+        owner = new_owner;
+    }
+
 	function buyTick() public {
 		if (numRegistrants >= quota) { 
 			throw; // throw ensures funds will be returned
@@ -68,12 +79,12 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 	}
 
 	function changeQuota(uint newquota) public {
-		if (msg.sender != organizer) { return; }
+		if (msg.sender != owner) { return; }
 		quota = newquota;
 	}
 
 	function refundTicket(address recipient, uint amount) public {
-		if (msg.sender != organizer) { return; }
+		if (msg.sender != owner) { return; }
 		if (registrantsPaid[recipient] == amount) { 
 			address myAddress = this;
 			if (myAddress.balance >= amount) { 
@@ -96,8 +107,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     }
 
 	function destroy() {
-		if (msg.sender == organizer) { // without this funds could be locked in the contract forever!
-			suicide(organizer);
+		if (msg.sender == owner) { // without this funds could be locked in the contract forever!
+			suicide(owner);
 		}
 	}
 }

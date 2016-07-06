@@ -9,6 +9,7 @@ var Pudding = require("ether-pudding");
 
 var Greeter = require("./contracts/Greeter.sol.js");
 
+var fs = require('fs');
 
 var UserChain = require("./contracts/UserChain.sol.js");
 // var ipfsAPI = require('ipfs-api');
@@ -23,97 +24,104 @@ var provider = new web3.providers.HttpProvider();
 
 web3.setProvider(provider);
 
-var rpc = require('json-rpc2');
-var client = rpc.Client.$create(8545, "localhost");
+// var players = [
+//     "Messi",
+//     "Ronaldo",
+//     "Costa",
+//     "Neymar",
+//     "Arabi",
+//     "Bale",
+//     "Toquero"
+// ];
+//
+// var teams = [
+//     "A",
+//     "C",
+//     "g",
+//     "H",
+//     "X",
+//     "A",
+//     "S"
+// ];
+//
+// var result = [];
+//
+// for (var i=0; i<players.length; i++) {
+//     result.push({name: players[i], team: teams[i]});
+// }
+//
 
-client.call("personal_newAccount", ["password"], function(err,result) {
-    console.log("Created acc " + result + " err " + err);
+var file = "../data/accounts.json";
 
-    web3.eth.getAccounts(function (err, accs) {
-        console.log("personalAccounts " + accs);
-    });
+// fs.writeFile(file, JSON.stringify(result), function (err) {
+//     if (err) {
+//         return console.log(err);
+//     }
+//
+//     console.log("The file was saved!");
+// });
+//
+// console.log("NOW READ IT");
 
-    client.call("personal_unlockAccount", ["password"], function(err,result) {
-        console.log("yay")
+var result = [];
 
+result.push({account: "1234", contract: "5678"});
 
-    });
+fs.writeFile(file, JSON.stringify(result), function (err) {
+    if (err) {
+        return console.log(err);
+    }
 
-     // web3.personal.unlockAccount(result, "password", 2);
-     // console.log("yay")
+    console.log("The file was saved!");
+});
+
+var obj;
+
+fs.readFile(file, 'utf8', function (err, data) {
+    if (err) throw err;
+    obj = JSON.parse(data);
+
+    for (var index in obj) {
+        console.log("Item " + obj[index].account + " " + obj[index].contract);
+    }
 });
 
 
 
-// var seed = lightwallet.keystore.generateRandomSeed();
+
+// var obj;
+// fs.readFile(file, 'utf8', function (err, data) {
+//     if (err) {
+//         console.log("File does not exist");
+//     }
 //
-// lightwallet.keystore.deriveKeyFromPassword('mypassword', function (err, pwDerivedKey) {
+//     obj = JSON.parse(data);
 //
-//     console.log("dervied key " + pwDerivedKey);
+//     for (var index in obj) {
+//         console.log("Item " + obj[index].name + " " + obj[index].team);
+//     }
 //
-//     var keystore = new lightwallet.keystore(seed, pwDerivedKey)
-//     keystore.generateNewAddress(pwDerivedKey)
+//     console.log("Add new");
 //
-//     var sendingAddr = keystore.getAddresses()[0]
+//     obj.push({name: 'donal', team: 'SF United'});
 //
-//     console.log("Sending addr " + sendingAddr);
+//     fs.writeFile(file, JSON.stringify(obj), function (err) {
+//         if (err) {
+//             return console.log(err);
+//         }
 //
-//
-//     var web3Provider = new HookedWeb3Provider({
-//         host: "http://localhost:8545",
-//         transaction_signer: keystore
+//         console.log("The file was saved!");
 //     });
 //
-//     web3.setProvider(web3Provider);
+//     fs.readFile(file, 'utf8', function (err, data) {
+//         if (err) throw err;
+//         obj = JSON.parse(data);
 //
-//     web3.eth.getAccounts(function (err, accs) {
-//         console.log("personalAccounts " + accs);
+//         for (var index in obj) {
+//             console.log("Item " + obj[index].name + " " + obj[index].team);
+//         }
 //     });
-//
-//
 // });
 
 
-//
-// web3.setProvider(provider);
-//
-// Pudding.setWeb3(web3);
-//
-// UserChain.load(Pudding);
-//
-// var userChain = UserChain.deployed();
-// // var greeter = Greeter.deployed();
-//
-// var personalAccounts = web3.personal.getAccounts();
-//
-// web3.eth.getAccounts(function (err, accs) {
-//
-//     // greeter.greet.call({from: accs[0]}).then(function (value) {
-//     //     console.log("value " + value);
-//     // });
-//
-//
-//     userChain.getSSN.call({from: accs[0]}).then(function (value) {
-//         //  console.log("SSN location " + value);
-//
-//         console.log("value " + value);
-//
-//         if (value && value != 0) {
-//             ipfs.object.get([value])
-//                 .then(function (result) {
-//                     console.log('FROM IPFS --- ' + result.data);
-//
-//                     res.send(JSON.stringify({value: result.data}));
-//                 })
-//                 .catch(function (err) {
-//                     console.log('getSSN Fail: ', err)
-//                 })
-//
-//         }
-//         else {
-//             console.log("value not set");
-//         }
-//
-//     });
-// });
 

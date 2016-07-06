@@ -1,9 +1,6 @@
 module.exports = {
   build: {
-    "index.html": "index.html",
-    "app.js": [
-      "javascripts/app.js"
-    ]
+    "index.html": "index.html"
   },
   deploy: [
     "UserChain"
