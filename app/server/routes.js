@@ -13,11 +13,7 @@ var provider = new web3.providers.HttpProvider();
 
 web3.setProvider(provider);
 
-Pudding.setWeb3(web3);
 
-UserChain.load(Pudding);
-
-var userChain = UserChain.deployed();
 
 module.exports = function (app) {
 
@@ -32,6 +28,12 @@ module.exports = function (app) {
             var updatedValue = req.body.text;
 
             console.log("SET VALUE " + updatedValue);
+
+            Pudding.setWeb3(web3);
+
+            UserChain.load(Pudding);
+
+            var userChain = UserChain.deployed();
 
             userChain.setValue(updatedValue, {from: accs[0]}).then(function (value) {
                 console.log("update succeeded");
@@ -123,40 +125,40 @@ module.exports = function (app) {
             return;
         }
 
-        checkValues();
+        // checkValues();
 
-        console.log("Owner " + userChain.owner.call());
+        // console.log("Owner " + userChain.owner.call());
 
         console.log("Now get SSN");
 
-        userChain.getSSN.call({from: accs[0]}).then(function (value) {
-
-            if (value && value != 0) {
-                ipfs.object.get([value])
-                    .then(function (result) {
-                        console.log('FROM IPFS --- ' + result.data);
-
-                        res.send(JSON.stringify({value: result.data}));
-                    })
-                    .catch(function (err) {
-                        console.log('getSSN Fail: ', err)
-                    })
-
-            }
-            else {
-                console.log("getSSN : SSN value not set");
-            }
-        }).catch(function (e) {
-            console.log("ERR " + e);
-        });
+        // userChain.getSSN.call({from: accs[0]}).then(function (value) {
+        //
+        //     if (value && value != 0) {
+        //         ipfs.object.get([value])
+        //             .then(function (result) {
+        //                 console.log('FROM IPFS --- ' + result.data);
+        //
+        //                 res.send(JSON.stringify({value: result.data}));
+        //             })
+        //             .catch(function (err) {
+        //                 console.log('getSSN Fail: ', err)
+        //             })
+        //
+        //     }
+        //     else {
+        //         console.log("getSSN : SSN value not set");
+        //     }
+        // }).catch(function (e) {
+        //     console.log("ERR " + e);
+        // });
 
 
     }
 
-    function checkValues() {
-        userChain.owner.call().then(
-            function (owner) {
-                console.log("Got owner " + owner);
-            });
-    }
+    // function checkValues() {
+    //     userChain.owner.call().then(
+    //         function (owner) {
+    //             console.log("Got owner " + owner);
+    //         });
+    // }
 };

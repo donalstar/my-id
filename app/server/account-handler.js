@@ -1,6 +1,7 @@
 var Web3 = require('web3');
 var rpc = require('json-rpc2');
 var UserChain = require("../contracts/UserChain.sol.js");
+var Pudding = require("ether-pudding");
 var fs = require('fs');
 var client = rpc.Client.$create(8545, "localhost");
 var web3 = new Web3();
@@ -10,6 +11,9 @@ var accountsFile = "../data/accounts.json";
 
 web3.setProvider(provider);
 
+Pudding.setWeb3(web3);
+
+UserChain.load(Pudding);
 
 /**
  * Unlock account
@@ -49,7 +53,7 @@ function createContract(accountAddress, masterAccount, callback) {
     // TODO: How to correctly set gas
     var gas = gasEstimate * 10;
 
-    contract.new(accountAddress, {
+    contract.new({
         from: masterAccount,
         data: code,
         gas: gas
@@ -131,6 +135,42 @@ function addToFile(username, accountAddress, contractAddress, callback) {
     });
 }
 
+/**
+ *
+ * @param masterAccount
+ * @param accountAddress
+ * @param contract
+ * @param callback
+ */
+function setOwner(masterAccount, accountAddress, contract, callback) {
+    console.log("Set owner...");
+
+    var userChain = UserChain.at(contract.address);
+
+    userChain.setOwner(accountAddress, {from: masterAccount}).then(function (value) {
+
+        console.log("setOwner to " + accountAddress);
+
+        userChain.setContractOwner(accountAddress, {from: masterAccount}).then(function (value) {
+            console.log("setContractOwner " + accountAddress);
+
+            callback(null);
+        }).catch(function (e) {
+            console.log("ERR " + e);
+
+            callback(null);
+        });
+
+    }).catch(function (e) {
+        console.log("ERR " + e);
+
+        callback(null);
+    });
+
+
+}
+
+
 module.exports = {
 
     /**
@@ -154,6 +194,17 @@ module.exports = {
                 contract.owner.call().then(
                     function (owner) {
                         console.log("Got owner_address " + owner);
+                    });
+
+                contract.contract_owner.call().then(
+                    function (a2) {
+                        console.log("Got a2 " + a2);
+                    });
+
+
+                contract.ssn_address.call().then(
+                    function (ssn_address) {
+                        console.log("Got ssn_address " + ssn_address);
                     });
 
                 unlockAccount(accountInfo.account, passphrase, function (err, result) {
@@ -183,10 +234,17 @@ module.exports = {
                 createContract(accountAddress, masterAccount, function (err, contract) {
                     console.log("Created contract with address " + contract + " for account " + accountAddress);
 
-                    addToFile(username, accountAddress, contract.address, function () {
-                        res.send(JSON.stringify({value: result}));
+                    setOwner(masterAccount, accountAddress, contract, function (error) {
+                        console.log("After setOwner: error " + error);
+
+                        addToFile(username, accountAddress, contract.address, function () {
+                            res.send(JSON.stringify({value: result}));
+                        });
                     });
+
                 });
+
+
             });
         });
     }

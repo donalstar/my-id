@@ -12,13 +12,19 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
     uint public value;
 
+    address public owner_address;
+
+    address public contract_owner;
+
 	event GetSSN(string ssn_address);
 
 	event Refund(address _to, uint _amount); // so you can log the event
 
     event SetOwner(address _owner);
 
+
 	function UserChain(address account_address) {
+		owner = msg.sender;
 		quota = 100;
 		numRegistrants = 0;
 		balance = 800;
@@ -27,7 +33,9 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
         ssn_address = "0";
 
-        owner = account_address;
+       // owner_address = account_address;
+
+        //SetOwner(owner_address);
 	}
 
     // SSN
@@ -36,6 +44,11 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
        GetSSN(ssn_address);
 
        ssn_address = location;
+    }
+
+    function setContractOwner(address account_address) public {
+
+       contract_owner = account_address;
     }
 
     function getSSN() public returns (string) {
@@ -63,11 +76,11 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     }
 
     function setOwner(address new_owner) {
-        if (msg.sender != owner) { return; }
+   //     if (msg.sender != owner) { return; }
 
         SetOwner(new_owner);
 
-        owner = new_owner;
+        owner_address = new_owner;
     }
 
 	function buyTick() public {
