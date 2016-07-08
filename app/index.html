@@ -74,7 +74,7 @@
         </nav>
 
         <div style="padding-left: 40px;">
-            <div class="row centered-form">
+            <div ng-hide="loggedIn" class="row centered-form">
                 <div>
                     <div class="panel panel-default" style="width:500px">
                         <div class="panel-heading">
@@ -108,6 +108,10 @@
                                                        tabindex="1"
                                                        required/>
                                             </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div>{{accountCreateStatus}}</div>
                                         </div>
 
                                         <button type="submit" class="btn btn-primary"
@@ -182,13 +186,6 @@
                                     </div>
                                 </div>
 
-                                <div class="row" style="margin-bottom:10px;">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Private Key:</label>
-
-                                        <label class="col-sm-8">Private Key</label>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
@@ -218,6 +215,11 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="row">
+                                            <div>{{ssnUpdateStatus}}</div>
+                                        </div>
+                                    </div>
 
                                     <div class="well" style="margin: 0 auto 5px; text-align:right">
                                         <button type="submit" class="btn btn-primary" style="width:100px">Save

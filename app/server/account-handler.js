@@ -2,12 +2,11 @@ var Web3 = require('web3');
 var rpc = require('json-rpc2');
 var UserChain = require("../contracts/UserChain.sol.js");
 var Pudding = require("ether-pudding");
-var fs = require('fs');
 var client = rpc.Client.$create(8545, "localhost");
 var web3 = new Web3();
 var provider = new web3.providers.HttpProvider();
 
-var accountsFile = "../data/accounts.json";
+var utility = require('./utility.js');
 
 web3.setProvider(provider);
 
@@ -82,59 +81,6 @@ function createContract(accountAddress, masterAccount, callback) {
     })
 }
 
-function getAccountInfo(username, callback) {
-    var result;
-
-    fs.readFile(accountsFile, 'utf8', function (err, data) {
-        if (err) {
-            callback(err, null);
-        }
-
-        result = JSON.parse(data);
-
-        var account;
-
-        for (index in result) {
-            console.log("Username " + result[index].username);
-
-            if (username == result[index].username) {
-                console.log("matched username!");
-                account = result[index];
-                break;
-            }
-        }
-
-        callback(null, account);
-    });
-}
-
-/**
- *
- * @param username
- * @param accountAddress
- * @param contractAddress
- * @param callback
- */
-function addToFile(username, accountAddress, contractAddress, callback) {
-
-    var result;
-
-    fs.readFile(accountsFile, 'utf8', function (err, data) {
-        if (err) throw err;
-        result = JSON.parse(data);
-
-        result.push({username: username, account: accountAddress, contract: contractAddress});
-
-        fs.writeFile(accountsFile, JSON.stringify(result), function (err) {
-            if (err) {
-                return console.log(err);
-            }
-
-            console.log("The file was saved!");
-        });
-    });
-}
-
 /**
  *
  * @param masterAccount
@@ -166,10 +112,34 @@ function setOwner(masterAccount, accountAddress, contract, callback) {
 
         callback(null);
     });
-
-
 }
 
+
+function addFunds(address, callback) {
+    web3.eth.getAccounts(function (err, accs) {
+        var amount = web3.toWei(5, "finney"); // decide how much to contribute
+        
+        var transaction = web3.eth.sendTransaction({
+            from: accs[0],
+            to: address,
+            value: amount,
+            gas: 3000000
+        });
+
+        console.log("Sent funds to " + address); // "0x7f9fade1c0d57a7af66ab4ead7c2eb7b11a91385"
+
+
+        console.log("NEW Balance: " + web3.eth.getBalance(address));
+
+        web3.eth.getTransactionReceipt(transaction, function (receipt) {
+            console.log("TXN receipt " + receipt);
+
+
+            callback();
+        });
+
+    });
+}
 
 module.exports = {
 
@@ -181,15 +151,11 @@ module.exports = {
      */
     getAccount: function (username, passphrase, res) {
 
-        getAccountInfo(username, function (error, accountInfo) {
+        utility.getAccountInfo(username, function (error, accountInfo) {
 
             if (accountInfo) {
 
-
                 var contract = UserChain.at(accountInfo.contract);
-
-                // myContractInstance.myMethod.call(param1 [, param2, ...] [, transactionObject] [, defaultBlock] [, callback]);
-                //
 
                 contract.owner.call().then(
                     function (owner) {
@@ -233,18 +199,26 @@ module.exports = {
 
                 createContract(accountAddress, masterAccount, function (err, contract) {
                     console.log("Created contract with address " + contract + " for account " + accountAddress);
+                    
+                    addFunds(accountAddress, function () {
+                        if (!err) {
+                            console.log("Successfully added funds to account " + accountAddress);
+                            
+                            setOwner(masterAccount, accountAddress, contract, function (error) {
+                                console.log("After setOwner: error " + error);
 
-                    setOwner(masterAccount, accountAddress, contract, function (error) {
-                        console.log("After setOwner: error " + error);
-
-                        addToFile(username, accountAddress, contract.address, function () {
-                            res.send(JSON.stringify({value: result}));
-                        });
+                                utility.addToFile(username, accountAddress, contract.address, function () {
+                                    console.log("Account creation complete");
+                                    
+                                    res.send(JSON.stringify({value: "ok"}));
+                                });
+                            });
+                        }
+                        else {
+                            console.log('Failed to add funds : ', error);
+                        }
                     });
-
                 });
-
-
             });
         });
     }

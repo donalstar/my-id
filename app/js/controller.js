@@ -8,17 +8,11 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
         $scope.formData = {};
 
         $scope.accountFormData = {};
-
-        SSN.get(1)
-            .success(function (data) {
-                $scope.ssn = data.value;
-
-                console.log("SSN " + $scope.ssn);
-
-                $scope.formData.text = data.value;
-            });
-
+        
         $scope.snapVersion = SNAP_VERSION.full;
+
+        $scope.accountCreateStatus = '';
+        $scope.ssnUpdateStatus = '';
 
         snapRemote.getSnapper().then(function (snapper) {
             snapper.open('left');
@@ -30,7 +24,18 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
                 .success(function (data) {
                     if (data.result == true) {
                         console.log("Login successful " + data.result + " err " + data.error );
+
                         $scope.loggedIn = true;
+                        $scope.user = $scope.loginFormData.username;
+
+                        SSN.get($scope.user)
+                            .success(function (data) {
+                                $scope.ssn = data.value;
+
+                                console.log("SSN " + $scope.ssn);
+
+                                $scope.formData.text = data.value;
+                            });
                     }
                     else {
                         console.log("Login error " + data.error.message );
@@ -46,11 +51,15 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
         $scope.createAccount = function () {
             console.log("Create account... ");
 
+            $scope.accountCreateStatus = 'in progress...';
+
             Account.create($scope.accountFormData)
                 .success(function (data) {
                     console.log("Updating... success --- using username " + $scope.accountFormData.username);
 
                     console.log("Created new account! - " + data.value);
+
+                    $scope.accountCreateStatus = 'account created!';
                 });
         };
 
@@ -60,6 +69,10 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
             // if form is empty, nothing will happen
             if ($scope.formData != undefined) {
                 $scope.loading = true;
+
+                $scope.ssnUpdateStatus = "updating...";
+                
+                $scope.formData.user = $scope.user;
 
                 console.log("Updating... ");
 
@@ -73,6 +86,8 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
                         $scope.loading = false;
 
                         $scope.ssn = $scope.formData.text;
+
+                        $scope.ssnUpdateStatus = "update successful";
                     });
             }
         };

@@ -29,13 +29,7 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		numRegistrants = 0;
 		balance = 800;
 
-		value = 0;
-
         ssn_address = "0";
-
-       // owner_address = account_address;
-
-        //SetOwner(owner_address);
 	}
 
     // SSN
@@ -47,7 +41,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     }
 
     function setContractOwner(address account_address) public {
-
        contract_owner = account_address;
     }
 
@@ -58,14 +51,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     function setDL(address dl_address) public {
         dl = dl_address;
     }
-
-    function setValue(uint new_value) public {
-        value = new_value;
-    }
-
-    function getValue() returns(uint) {
-    	return value;
-  	}
 
     function setLocation(string loc_address) {
         location = loc_address;
@@ -83,31 +68,10 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         owner_address = new_owner;
     }
 
-	function buyTick() public {
-		if (numRegistrants >= quota) { 
-			throw; // throw ensures funds will be returned
-		}
-		registrantsPaid[msg.sender] = msg.value;
-		numRegistrants++;
-	}
 
 	function changeQuota(uint newquota) public {
 		if (msg.sender != owner) { return; }
 		quota = newquota;
-	}
-
-	function refundTicket(address recipient, uint amount) public {
-		if (msg.sender != owner) { return; }
-		if (registrantsPaid[recipient] == amount) { 
-			address myAddress = this;
-			if (myAddress.balance >= amount) { 
-				recipient.send(amount);
-				Refund(recipient, amount);
-				registrantsPaid[recipient] = 0;
-				numRegistrants--;
-			}
-		}
-		return;
 	}
 
 
