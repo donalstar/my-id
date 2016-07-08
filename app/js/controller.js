@@ -5,17 +5,19 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
         $scope.accountCreateInProgress = false;
 
         $scope.loginFormData = {};
-        
+
         $scope.formData = {};
 
         $scope.accountFormData = {};
-        
+
         $scope.snapVersion = SNAP_VERSION.full;
 
         $scope.accountCreateStatus = '';
+
+        $scope.dataUpdateInProgress = false;
         $scope.ssnUpdateStatus = '';
 
-        $scope.nameLabel = '';
+        $scope.fullName = '';
 
         snapRemote.getSnapper().then(function (snapper) {
             snapper.open('left');
@@ -26,23 +28,20 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
             Account.get($scope.loginFormData.username, $scope.loginFormData.password)
                 .success(function (data) {
                     if (data.result == true) {
-                        console.log("Login successful " + data.result + " err " + data.error );
+                        console.log("Login successful " + data.result + " err " + data.error);
 
                         $scope.loggedIn = true;
                         $scope.user = $scope.loginFormData.username;
-                        $scope.nameLabel = 'User: Donal';
+                        $scope.fullName = data.first_name + ' ' + data.last_name;
 
-                        SSN.get($scope.user)
-                            .success(function (data) {
-                                $scope.ssn = data.value;
+                        $scope.ssn = data.ssn;
 
-                                console.log("SSN " + $scope.ssn);
+                        console.log("SSN " + $scope.ssn);
 
-                                $scope.formData.text = data.value;
-                            });
+                        $scope.formData.text = data.value;
                     }
                     else {
-                        console.log("Login error " + data.error.message );
+                        console.log("Login error " + data.error.message);
                         $scope.loginFailed = true;
                     }
                 })
@@ -54,7 +53,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
         $scope.createAccount = function () {
             console.log("Create account... ");
-            
+
             $scope.accountCreateInProgress = true;
 
             Account.create($scope.accountFormData)
@@ -75,8 +74,8 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
             if ($scope.formData != undefined) {
                 $scope.loading = true;
 
-                $scope.ssnUpdateStatus = "updating...";
-                
+                $scope.dataUpdateInProgress = true;
+           
                 $scope.formData.user = $scope.user;
 
                 console.log("Updating... ");
@@ -93,6 +92,8 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
                         $scope.ssn = $scope.formData.text;
 
                         $scope.ssnUpdateStatus = "update successful";
+
+                        $scope.dataUpdateInProgress = false;
                     });
             }
         };

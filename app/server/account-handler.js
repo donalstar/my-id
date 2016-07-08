@@ -2,6 +2,7 @@ var Web3 = require('web3');
 var rpc = require('json-rpc2');
 var UserChain = require("../contracts/UserChain.sol.js");
 var Pudding = require("ether-pudding");
+var file_store = require('./file-store.js');
 var client = rpc.Client.$create(8545, "localhost");
 var web3 = new Web3();
 var provider = new web3.providers.HttpProvider();
@@ -32,9 +33,13 @@ function unlockAccount(address, passphrase, callback) {
 /**
  * Create Contract
  *
+ * @param firstName
+ * @param lastName
+ * @param accountAddress
  * @param masterAccount
+ * @param callback
  */
-function createContract(accountAddress, masterAccount, callback) {
+function createContract(firstName, lastName, accountAddress, masterAccount, callback) {
 
     code = UserChain.binary;
 
@@ -48,11 +53,10 @@ function createContract(accountAddress, masterAccount, callback) {
     });
     console.log("Gas estimate " + gasEstimate + " for sender " + masterAccount);
 
-
     // TODO: How to correctly set gas
     var gas = gasEstimate * 10;
 
-    contract.new({
+    contract.new(firstName, lastName, accountAddress, {
         from: masterAccount,
         data: code,
         gas: gas
@@ -64,9 +68,6 @@ function createContract(accountAddress, masterAccount, callback) {
 
             } else {
                 console.log("Contract mined! Address: " + contract.address);
-
-                console.log("GAS PRICE " + web3.eth.gasPrice);
-                console.log("Balance: " + web3.eth.getBalance(masterAccount));
 
                 callback(e, contract);
             }
@@ -81,44 +82,11 @@ function createContract(accountAddress, masterAccount, callback) {
     })
 }
 
-/**
- *
- * @param masterAccount
- * @param accountAddress
- * @param contract
- * @param callback
- */
-function setOwner(masterAccount, accountAddress, contract, callback) {
-    console.log("Set owner...");
-
-    var userChain = UserChain.at(contract.address);
-
-    userChain.setOwner(accountAddress, {from: masterAccount}).then(function (value) {
-
-        console.log("setOwner to " + accountAddress);
-
-        userChain.setContractOwner(accountAddress, {from: masterAccount}).then(function (value) {
-            console.log("setContractOwner " + accountAddress);
-
-            callback(null);
-        }).catch(function (e) {
-            console.log("ERR " + e);
-
-            callback(null);
-        });
-
-    }).catch(function (e) {
-        console.log("ERR " + e);
-
-        callback(null);
-    });
-}
-
 
 function addFunds(address, callback) {
     web3.eth.getAccounts(function (err, accs) {
         var amount = web3.toWei(5, "finney"); // decide how much to contribute
-        
+
         var transaction = web3.eth.sendTransaction({
             from: accs[0],
             to: address,
@@ -154,29 +122,39 @@ module.exports = {
         utility.getAccountInfo(username, function (error, accountInfo) {
 
             if (accountInfo) {
-
                 var contract = UserChain.at(accountInfo.contract);
 
-                contract.owner.call().then(
-                    function (owner) {
-                        console.log("Got owner_address " + owner);
-                    });
-
-                contract.contract_owner.call().then(
-                    function (a2) {
-                        console.log("Got a2 " + a2);
-                    });
-
-
-                contract.ssn_address.call().then(
-                    function (ssn_address) {
-                        console.log("Got ssn_address " + ssn_address);
-                    });
-
                 unlockAccount(accountInfo.account, passphrase, function (err, result) {
-                    console.log("unlockAccount - done: success " + result);
+                    console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
-                    res.send(JSON.stringify({result: result, error: err}));
+                    contract.the_name.call().then(
+                        function (the_name) {
+
+                            contract.ssn_address.call().then(
+                                function (ssn_address) {
+                                    console.log("Got ssn_address " + ssn_address);
+
+                                    if (ssn_address && ssn_address != 0) {
+                                        file_store.readFromFile(ssn_address, function (error, data) {
+                                            if (!error) {
+                                                console.log('FROM IPFS --- ' + data);
+
+                                                res.send(JSON.stringify(
+                                                    {
+                                                        result: result,
+                                                        first_name: the_name[0],
+                                                        last_name: the_name[1],
+                                                        ssn: data,
+                                                        error: err
+                                                    }));
+                                            }
+                                            else {
+                                                console.log('getSSN Fail: ', error);
+                                            }
+                                        });
+                                    }
+                                });
+                        });
                 });
             }
         });
@@ -186,10 +164,12 @@ module.exports = {
      * Create Account
      *
      * @param username
+     * @param first_name
+     * @param last_name
      * @param passphrase
      * @param res
      */
-    createAccount: function (username, passphrase, res) {
+    createAccount: function (username, first_name, last_name, passphrase, res) {
         console.log("createAccount - username " + username + " passphrase " + passphrase);
 
         client.call("personal_newAccount", [passphrase], function (err, accountAddress) {
@@ -197,21 +177,17 @@ module.exports = {
             web3.eth.getAccounts(function (err, accounts) {
                 var masterAccount = accounts[0];
 
-                createContract(accountAddress, masterAccount, function (err, contract) {
+                createContract(first_name, last_name, accountAddress, masterAccount, function (err, contract) {
                     console.log("Created contract with address " + contract + " for account " + accountAddress);
-                    
+
                     addFunds(accountAddress, function () {
                         if (!err) {
                             console.log("Successfully added funds to account " + accountAddress);
-                            
-                            setOwner(masterAccount, accountAddress, contract, function (error) {
-                                console.log("After setOwner: error " + error);
 
-                                utility.addToFile(username, accountAddress, contract.address, function () {
-                                    console.log("Account creation complete");
-                                    
-                                    res.send(JSON.stringify({value: "ok"}));
-                                });
+                            utility.addToFile(username, accountAddress, contract.address, function () {
+                                console.log("Account creation complete");
+
+                                res.send(JSON.stringify({value: "ok"}));
                             });
                         }
                         else {

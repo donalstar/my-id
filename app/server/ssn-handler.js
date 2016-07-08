@@ -12,41 +12,6 @@ UserChain.load(Pudding);
 
 module.exports = {
 
-    /**
-     * Get SSN
-     *
-     * @param username
-     * @param res
-     */
-    getSSN: function (username, res) {
-
-        utility.getAccountInfo(username, function (error, accountInfo) {
-            console.log("SSN - Got acc info -- contract = " + accountInfo.contract);
-
-            var contract = UserChain.at(accountInfo.contract);
-
-            contract.getSSN.call({from: accountInfo.account}).then(function (value) {
-
-                if (value && value != 0) {
-                    file_store.readFromFile(value, function (error, data) {
-                        if (!error) {
-                            console.log('FROM IPFS --- ' + data);
-
-                            res.send(JSON.stringify({value: data}));
-                        }
-                        else {
-                            console.log('getSSN Fail: ', error);
-                        }
-                    });
-                }
-                else {
-                    console.log("getSSN : SSN value not set");
-                }
-            }).catch(function (e) {
-                console.log("ERR " + e);
-            });
-        });
-    },
 
     /**
      *
@@ -58,7 +23,7 @@ module.exports = {
         utility.getAccountInfo(username, function (error, accountInfo) {
             var contract = UserChain.at(accountInfo.contract);
 
-            console.log("ADD SSN VALUE " + value);
+            console.log("ADD SSN VALUE " + value + " using account " + accountInfo.account);
 
             file_store.storeValue(value, function (error, location) {
                 if (!error) {

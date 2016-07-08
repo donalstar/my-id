@@ -1,47 +1,48 @@
 contract UserChain {  // can be killed, so the owner gets sent the money in the end
 
+    struct Name {
+        string first;
+        string last;
+    }
+
+
 	address public owner;
+	address public owner_address;
+
 	mapping (address => uint) public registrantsPaid;
-	uint public numRegistrants;
+
 	uint public quota;
     string public ssn_address;
     uint public balance;
     address public dl;
 
-    string public location;
+    string public first_name;
+    string public last_name;
 
-    uint public value;
-
-    address public owner_address;
-
-    address public contract_owner;
+    Name public the_name;
 
 	event GetSSN(string ssn_address);
 
-	event Refund(address _to, uint _amount); // so you can log the event
-
-    event SetOwner(address _owner);
-
-
-	function UserChain(address account_address) {
+	function UserChain(string fname, string lname, address new_owner) {
 		owner = msg.sender;
 		quota = 100;
-		numRegistrants = 0;
 		balance = 800;
 
         ssn_address = "0";
+
+        first_name = fname;
+        last_name = lname;
+
+        owner_address = new_owner;
+
+        the_name = Name(first_name, last_name);
 	}
 
     // SSN
-
     function setSSN(string location) public {
        GetSSN(ssn_address);
 
        ssn_address = location;
-    }
-
-    function setContractOwner(address account_address) public {
-       contract_owner = account_address;
     }
 
     function getSSN() public returns (string) {
@@ -50,22 +51,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
     function setDL(address dl_address) public {
         dl = dl_address;
-    }
-
-    function setLocation(string loc_address) {
-        location = loc_address;
-    }
-
-    function getLocation() returns(string) {
-        return location;
-    }
-
-    function setOwner(address new_owner) {
-   //     if (msg.sender != owner) { return; }
-
-        SetOwner(new_owner);
-
-        owner_address = new_owner;
     }
 
 

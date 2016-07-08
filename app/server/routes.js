@@ -12,10 +12,6 @@ module.exports = function (app) {
         ssn.updateSSN(req.body.user, req.body.text, response);
     });
 
-    app.get('/api/ssn/:id', function (req, res) {
-        ssn.getSSN(req.params.id, res);
-    });
-
     /**
      * Account
      */
@@ -26,7 +22,7 @@ module.exports = function (app) {
     });
 
     app.post('/api/account', function (req, response) {
-        account.createAccount(req.body.username, req.body.password, response);
+        account.createAccount(req.body.username, req.body.firstName, req.body.lastName, req.body.password, response);
     });
 
     // application -------------------------------------------------------------
