@@ -1,6 +1,10 @@
 ﻿@charset "utf-8";
 /* CSS Document */
 
+.row.extra-bottom-padding{
+    margin-bottom: 10px;
+}
+
 #header {
     background: #fff;
     height: 50px;

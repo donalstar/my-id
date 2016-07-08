@@ -2,6 +2,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
     function ($scope, $rootScope, SSN, Account, SNAP_VERSION, snapRemote) {
 
         $scope.loggedIn = false;
+        $scope.accountCreateInProgress = false;
 
         $scope.loginFormData = {};
         
@@ -13,6 +14,8 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
         $scope.accountCreateStatus = '';
         $scope.ssnUpdateStatus = '';
+
+        $scope.nameLabel = '';
 
         snapRemote.getSnapper().then(function (snapper) {
             snapper.open('left');
@@ -27,6 +30,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
                         $scope.loggedIn = true;
                         $scope.user = $scope.loginFormData.username;
+                        $scope.nameLabel = 'User: Donal';
 
                         SSN.get($scope.user)
                             .success(function (data) {
@@ -50,8 +54,8 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
         $scope.createAccount = function () {
             console.log("Create account... ");
-
-            $scope.accountCreateStatus = 'in progress...';
+            
+            $scope.accountCreateInProgress = true;
 
             Account.create($scope.accountFormData)
                 .success(function (data) {
@@ -60,6 +64,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
                     console.log("Created new account! - " + data.value);
 
                     $scope.accountCreateStatus = 'account created!';
+                    $scope.accountCreateInProgress = false;
                 });
         };
 
