@@ -125,36 +125,54 @@ module.exports = {
                 var contract = UserChain.at(accountInfo.contract);
 
                 unlockAccount(accountInfo.account, passphrase, function (err, result) {
-                    console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
+                    if (!err) {
+                        console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
-                    contract.the_name.call().then(
-                        function (the_name) {
+                        contract.the_name.call().then(
+                            function (the_name) {
 
-                            contract.ssn_address.call().then(
-                                function (ssn_address) {
-                                    console.log("Got ssn_address " + ssn_address);
+                                contract.ssn_address.call().then(
+                                    function (ssn_address) {
+                                        console.log("Got ssn_address " + ssn_address);
 
-                                    if (ssn_address && ssn_address != 0) {
-                                        file_store.readFromFile(ssn_address, function (error, data) {
-                                            if (!error) {
-                                                console.log('FROM IPFS --- ' + data);
+                                        if (ssn_address && ssn_address != 0) {
+                                            file_store.readFromFile(ssn_address, function (error, data) {
+                                                if (!error) {
+                                                    console.log('FROM IPFS --- ' + data);
 
-                                                res.send(JSON.stringify(
-                                                    {
-                                                        result: result,
-                                                        first_name: the_name[0],
-                                                        last_name: the_name[1],
-                                                        ssn: data,
-                                                        error: err
-                                                    }));
-                                            }
-                                            else {
-                                                console.log('getSSN Fail: ', error);
-                                            }
-                                        });
-                                    }
-                                });
-                        });
+                                                    res.send(JSON.stringify(
+                                                        {
+                                                            result: result,
+                                                            first_name: the_name[0],
+                                                            last_name: the_name[1],
+                                                            ssn: data,
+                                                            error: err
+                                                        }));
+                                                }
+                                                else {
+                                                    console.log('getSSN Fail: ', error);
+                                                }
+                                            });
+                                        }
+                                    });
+                            });
+                    }
+                    else {
+                        console.log("Failed to unlock account " + err);
+
+                        var message = 'system error';
+                        
+                        if (err.code == -32000) {
+                            message = err.message;
+                        }
+                        else {
+                            
+                        }
+                        res.send(JSON.stringify(
+                            {
+                                error: message
+                            }));
+                    }
                 });
             }
         });

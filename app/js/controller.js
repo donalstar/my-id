@@ -41,8 +41,9 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
                         $scope.formData.text = data.value;
                     }
                     else {
-                        console.log("Login error " + data.error.message);
+                        console.log("Login error " + data.error);
                         $scope.loginFailed = true;
+                        $scope.loginErrorMessage = data.error;
                     }
                 })
                 .error(function (error) {
