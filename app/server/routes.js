@@ -1,15 +1,14 @@
 var account = require('./account-handler.js');
-var ssn = require('./ssn-handler.js');
-
+var attributes = require('./attributes-handler.js');
 
 module.exports = function (app) {
 
     /**
-     * Add/Update SSN
+     * Add/Update Attribute
      */
 
-    app.post('/api/ssn', function (req, response) {
-        ssn.updateSSN(req.body.user, req.body.text, response);
+    app.post('/api/attribute', function (req, response) {
+        attributes.updateAttribute(req.body.user, req.body.requestType, req.body, response);
     });
 
     /**
@@ -31,3 +30,6 @@ module.exports = function (app) {
         res.sendFile(__dirname + '/public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
     });
 };
+
+
+

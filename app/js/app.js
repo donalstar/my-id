@@ -1,5 +1,5 @@
 var application = angular.module('appname', [
-    'todoService',
+    'service',
     'snap'
 ]);
 

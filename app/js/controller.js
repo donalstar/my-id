@@ -1,12 +1,13 @@
-application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 'SNAP_VERSION', 'snapRemote',
-    function ($scope, $rootScope, SSN, Account, SNAP_VERSION, snapRemote) {
+application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Account', 'SNAP_VERSION', 'snapRemote',
+    function ($scope, $rootScope, Attributes, Account, SNAP_VERSION, snapRemote) {
 
         $scope.loggedIn = false;
         $scope.accountCreateInProgress = false;
+        $scope.accountBalance = 0.00;
 
         $scope.loginFormData = {};
 
-        $scope.formData = {};
+        $scope.attributes = {};
 
         $scope.accountFormData = {};
 
@@ -15,7 +16,7 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
         $scope.accountCreateStatus = '';
 
         $scope.dataUpdateInProgress = false;
-        $scope.ssnUpdateStatus = '';
+        $scope.updateStatus = '';
 
         $scope.fullName = '';
 
@@ -35,10 +36,14 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
                         $scope.fullName = data.first_name + ' ' + data.last_name;
 
                         $scope.ssn = data.ssn;
+                        $scope.dl = data.dl;
 
                         console.log("SSN " + $scope.ssn);
 
-                        $scope.formData.text = data.value;
+                        $scope.accountBalance = data.balance;
+
+                        $scope.attributes.ssn = data.ssn;
+                        $scope.attributes.dl = data.dl;
                     }
                     else {
                         console.log("Login error " + data.error);
@@ -68,21 +73,22 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
                 });
         };
 
-        $scope.updateValue = function () {
+        $scope.updateValues = function (type) {
 
             // validate the formData to make sure that something is there
             // if form is empty, nothing will happen
-            if ($scope.formData != undefined) {
+            if ($scope.attributes != undefined) {
                 $scope.loading = true;
 
                 $scope.dataUpdateInProgress = true;
-           
-                $scope.formData.user = $scope.user;
 
-                console.log("Updating... ");
+                $scope.attributes.user = $scope.user;
+                $scope.attributes.requestType = type;
+
+                console.log("Updating " + type + "... ");
 
                 // call the create function from our service (returns a promise object)
-                SSN.update($scope.formData)
+                Attributes.update($scope.attributes)
 
                 // if successful creation, call our get function to get all the new todos
                     .success(function (data) {
@@ -90,9 +96,15 @@ application.controller('controller', ['$scope', '$rootScope', 'SSN', 'Account', 
 
                         $scope.loading = false;
 
-                        $scope.ssn = $scope.formData.text;
+                        $scope.ssn = $scope.attributes.ssn;
+                        $scope.dl = $scope.attributes.dl;
 
-                        $scope.ssnUpdateStatus = "update successful";
+                        $scope.updateStatus = "update successful";
+
+                        $scope.dataUpdateInProgress = false;
+                    })
+                    .error(function (error) {
+                        $scope.updateStatus = error.message;
 
                         $scope.dataUpdateInProgress = false;
                     });

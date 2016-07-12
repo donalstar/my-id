@@ -5,16 +5,19 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         string last;
     }
 
-
 	address public owner;
 	address public owner_address;
 
 	mapping (address => uint) public registrantsPaid;
 
+    uint TYPE_SSN = 1;
+    uint TYPE_DL = 2;
+
+	mapping (uint => string) public attributes;
+
 	uint public quota;
     string public ssn_address;
     uint public balance;
-    address public dl;
 
     string public first_name;
     string public last_name;
@@ -36,21 +39,30 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         owner_address = new_owner;
 
         the_name = Name(first_name, last_name);
+
+        attributes[TYPE_SSN] = "0";
+        attributes[TYPE_DL] = "0";
 	}
 
     // SSN
     function setSSN(string location) public {
-       GetSSN(ssn_address);
-
        ssn_address = location;
+
+      // attributes[TYPE_SSN] = location;
     }
 
     function getSSN() public returns (string) {
         return ssn_address;
     }
 
-    function setDL(address dl_address) public {
-        dl = dl_address;
+    // Attribute
+
+    function setDL(string location) public {
+        attributes[TYPE_DL] = location;
+    }
+
+    function getDL() public returns (string) {
+        return attributes[TYPE_DL];
     }
 
 
@@ -58,11 +70,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 		if (msg.sender != owner) { return; }
 		quota = newquota;
 	}
-
-
-    function getDL() returns (address dl) {
-        return dl;
-    }
 
     function getBalance() public returns (uint balance) {
         return balance;

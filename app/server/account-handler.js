@@ -3,7 +3,8 @@ var rpc = require('json-rpc2');
 var UserChain = require("../contracts/UserChain.sol.js");
 var Pudding = require("ether-pudding");
 var file_store = require('./file-store.js');
-var client = rpc.Client.$create(8545, "localhost");
+var config = require('./config.js');
+var client = rpc.Client.$create(config.server_port, config.server_host);
 var web3 = new Web3();
 var provider = new web3.providers.HttpProvider();
 
@@ -124,6 +125,10 @@ module.exports = {
             if (accountInfo) {
                 var contract = UserChain.at(accountInfo.contract);
 
+                var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+
+                console.log("Account Balance (finney): " + balance);
+
                 unlockAccount(accountInfo.account, passphrase, function (err, result) {
                     if (!err) {
                         console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
@@ -131,42 +136,76 @@ module.exports = {
                         contract.the_name.call().then(
                             function (the_name) {
 
-                                contract.ssn_address.call().then(
-                                    function (ssn_address) {
-                                        console.log("Got ssn_address " + ssn_address);
+                                contract.getDL.call().then(
+                                    function (dl_address) {
+                                        console.log("GOT DL == " + dl_address);
 
-                                        if (ssn_address && ssn_address != 0) {
-                                            file_store.readFromFile(ssn_address, function (error, data) {
-                                                if (!error) {
-                                                    console.log('FROM IPFS --- ' + data);
+                                        var dl = "0";
+                                        
+                                        file_store.readFromFile(dl_address, function (error, data) {
+                                            if (!error) {
+                                                dl = data;
+                                            }
+                                        });
 
+                                        contract.getSSN.call().then(
+                                            function (ssn_address) {
+                                                console.log("Got ssn_address " + ssn_address);
+
+                                                if (ssn_address && ssn_address != 0) {
+                                                    file_store.readFromFile(ssn_address, function (error, data) {
+                                                        if (!error) {
+                                                            console.log('FROM IPFS --- ' + data);
+
+                                                            res.send(JSON.stringify(
+                                                                {
+                                                                    result: result,
+                                                                    balance: balance,
+                                                                    first_name: the_name[0],
+                                                                    last_name: the_name[1],
+                                                                    ssn: data,
+                                                                    dl: dl,
+                                                                    error: err
+                                                                }));
+                                                        }
+                                                        else {
+                                                            var message = 'Error reading from file store: ' + error;
+
+                                                            console.log(message, error);
+
+                                                            res.send(JSON.stringify(
+                                                                {
+                                                                    error: message + error
+                                                                }));
+                                                        }
+                                                    });
+                                                }
+                                                else {
                                                     res.send(JSON.stringify(
                                                         {
                                                             result: result,
+                                                            balance: balance,
                                                             first_name: the_name[0],
                                                             last_name: the_name[1],
-                                                            ssn: data,
+                                                            ssn: "0",
                                                             error: err
                                                         }));
                                                 }
-                                                else {
-                                                    console.log('getSSN Fail: ', error);
-                                                }
                                             });
-                                        }
                                     });
+
                             });
                     }
                     else {
                         console.log("Failed to unlock account " + err);
 
                         var message = 'system error';
-                        
+
                         if (err.code == -32000) {
                             message = err.message;
                         }
                         else {
-                            
+
                         }
                         res.send(JSON.stringify(
                             {

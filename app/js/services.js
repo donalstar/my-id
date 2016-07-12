@@ -1,9 +1,9 @@
-var services = angular.module('todoService', [])
+var services = angular.module('service', []);
 
-services.factory('SSN', ['$http', function ($http) {
+services.factory('Attributes', ['$http', function ($http) {
     return {
         update: function (value) {
-            return $http.post('/api/ssn', value);
+            return $http.post('/api/attribute', value);
         }
     }
 }]);
