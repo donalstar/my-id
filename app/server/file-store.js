@@ -1,6 +1,10 @@
 var ipfsAPI = require('ipfs-api');
 var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'});
 
+function trim(s) {
+    return ( s || '' ).replace(/^\s+|\s+$/g, '');
+}
+
 module.exports = {
 
     /**
@@ -15,7 +19,9 @@ module.exports = {
             .then(function (result) {
                 console.log('FROM IPFS --- ' + result.data);
 
-                callback(null, result.data);
+                data = result.data.replace(/[^a-zA-Z0-9]/g, '');
+
+                callback(null, data);
             })
             .catch(function (err) {
                 callback(err, null);
@@ -31,7 +37,7 @@ module.exports = {
 
         ipfs.files.add([new Buffer(value)], function (err, res) {
             if (err || !res) return console.log(err);
-            
+
             ipfs.object.get([res[0].path])
                 .then(function (result) {
                     callback(null, res[0].path);

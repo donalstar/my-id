@@ -1,4 +1,5 @@
 var Web3 = require('web3');
+var async = require("async");
 var rpc = require('json-rpc2');
 var UserChain = require("../contracts/UserChain.sol.js");
 var Pudding = require("ether-pudding");
@@ -15,6 +16,7 @@ web3.setProvider(provider);
 Pudding.setWeb3(web3);
 
 UserChain.load(Pudding);
+
 
 /**
  * Unlock account
@@ -110,6 +112,30 @@ function addFunds(address, callback) {
     });
 }
 
+/**
+ *
+ * @param attribute
+ * @param callback
+ */
+function processAttribute(attribute, callback) {
+
+    if (attribute && attribute != 0) {
+        console.log("Got attrib  " + attribute);
+
+        file_store.readFromFile(attribute, function (error, data) {
+            if (!error) {
+                console.log(' READ (' + attribute + ') --- ' + data);
+
+                callback(null, data.toString());
+            }
+        });
+    }
+    else {
+        console.log("Zero attrib");
+        callback(null, 0);
+    }
+}
+
 module.exports = {
 
     /**
@@ -119,6 +145,7 @@ module.exports = {
      * @param res
      */
     getAccount: function (username, passphrase, res) {
+
 
         utility.getAccountInfo(username, function (error, accountInfo) {
 
@@ -136,62 +163,37 @@ module.exports = {
                         contract.the_name.call().then(
                             function (the_name) {
 
-                                contract.getDL.call().then(
-                                    function (dl_address) {
-                                        console.log("GOT DL == " + dl_address);
+                                contract.the_attributes.call().then(
+                                    function (the_attributes) {
 
-                                        var dl = "0";
-                                        
-                                        file_store.readFromFile(dl_address, function (error, data) {
+
+                                        async.map(the_attributes, processAttribute, function (error, result) {
+                                            console.log("map completed. Error: ", error, " result: ", result);
+
                                             if (!error) {
-                                                dl = data;
+                                                res.send(JSON.stringify(
+                                                    {
+                                                        result: true,
+                                                        balance: balance,
+                                                        first_name: the_name[0],
+                                                        last_name: the_name[1],
+                                                        ssn: result[0],
+                                                        dl: result[1],
+                                                        error: err
+                                                    }));
+                                            }
+                                            else {
+                                                var message = 'Error processing attributes: ' + error;
+
+                                                console.log(message, error);
+
+                                                res.send(JSON.stringify(
+                                                    {
+                                                        error: message + error
+                                                    }));
                                             }
                                         });
 
-                                        contract.getSSN.call().then(
-                                            function (ssn_address) {
-                                                console.log("Got ssn_address " + ssn_address);
-
-                                                if (ssn_address && ssn_address != 0) {
-                                                    file_store.readFromFile(ssn_address, function (error, data) {
-                                                        if (!error) {
-                                                            console.log('FROM IPFS --- ' + data);
-
-                                                            res.send(JSON.stringify(
-                                                                {
-                                                                    result: result,
-                                                                    balance: balance,
-                                                                    first_name: the_name[0],
-                                                                    last_name: the_name[1],
-                                                                    ssn: data,
-                                                                    dl: dl,
-                                                                    error: err
-                                                                }));
-                                                        }
-                                                        else {
-                                                            var message = 'Error reading from file store: ' + error;
-
-                                                            console.log(message, error);
-
-                                                            res.send(JSON.stringify(
-                                                                {
-                                                                    error: message + error
-                                                                }));
-                                                        }
-                                                    });
-                                                }
-                                                else {
-                                                    res.send(JSON.stringify(
-                                                        {
-                                                            result: result,
-                                                            balance: balance,
-                                                            first_name: the_name[0],
-                                                            last_name: the_name[1],
-                                                            ssn: "0",
-                                                            error: err
-                                                        }));
-                                                }
-                                            });
                                     });
 
                             });

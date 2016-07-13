@@ -16,6 +16,11 @@ function contains(arr, obj) {
     return (arr.indexOf(obj) != -1);
 }
 
+var AttributeType = {
+    SSN: 1,
+    DL: 2
+};
+
 /**
  *
  * @param username
@@ -27,7 +32,8 @@ function saveValueToContract(username, requestType, value, res) {
         var contract = UserChain.at(accountInfo.contract);
 
         if (requestType == 'ssn') {
-            contract.setSSN(value, {from: accountInfo.account}).then(function (result) {
+            contract.setAttribute(AttributeType.SSN, value, {from: accountInfo.account}).then(function (result) {
+            // contract.setSSN(value, {from: accountInfo.account}).then(function (result) {
                 console.log("Set location addr - " + value + " : " + result);
 
                 res.send(JSON.stringify({value: "ok"}));
@@ -38,7 +44,8 @@ function saveValueToContract(username, requestType, value, res) {
             });
         }
         else if (requestType == 'dl') {
-            contract.setDL(value, {from: accountInfo.account}).then(function (result) {
+            contract.setAttribute(AttributeType.DL, value, {from: accountInfo.account}).then(function (result) {
+            // contract.setDL(value, {from: accountInfo.account}).then(function (result) {
                 console.log("DL: Set location addr - " + value + " : " + result);
 
                 res.send(JSON.stringify({value: "ok"}));

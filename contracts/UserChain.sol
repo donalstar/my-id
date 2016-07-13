@@ -5,6 +5,11 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         string last;
     }
 
+    struct Attributes {
+        string ssn;
+        string dl;
+    }
+
 	address public owner;
 	address public owner_address;
 
@@ -24,6 +29,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
     Name public the_name;
 
+    Attributes public the_attributes;
+
 	event GetSSN(string ssn_address);
 
 	function UserChain(string fname, string lname, address new_owner) {
@@ -41,8 +48,22 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         the_name = Name(first_name, last_name);
 
         attributes[TYPE_SSN] = "0";
-        attributes[TYPE_DL] = "0";
+
+        the_attributes.ssn = "0";
+        the_attributes.dl = "0";
 	}
+
+    function setAttribute(uint id, string location) {
+        if (id == TYPE_SSN) {
+            the_attributes.ssn = location;
+        }
+        else if (id == TYPE_DL) {
+            the_attributes.dl = location;
+        }
+        else {
+            throw;
+        }
+    }
 
     // SSN
     function setSSN(string location) public {
@@ -58,11 +79,11 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     // Attribute
 
     function setDL(string location) public {
-        attributes[TYPE_DL] = location;
+        the_attributes.dl = location;
     }
 
     function getDL() public returns (string) {
-        return attributes[TYPE_DL];
+        return the_attributes.dl;
     }
 
 
