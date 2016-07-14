@@ -1,10 +1,6 @@
 var ipfsAPI = require('ipfs-api');
 var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'});
 
-function trim(s) {
-    return ( s || '' ).replace(/^\s+|\s+$/g, '');
-}
-
 module.exports = {
 
     /**
@@ -15,17 +11,25 @@ module.exports = {
      */
     readFromFile: function (file_id, callback) {
 
-        ipfs.object.get([file_id])
+        ipfs.block.get(file_id)
             .then(function (result) {
-                console.log('FROM IPFS --- ' + result.data);
 
-                data = result.data.replace(/[^a-zA-Z0-9]/g, '');
+                let buff = '';
 
-                callback(null, data);
+                result
+                    .on('data', function (data) {
+                        buff += data;
+                    })
+                    .on('end', function () {
+                        callback(null, buff);
+                    })
+                ;
+
             })
             .catch(function (err) {
                 callback(err, null);
-            });
+
+            })
     },
 
     /**
@@ -35,17 +39,15 @@ module.exports = {
      */
     storeValue: function (value, callback) {
 
-        ipfs.files.add([new Buffer(value)], function (err, res) {
-            if (err || !res) return console.log(err);
+        ipfs.block.put(new Buffer(value), function (err, res) {
+            var key = res.Key;
 
-            ipfs.object.get([res[0].path])
-                .then(function (result) {
-                    callback(null, res[0].path);
-                })
-                .catch(function (err) {
-                    callback(null, err);
-                })
+            if (err || !res) {
+                callback(err, null);
+            }
+            else {
+                callback(null, key);
+            }
         });
-
     }
 };

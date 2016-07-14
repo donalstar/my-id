@@ -210,7 +210,7 @@
 
                                             <div class="col-sm-6">
                                                 <input type="text" name="name" class="form-control input-sm"
-                                                       ng-model="attributes.ssn" placeholder="Value" tabindex="1"
+                                                       ng-model="attributes.profile[0].value" placeholder="Value" tabindex="1"
                                                        required/>
                                             </div>
 
@@ -229,7 +229,7 @@
 
                                             <div class="col-sm-6">
                                                 <input type="text" name="name" class="form-control input-sm"
-                                                       ng-model="attributes.dl" placeholder="Value" tabindex="1"
+                                                       ng-model="attributes.profile[1].value" placeholder="Value" tabindex="1"
                                                        required/>
                                             </div>
 
@@ -272,13 +272,13 @@
 
                                         <label class="col-sm-3 control-label">SSN:</label>
 
-                                        <label class="col-sm-8">{{ssn}}</label>
+                                        <label class="col-sm-8">{{attributes.profile[0].value}}</label>
                                     </div>
 
                                     <div class="row" style="margin-bottom:10px;">
                                         <label class="col-sm-3 control-label">DL:</label>
 
-                                        <label class="col-sm-8">{{dl}}</label>
+                                        <label class="col-sm-8">{{attributes.profile[1].value}}</label>
                                     </div>
                                 </div>
                             </div>

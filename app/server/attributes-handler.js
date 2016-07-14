@@ -10,86 +10,69 @@ web3.setProvider(provider);
 Pudding.setWeb3(web3);
 UserChain.load(Pudding);
 
-var attributeTypes = ['ssn', 'dl'];
-
-function contains(arr, obj) {
-    return (arr.indexOf(obj) != -1);
-}
-
-var AttributeType = {
-    SSN: 1,
-    DL: 2
-};
-
-/**
- *
- * @param username
- * @param requestType
- * @param value
- */
-function saveValueToContract(username, requestType, value, res) {
+function saveAttributesLocationToContract(username, location, callback) {
     utility.getAccountInfo(username, function (error, accountInfo) {
         var contract = UserChain.at(accountInfo.contract);
 
-        if (requestType == 'ssn') {
-            contract.setAttribute(AttributeType.SSN, value, {from: accountInfo.account}).then(function (result) {
-            // contract.setSSN(value, {from: accountInfo.account}).then(function (result) {
-                console.log("Set location addr - " + value + " : " + result);
+        contract.setAttributes(location, {from: accountInfo.account}).then(function (result) {
+            console.log("Set location addr - " + location + " : " + result);
 
-                res.send(JSON.stringify({value: "ok"}));
-            }).catch(function (e) {
-                console.log("updateAttribute ERR " + e);
+            var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
 
-                res.send(JSON.stringify({value: e}));
-            });
-        }
-        else if (requestType == 'dl') {
-            contract.setAttribute(AttributeType.DL, value, {from: accountInfo.account}).then(function (result) {
-            // contract.setDL(value, {from: accountInfo.account}).then(function (result) {
-                console.log("DL: Set location addr - " + value + " : " + result);
+            callback(null, balance);
+        }).catch(function (e) {
+            console.log("updateAttributes ERR " + e);
 
-                res.send(JSON.stringify({value: "ok"}));
-            }).catch(function (e) {
-                console.log("updateAttribute ERR " + e);
-
-                res.send(JSON.stringify({value: e}));
-            });
-        }
+            callback(e, null);
+        });
     });
-
 }
 
 module.exports = {
 
+    getAttributes: function (accountInfo, callback) {
+        var contract = UserChain.at(accountInfo.contract);
+
+        contract.attributes.call().then(
+            function (attributes_location) {
+                console.log("Got Attribs Loc: " + attributes_location);
+
+                if (attributes_location != "0") {
+                    file_store.readFromFile(attributes_location, function (error, data) {
+                        callback(null, data);
+                    });
+                }
+                else {
+                    callback(null, null);
+                }
+            }
+        );
+    },
+
     /**
      *
      * @param username
-     * @param requestType
-     * @param values
+     * @param attributes
      * @param res
      */
-    updateAttribute: function (username, requestType, values, res) {
-        console.log("Update: request type " + requestType);
-
-        if (contains(attributeTypes, requestType)) { // valid type
-            var attributeValue = values[requestType];
-
-            file_store.storeValue(attributeValue, function (error, location) {
-                if (!error) {
-                    saveValueToContract(username, requestType, location, res);
-                }
-                else {
-                    console.log('Fail: ', error);
-                }
-            });
-        }
-        else {
-            var message = "Unsupported attribute type " + requestType;
-
-            console.log(message);
-
-            res.status(500).send(JSON.stringify({message: message}));
-        }
+    saveAttributes: function (username, attributes, res) {
+        var value = JSON.stringify(attributes);
+        
+        file_store.storeValue(value, function (error, location) {
+            if (!error) {
+                saveAttributesLocationToContract(username, location, function (error, result) {
+                    if (!error) {
+                        res.send(JSON.stringify({value: "ok", balance: result}));
+                    }
+                    else {
+                        res.status(500).send({message: error.message});
+                    }
+                });
+            }
+            else {
+                res.status(500).send({message: error.message});
+            }
+        });
     }
 };
 

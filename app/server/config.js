@@ -6,5 +6,7 @@ module.exports = {
 
     ipfs_host: "localhost",
 
-    ipfs_port: 5001
+    ipfs_port: 5001,
+    
+    account_unlock_duration: 1800
 };

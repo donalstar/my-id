@@ -1,14 +1,61 @@
-'use strict'
+// 'use strict'
 
 var async = require("async");
 var fs = require('fs');
 
+var ipfsAPI = require('ipfs-api');
+var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'});
+
 console.log("add.js");
 
-async.map(['index.html','package.json','server.js'], fs.stat, function(err, results){
-    // results is now an array of stats for each file
-    console.log("RES " + results);
-});
+var profile = [
+    {name: 'ssn', value: '444', access: 0},
+    {name: 'dl', value: '7655586', access: 1}
+];
+
+var out = JSON.stringify(profile);
+
+
+ipfs.block.put(new Buffer(out), function (err, res) {
+    if (err || !res) return console.log(err);
+
+    var key = res.Key;
+
+    ipfs.block.get(key)
+        .then(function (result) {
+
+
+            let buff = '';
+
+            result
+                .on('data', function (data) {
+
+                    buff += data;
+
+                })
+                .on('end', function () {
+
+                    console.log("Got data 2 " + buff);
+
+                    var struct = JSON.parse(buff);
+
+                    console.log("JSON");
+                })
+            ;
+
+        })
+        .catch(function (err) {
+            console.log("ERR " + err);
+
+        })
+})
+;
+
+
+// async.map(['index.html','package.json','server.js'], fs.stat, function(err, results){
+//     // results is now an array of stats for each file
+//     console.log("RES " + results);
+// });
 
 
 // var Web3 = require('web3');
@@ -92,8 +139,6 @@ async.map(['index.html','package.json','server.js'], fs.stat, function(err, resu
 //         console.log("Item " + obj[index].account + " " + obj[index].contract);
 //     }
 // });
-
-
 
 
 // var obj;

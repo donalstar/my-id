@@ -35,15 +35,9 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                         $scope.user = $scope.loginFormData.username;
                         $scope.fullName = data.first_name + ' ' + data.last_name;
 
-                        $scope.ssn = data.ssn;
-                        $scope.dl = data.dl;
-
-                        console.log("SSN " + $scope.ssn);
-
                         $scope.accountBalance = data.balance;
 
-                        $scope.attributes.ssn = data.ssn;
-                        $scope.attributes.dl = data.dl;
+                        $scope.attributes.profile = data.profile;
                     }
                     else {
                         console.log("Login error " + data.error);
@@ -85,26 +79,23 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                 $scope.attributes.user = $scope.user;
                 $scope.attributes.requestType = type;
 
-                console.log("Updating " + type + "... ");
-
                 // call the create function from our service (returns a promise object)
                 Attributes.update($scope.attributes)
 
                 // if successful creation, call our get function to get all the new todos
                     .success(function (data) {
-                        console.log("Updating... success");
+                        console.log("Updating... success -- new balance " + data.balance);
+
+                        $scope.accountBalance = data.balance;
 
                         $scope.loading = false;
-
-                        $scope.ssn = $scope.attributes.ssn;
-                        $scope.dl = $scope.attributes.dl;
 
                         $scope.updateStatus = "update successful";
 
                         $scope.dataUpdateInProgress = false;
                     })
                     .error(function (error) {
-                        $scope.updateStatus = error.message;
+                        $scope.updateStatus = "Update error: " + error.message;
 
                         $scope.dataUpdateInProgress = false;
                     });

@@ -1,5 +1,7 @@
 contract UserChain {  // can be killed, so the owner gets sent the money in the end
 
+    uint minBalance;
+
     struct Name {
         string first;
         string last;
@@ -13,16 +15,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 	address public owner;
 	address public owner_address;
 
-	mapping (address => uint) public registrantsPaid;
-
-    uint TYPE_SSN = 1;
-    uint TYPE_DL = 2;
-
-	mapping (uint => string) public attributes;
-
-	uint public quota;
-    string public ssn_address;
-    uint public balance;
+    uint TYPE_SSN = 0;
+    uint TYPE_DL = 1;
 
     string public first_name;
     string public last_name;
@@ -31,14 +25,15 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
     Attributes public the_attributes;
 
-	event GetSSN(string ssn_address);
+    mapping (uint => string) public attribsMap;
+
+    string public attributes;
+
+	event SetAttribute(uint id, string attribute);
+	event GetAttribute(uint id, string attribute);
 
 	function UserChain(string fname, string lname, address new_owner) {
 		owner = msg.sender;
-		quota = 100;
-		balance = 800;
-
-        ssn_address = "0";
 
         first_name = fname;
         last_name = lname;
@@ -47,13 +42,18 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
         the_name = Name(first_name, last_name);
 
-        attributes[TYPE_SSN] = "0";
-
         the_attributes.ssn = "0";
         the_attributes.dl = "0";
+
+        attribsMap[0] = "0";
+        attribsMap[1] = "0";
+
+        attributes = "0";
 	}
 
     function setAttribute(uint id, string location) {
+        SetAttribute(id, location);
+
         if (id == TYPE_SSN) {
             the_attributes.ssn = location;
         }
@@ -65,35 +65,39 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         }
     }
 
+    function setAttrib(uint id, string location) {
+        SetAttribute(id, location);
+
+        attribsMap[id] = location;
+    }
+
+    function getAttrib(uint id) constant returns (string res) {
+        return attribsMap[id];
+    }
+
+    // Attributes
+    function setAttributes(string location) public {
+        attributes = location;
+    }
+
+
     // SSN
     function setSSN(string location) public {
-       ssn_address = location;
-
-      // attributes[TYPE_SSN] = location;
+        setAttribute(TYPE_SSN, location);
     }
 
     function getSSN() public returns (string) {
-        return ssn_address;
+        return the_attributes.ssn;
     }
 
     // Attribute
 
     function setDL(string location) public {
-        the_attributes.dl = location;
+        setAttribute(TYPE_DL, location);
     }
 
     function getDL() public returns (string) {
         return the_attributes.dl;
-    }
-
-
-	function changeQuota(uint newquota) public {
-		if (msg.sender != owner) { return; }
-		quota = newquota;
-	}
-
-    function getBalance() public returns (uint balance) {
-        return balance;
     }
 
 	function destroy() {
@@ -101,4 +105,11 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 			suicide(owner);
 		}
 	}
+
+	/* This unnamed function is called whenever someone tries to send ether to it */
+    function () {
+        throw;     // Prevents accidental sending of ether
+    }
+
 }
+

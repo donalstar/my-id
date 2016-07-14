@@ -8,7 +8,7 @@ module.exports = function (app) {
      */
 
     app.post('/api/attribute', function (req, response) {
-        attributes.updateAttribute(req.body.user, req.body.requestType, req.body, response);
+        attributes.saveAttributes(req.body.user, req.body.profile, response);
     });
 
     /**
