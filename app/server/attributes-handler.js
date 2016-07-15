@@ -10,6 +10,23 @@ web3.setProvider(provider);
 Pudding.setWeb3(web3);
 UserChain.load(Pudding);
 
+var attributeTypes = ['ssn', 'dl', 'fico'];
+
+function contains(arr, obj) {
+    return (arr.indexOf(obj) != -1);
+}
+
+
+/**
+ *
+ * @param attributeType
+ * @returns {number}
+ */
+function getAttributeId(attributeType) {
+    return (attributeTypes.indexOf(attributeType));
+}
+
+
 function saveAttributesLocationToContract(username, location, callback) {
     utility.getAccountInfo(username, function (error, accountInfo) {
         var contract = UserChain.at(accountInfo.contract);
@@ -28,10 +45,95 @@ function saveAttributesLocationToContract(username, location, callback) {
     });
 }
 
+/**
+ *
+ * @param username
+ * @param requestType
+ * @param value
+ * @param callback
+ */
+function saveValueToContract(username, requestType, value, callback) {
+    utility.getAccountInfo(username, function (error, accountInfo) {
+        var contract = UserChain.at(accountInfo.contract);
+
+        contract.setAttrib(requestType, value, {from: accountInfo.account}).then(function (result) {
+            console.log("Set location addr - " + value + " : " + result);
+
+            callback(null, result);
+        }).catch(function (e) {
+            console.log("updateAttribute ERR " + e);
+
+            callback(e, null);
+        });
+    });
+}
+
+/**
+ *
+ * @param username
+ * @param requestType
+ * @param attributeValue
+ * @param callback
+ */
+function updateAttribute(username, requestType, attributeValue, callback) {
+    console.log("Update: request type " + requestType);
+
+    if (contains(attributeTypes, requestType)) { // valid type
+
+        var attributeType = getAttributeId(requestType);
+
+        file_store.storeValue(attributeValue, function (error, location) {
+            if (!error) {
+                saveValueToContract(username, attributeType, location, callback);
+            }
+            else {
+                callback(error, null);
+            }
+        });
+    }
+    else {
+        var message = "Unsupported attribute type " + requestType;
+
+        console.log(message);
+
+        throw message;
+    }
+}
+
+/**
+ *
+ * @param attributes
+ * @param requestType
+ */
+function getAttributeValue(attributes, requestType) {
+    var value = null;
+
+    for (var i = 0; i < attributes.length; i++) {
+        var attribute = attributes[i];
+
+        if (attribute.name == requestType) {
+            value = attribute.value;
+        }
+    }
+
+    return value;
+}
+
 module.exports = {
 
     getAttributes: function (accountInfo, callback) {
         var contract = UserChain.at(accountInfo.contract);
+
+        // quick test -- get attrib #1
+
+        contract.getAttrib(0, {from: accountInfo.account}).then(function (result) {
+            console.log("Got Attrib: " + result);
+
+            file_store.readFromFile(result, function (error, data) {
+                console.log("Got Attrib VALUE: " + data);
+            });
+        });
+
 
         contract.attributes.call().then(
             function (attributes_location) {
@@ -52,17 +154,27 @@ module.exports = {
     /**
      *
      * @param username
+     * @param updatedAttributeType
      * @param attributes
      * @param res
      */
-    saveAttributes: function (username, attributes, res) {
+    saveAttributes: function (username, updatedAttributeType, attributes, res) {
         var value = JSON.stringify(attributes);
-        
-        file_store.storeValue(value, function (error, location) {
+
+        var attributeValue = getAttributeValue(attributes, updatedAttributeType);
+
+        updateAttribute(username, updatedAttributeType, attributeValue, function (error, result) {
             if (!error) {
-                saveAttributesLocationToContract(username, location, function (error, result) {
+                file_store.storeValue(value, function (error, location) {
                     if (!error) {
-                        res.send(JSON.stringify({value: "ok", balance: result}));
+                        saveAttributesLocationToContract(username, location, function (error, result) {
+                            if (!error) {
+                                res.send(JSON.stringify({value: "ok", balance: result}));
+                            }
+                            else {
+                                res.status(500).send({message: error.message});
+                            }
+                        });
                     }
                     else {
                         res.status(500).send({message: error.message});

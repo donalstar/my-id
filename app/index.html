@@ -204,7 +204,7 @@
                                 <div class="alert alert-success" style="display: none;"></div>
 
                                 <div class="row" style="margin-bottom:10px;" ng-repeat="item in attributes.profile">
-                                    <form name="form" ng-submit="updateValues('{{item.name}}')">
+                                    <form name="form" ng-submit="updateValues(item.name)">
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">{{item.name.toUpperCase()}}:</label>
 

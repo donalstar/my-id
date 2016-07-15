@@ -8,7 +8,9 @@ module.exports = function (app) {
      */
 
     app.post('/api/attribute', function (req, response) {
-        attributes.saveAttributes(req.body.user, req.body.profile, response);
+        console.log("-- Update attrib - type = " + req.body.requestType);
+
+        attributes.saveAttributes(req.body.user, req.body.requestType, req.body.profile, response);
     });
 
     /**

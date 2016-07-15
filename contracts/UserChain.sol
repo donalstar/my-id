@@ -52,6 +52,15 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 	}
 
 
+    function setAttrib(uint id, string location) {
+        SetAttribute(id, location);
+
+        attribsMap[id] = location;
+    }
+
+    function getAttrib(uint id) constant returns (string res) {
+        return attribsMap[id];
+    }
 
     // Attributes
     function setAttributes(string location) public {
