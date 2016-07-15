@@ -101,7 +101,12 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
             contract.the_name.call().then(
                 function (the_name) {
                     attributesHandler.getAttributes(accountInfo, function (error, attributes) {
-                        var profile = [];
+
+                        var profile = [
+                            {name: "ssn", value: "", access: 0},
+                            {name: "dl", value: "", access: 0},
+                            {name: "fico", value: "", access: 0}
+                        ];
 
                         if (attributes != null) {
                             profile = JSON.parse(attributes);

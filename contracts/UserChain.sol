@@ -42,62 +42,20 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
         the_name = Name(first_name, last_name);
 
-        the_attributes.ssn = "0";
-        the_attributes.dl = "0";
+        //the_attributes.ssn = "0";
+        //the_attributes.dl = "0";
 
-        attribsMap[0] = "0";
-        attribsMap[1] = "0";
+        //attribsMap[0] = "0";
+        //attribsMap[1] = "0";
 
         attributes = "0";
 	}
 
-    function setAttribute(uint id, string location) {
-        SetAttribute(id, location);
 
-        if (id == TYPE_SSN) {
-            the_attributes.ssn = location;
-        }
-        else if (id == TYPE_DL) {
-            the_attributes.dl = location;
-        }
-        else {
-            throw;
-        }
-    }
-
-    function setAttrib(uint id, string location) {
-        SetAttribute(id, location);
-
-        attribsMap[id] = location;
-    }
-
-    function getAttrib(uint id) constant returns (string res) {
-        return attribsMap[id];
-    }
 
     // Attributes
     function setAttributes(string location) public {
         attributes = location;
-    }
-
-
-    // SSN
-    function setSSN(string location) public {
-        setAttribute(TYPE_SSN, location);
-    }
-
-    function getSSN() public returns (string) {
-        return the_attributes.ssn;
-    }
-
-    // Attribute
-
-    function setDL(string location) public {
-        setAttribute(TYPE_DL, location);
-    }
-
-    function getDL() public returns (string) {
-        return the_attributes.dl;
     }
 
 	function destroy() {
