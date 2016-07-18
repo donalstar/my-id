@@ -1,4 +1,5 @@
 var account = require('./account-handler.js');
+var customer = require('./customer-handler.js');
 var attributes = require('./attributes-handler.js');
 
 module.exports = function (app) {
@@ -22,8 +23,38 @@ module.exports = function (app) {
         account.getAccount(req.params.username, req.params.password, response);
     });
 
+    /**
+     * Get Accounts
+     */
+    app.get('/api/accounts', function (req, response) {
+        console.log("Get all accounts");
+
+        account.getAllAccounts(response);
+    });
+
     app.post('/api/account', function (req, response) {
         account.createAccount(req.body.username, req.body.firstName, req.body.lastName, req.body.password, response);
+    });
+
+    // Customer
+
+    /**
+     * Create Customer
+     */
+
+    app.post('/api/customer', function (req, response) {
+        console.log("Create new customer " + req.body.username);
+
+        customer.createAccount(req.body.username, req.body.firstName, req.body.lastName, req.body.password, response);
+    });
+
+    /**
+     * Get customer
+     */
+    app.get('/api/customer/:username/:password', function (req, response) {
+        console.log("Get customer account " + req.params.username);
+
+        customer.getAccount(req.params.username, req.params.password, response);
     });
 
     // application -------------------------------------------------------------

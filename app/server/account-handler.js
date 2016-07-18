@@ -1,12 +1,9 @@
 var Web3 = require('web3');
 var async = require("async");
-var rpc = require('json-rpc2');
 var UserChain = require("../contracts/UserChain.sol.js");
 var Pudding = require("ether-pudding");
-var file_store = require('./file-store.js');
 var config = require('./config.js');
 var attributesHandler = require('./attributes-handler.js');
-var client = rpc.Client.$create(config.server_port, config.server_host);
 var web3 = new Web3();
 var provider = new web3.providers.HttpProvider();
 
@@ -17,21 +14,6 @@ web3.setProvider(provider);
 Pudding.setWeb3(web3);
 
 UserChain.load(Pudding);
-
-/**
- * Unlock account
- *
- * @param address
- * @param passphrase
- * @param callback
- */
-function unlockAccount(address, passphrase, callback) {
-
-    client.call("personal_unlockAccount", [address, passphrase, config.account_unlock_duration], function (err, result) {
-
-        callback(err, result);
-    });
-}
 
 /**
  * Create Contract
@@ -94,7 +76,9 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
  * @param res
  */
 function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
-    unlockAccount(accountInfo.account, passphrase, function (err, result) {
+
+    utility.unlockAccount(accountInfo.account, passphrase, function (err, result) {
+
         if (!err) {
             console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
@@ -140,10 +124,15 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
                     error: message
                 }));
         }
+
     });
 }
 
-
+/**
+ * 
+ * @param address
+ * @param callback
+ */
 function addFunds(address, callback) {
     web3.eth.getAccounts(function (err, accs) {
         var amount = web3.toWei(10, "finney"); // decide how much to contribute
@@ -213,8 +202,8 @@ module.exports = {
     createAccount: function (username, first_name, last_name, passphrase, res) {
         console.log("createAccount - username " + username + " passphrase " + passphrase);
 
-        client.call("personal_newAccount", [passphrase], function (err, accountAddress) {
 
+        utility.createAccount(username, passphrase, function (err, accountAddress) {
             web3.eth.getAccounts(function (err, accounts) {
                 var masterAccount = accounts[0];
 
@@ -225,7 +214,7 @@ module.exports = {
                         if (!err) {
                             console.log("Successfully added funds to account " + accountAddress);
 
-                            utility.addToFile(username, accountAddress, contract.address, function () {
+                            utility.addToFile(username, first_name, last_name, accountAddress, contract.address, function () {
                                 console.log("Account creation complete");
 
                                 res.send(JSON.stringify({value: "ok"}));
@@ -237,6 +226,21 @@ module.exports = {
                     });
                 });
             });
+        });
+    },
+
+    /**
+     *
+     * @param res
+     */
+    getAllAccounts: function (res) {
+        utility.getUserAccounts(function (err, result) {
+            if (err) {
+                res.status(500).send({message: err.message});
+            }
+            else {
+                res.send(result);
+            }
         });
     }
 };
