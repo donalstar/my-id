@@ -13,6 +13,9 @@ services.factory('Account', ['$http', function ($http) {
         get: function (username, password) {
             return $http.get('/api/account/' + username + "/" + password);
         },
+        getData: function (username, account_name, attribute) {
+            return $http.get('/api/account_data/' + username + "/" + account_name + "/" + attribute);
+        },
         getAll: function() {
             return $http.get('/api/accounts/');
         },

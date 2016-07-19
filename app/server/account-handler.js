@@ -129,7 +129,7 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
 }
 
 /**
- * 
+ *
  * @param address
  * @param callback
  */
@@ -188,6 +188,33 @@ module.exports = {
                 }
             }
         });
+    },
+
+    /**
+     *
+     * @param username
+     * @param account_name
+     * @param attribute
+     * @param res
+     */
+    requestData: function (username, account_name, attribute, res) {
+        utility.getAccountInfo(account_name, function (error, accountInfo) {
+            if (accountInfo) {
+                attributesHandler.getAttribute(accountInfo, 0, function (err, result) {
+                    res.send(JSON.stringify(
+                        {
+                            result: true,
+                            attribute: attribute,
+                            value: result,
+                            error: err
+                        }));
+                });
+            }
+            else {
+                res.status(500).send({message: error.message});
+            }
+        });
+
     },
 
     /**

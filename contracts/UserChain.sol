@@ -42,12 +42,6 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
         the_name = Name(first_name, last_name);
 
-        //the_attributes.ssn = "0";
-        //the_attributes.dl = "0";
-
-        //attribsMap[0] = "0";
-        //attribsMap[1] = "0";
-
         attributes = "0";
 	}
 

@@ -1,14 +1,15 @@
 module.exports = {
-  build: {
-    "index.html": "index.html"
-  },
-  deploy: [
-    "UserChain"
-  ],
-  rpc: {
-    host: "localhost",
-    port: 8545
-  }
+    build: {
+        "index.html": "index.html"
+    },
+    deploy: [
+        "UserChain",
+        "Coin"
+    ],
+    rpc: {
+        host: "localhost",
+        port: 8545
+    }
 };
 
 

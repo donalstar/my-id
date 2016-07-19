@@ -229,9 +229,14 @@
                                                     </div>
 
                                                     <div class="col-sm-3">
-                                                        <button type="submit" class="btn btn-primary"
+                                                        <button type="submit" ng-click="requestData(account.username)"
+                                                                class="btn btn-primary"
                                                                 style="width:100px">Get SSN
                                                         </button>
+                                                    </div>
+
+                                                    <div ng-show="gotAttribute(account.username)" class="col-md-10">
+                                                        <div>RESULT: {{gotAttribute(account.username)}}</div>
                                                     </div>
                                                 </div>
                                             </div>

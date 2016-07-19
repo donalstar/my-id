@@ -6,12 +6,14 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
         $scope.accountBalance = 0.00;
 
         $scope.customerData = {};
-        
+
         $scope.snapVersion = SNAP_VERSION.full;
 
         $scope.accountCreateStatus = '';
         $scope.loginFormData = {};
         $scope.fullName = '';
+
+        $scope.accountAttributes = {};
 
         snapRemote.getSnapper().then(function (snapper) {
             snapper.open('left');
@@ -72,5 +74,23 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
                     $scope.createErrorMessage = error;
                 });
         };
+
+        $scope.requestData = function (account_name) {
+            console.log("REQUEST DATA for " + account_name);
+            
+            Account.getData($scope.user, account_name, "attrib")
+                .success(function (data) {
+                    console.log("Got account data " + data.value);
+
+                    $scope.accountAttributes.username = data.value;
+                })
+                .error(function (error) {
+                    console.log("error getting account data " + error);
+                });
+        };
+
+        $scope.gotAttribute = function(username) {
+            return $scope.accountAttributes.username;
+        }
     }]);
 

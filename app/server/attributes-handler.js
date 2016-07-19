@@ -121,6 +121,29 @@ function getAttributeValue(attributes, requestType) {
 
 module.exports = {
 
+    /**
+     * 
+     * @param accountInfo
+     * @param attributeId
+     * @param callback
+     */
+    getAttribute: function(accountInfo, attributeId, callback) {
+        var contract = UserChain.at(accountInfo.contract);
+
+        contract.getAttrib(attributeId, {from: accountInfo.account}).then(function (result) {
+            console.log("Got Attrib: " + result);
+
+            if (result != "0") {
+                file_store.readFromFile(result, function (error, data) {
+                    callback(error, data);
+                });                
+            }
+            else {
+                callback(null, null);
+            }
+        });
+    },
+    
     getAttributes: function (accountInfo, callback) {
         var contract = UserChain.at(accountInfo.contract);
 

@@ -36,6 +36,14 @@ module.exports = function (app) {
         account.createAccount(req.body.username, req.body.firstName, req.body.lastName, req.body.password, response);
     });
 
+    /**
+     * Account data
+     * 
+     */
+    app.get('/api/account_data/:username/:account_name/:attribute', function (req, response) {
+        account.requestData(req.params.username, req.params.account_name, req.params.attribute, response);
+    });
+    
     // Customer
 
     /**

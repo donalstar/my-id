@@ -54,6 +54,8 @@ module.exports = {
                 utility.addToCustomerFile(username, first_name, last_name, accountAddress, function () {
                     console.log("Account creation complete");
 
+                    // QUICK TEST -- GET COINS
+                    
                     res.send(JSON.stringify({value: "ok"}));
                 });
             }
