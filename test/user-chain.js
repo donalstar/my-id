@@ -28,42 +28,42 @@ contract('UserChain', function (accounts) {
     //         }).catch(done);
     // });
 
-    it("Should set attribs", function (done) {
-        UserChain.new({from: owner_account}).then(
-            function (UserChain) {
-                UserChain.setAttrib(1, "22222").then(
-                    function (attribute) {
-                        console.log("Set attrib 1 to " + "22222");
-                    }).then(
-                    function () {
-                        var ssn = "4321";
+    // it("Should set attribs", function (done) {
+    //     UserChain.new({from: owner_account}).then(
+    //         function (UserChain) {
+    //             UserChain.setAttrib(1, "22222").then(
+    //                 function (attribute) {
+    //                     console.log("Set attrib 1 to " + "22222");
+    //                 }).then(
+    //                 function () {
+    //                     var ssn = "4321";
+    //
+    //                     console.log("Set attrib 0 to " + ssn);
+    //                     return UserChain.setAttrib(0, ssn);
+    //                 }).then(
+    //                 function () {
+    //                     return UserChain.getAttrib(0);
+    //                 }).then(
+    //                 function (attrib) {
+    //                     assert.equal(attrib, "4321", "New SSN is not correct!");
+    //
+    //                     return UserChain.attribsMap.call();
+    //                 }).then(
+    //                 function (attribsMap) {
+    //                     console.log("Attribs map " + attribsMap);
+    //
+    //
+    //                     done();
+    //                 }).catch(done);
+    //
+    //
+    //
+    //
+    //         });
 
-                        console.log("Set attrib 0 to " + ssn);
-                        return UserChain.setAttrib(0, ssn);
-                    }).then(
-                    function () {
-                        return UserChain.getAttrib(0);
-                    }).then(
-                    function (attrib) {
-                        assert.equal(attrib, "4321", "New SSN is not correct!");
-
-                        return UserChain.attribsMap.call();
-                    }).then(
-                    function (attribsMap) {
-                        console.log("Attribs map " + attribsMap);
-              
-
-                        done();
-                    }).catch(done);
 
 
-
-
-            });
-
-
-
-    });
+    // });
 
     // it("Should set DL", function (done) {
     //

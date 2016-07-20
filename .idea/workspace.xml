@@ -3,19 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="7e40cf0e-1887-4463-aab9-cebf05c2f6c9" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin.html" afterPath="$PROJECT_DIR$/app/admin.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/contracts/UserChain.sol.js" afterPath="$PROJECT_DIR$/app/contracts/UserChain.sol.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/admin_controller.js" afterPath="$PROJECT_DIR$/app/js/admin_controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/services.js" afterPath="$PROJECT_DIR$/app/js/services.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/account-handler.js" afterPath="$PROJECT_DIR$/app/server/account-handler.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/attributes-handler.js" afterPath="$PROJECT_DIR$/app/server/attributes-handler.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/customer-handler.js" afterPath="$PROJECT_DIR$/app/server/customer-handler.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/routes.js" afterPath="$PROJECT_DIR$/app/server/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/contracts/UserChain.sol" afterPath="$PROJECT_DIR$/contracts/UserChain.sol" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/accounts.json" afterPath="$PROJECT_DIR$/data/accounts.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/contracts/Coin.sol.js" afterPath="$PROJECT_DIR$/app/contracts/Coin.sol.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/setup.js" afterPath="$PROJECT_DIR$/app/setup.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/contracts/Coin.sol" afterPath="$PROJECT_DIR$/contracts/Coin.sol" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/environments/development/contracts/Coin.sol.js" afterPath="$PROJECT_DIR$/environments/development/contracts/Coin.sol.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/environments/development/contracts/UserChain.sol.js" afterPath="$PROJECT_DIR$/environments/development/contracts/UserChain.sol.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/environments/test/contracts/Coin.sol.js" afterPath="$PROJECT_DIR$/environments/test/contracts/Coin.sol.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/environments/test/contracts/UserChain.sol.js" afterPath="$PROJECT_DIR$/environments/test/contracts/UserChain.sol.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/truffle.js" afterPath="$PROJECT_DIR$/truffle.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/coin.js" afterPath="$PROJECT_DIR$/test/coin.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/user-chain.js" afterPath="$PROJECT_DIR$/test/user-chain.js" />
     </list>
     <ignored path="my-id.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,21 +32,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="attributes-handler.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/server/attributes-handler.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
-              <caret line="132" column="0" selection-start-line="132" selection-start-column="0" selection-end-line="143" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Coin.sol" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Coin.sol" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/contracts/Coin.sol">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="114" column="88" selection-start-line="114" selection-start-column="88" selection-end-line="114" selection-end-column="88" />
+            <state relative-caret-position="551">
+              <caret line="125" column="41" selection-start-line="125" selection-start-column="41" selection-end-line="125" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -59,8 +45,20 @@
       <file leaf-file-name="coin.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/coin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+            <state relative-caret-position="240">
+              <caret line="36" column="16" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="75" />
+              <folding>
+                <marker date="1468967204000" expanded="true" signature="301:470" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user-chain.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/user-chain.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="28" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -69,18 +67,28 @@
       <file leaf-file-name="setup.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/setup.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="370">
-              <caret line="41" column="58" selection-start-line="41" selection-start-column="58" selection-end-line="41" selection-end-column="58" />
+            <state relative-caret-position="480">
+              <caret line="82" column="59" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="customer-handler.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Coin.sol.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/contracts/Coin.sol.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="525">
+              <caret line="37" column="59" selection-start-line="37" selection-start-column="59" selection-end-line="37" selection-end-column="59" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="customer-handler.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/server/customer-handler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="545">
-              <caret line="57" column="20" selection-start-line="57" selection-start-column="20" selection-end-line="57" selection-end-column="20" />
+            <state relative-caret-position="30">
+              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -100,7 +108,7 @@
         <entry file="file://$PROJECT_DIR$/app/server/account-handler.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="330">
-              <caret line="43" column="39" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
+              <caret line="66" column="6" selection-start-line="66" selection-start-column="6" selection-end-line="66" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -109,31 +117,11 @@
       <file leaf-file-name="Coin.sol.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/environments/development/contracts/Coin.sol.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+            <state relative-caret-position="105">
+              <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Coin.sol.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/contracts/Coin.sol.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="7" column="2093" selection-start-line="7" selection-start-column="2086" selection-end-line="7" selection-end-column="2093" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="kill.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/kill.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -173,7 +161,6 @@
         <option value="$PROJECT_DIR$/app/js/app.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/app/server/config.js" />
-        <option value="$PROJECT_DIR$/test/user-chain.js" />
         <option value="internal/net.js" />
         <option value="$PROJECT_DIR$/app/add.js" />
         <option value="$PROJECT_DIR$/app/server/file-store.js" />
@@ -192,11 +179,12 @@
         <option value="$PROJECT_DIR$/app/admin.html" />
         <option value="$PROJECT_DIR$/contracts/UserChain.sol" />
         <option value="$PROJECT_DIR$/truffle.js" />
+        <option value="$PROJECT_DIR$/environments/development/contracts/Coin.sol.js" />
+        <option value="$PROJECT_DIR$/app/server/customer-handler.js" />
+        <option value="$PROJECT_DIR$/test/user-chain.js" />
         <option value="$PROJECT_DIR$/contracts/Coin.sol" />
         <option value="$PROJECT_DIR$/test/coin.js" />
-        <option value="$PROJECT_DIR$/environments/development/contracts/Coin.sol.js" />
         <option value="$PROJECT_DIR$/app/setup.js" />
-        <option value="$PROJECT_DIR$/app/server/customer-handler.js" />
       </list>
     </option>
   </component>
@@ -207,9 +195,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1440" />
-    <option name="height" value="837" />
+    <option name="x" value="1474" />
+    <option name="y" value="-76" />
+    <option name="width" value="1443" />
+    <option name="height" value="1095" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -534,18 +523,18 @@
       <workItem from="1467410100916" duration="89121000" />
       <workItem from="1468259747203" duration="59474000" />
       <workItem from="1468607357811" duration="12780000" />
-      <workItem from="1468692954678" duration="21851000" />
+      <workItem from="1468692954678" duration="44842000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="200468000" />
+    <option name="totallyTimeSpent" value="223459000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="837" extended-state="6" />
-    <editor active="true" />
+    <frame x="1474" y="-76" width="1443" height="1095" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24305555" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24255024" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -553,7 +542,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3971354" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39668617" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -645,8 +634,20 @@
           <properties />
           <option name="timeStamp" value="157" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/app/setup.js</url>
+          <line>117</line>
+          <properties />
+          <option name="timeStamp" value="159" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/app/setup.js</url>
+          <line>85</line>
+          <properties />
+          <option name="timeStamp" value="160" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="158" />
+      <option name="time" value="161" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -704,13 +705,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="2" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -926,10 +920,9 @@
         <state relative-caret-position="165">
           <caret line="216" column="50" selection-start-line="216" selection-start-column="50" selection-end-line="216" selection-end-column="50" />
           <folding>
-            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#0;n#div#2;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -952,14 +945,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/user-chain.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="44" column="46" selection-start-line="44" selection-start-column="46" selection-end-line="44" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/kill.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -968,10 +953,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/attributes-handler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="128" column="7" selection-start-line="128" selection-start-column="7" selection-end-line="128" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/customer-handler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/environments/development/contracts/Coin.sol.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+        <state relative-caret-position="105">
+          <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -986,26 +987,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/contracts/Coin.sol.js">
+    <entry file="file://$PROJECT_DIR$/test/user-chain.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
-          <caret line="7" column="2093" selection-start-line="7" selection-start-column="2086" selection-end-line="7" selection-end-column="2093" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/contracts/Coin.sol">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="114" column="88" selection-start-line="114" selection-start-column="88" selection-end-line="114" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/coin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="28" selection-end-column="10" />
           <folding />
         </state>
       </provider>
@@ -1013,31 +998,49 @@
     <entry file="file://$PROJECT_DIR$/app/server/account-handler.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
-          <caret line="43" column="39" selection-start-line="43" selection-start-column="39" selection-end-line="43" selection-end-column="39" />
+          <caret line="66" column="6" selection-start-line="66" selection-start-column="6" selection-end-line="66" selection-end-column="6" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/attributes-handler.js">
+    <entry file="file://$PROJECT_DIR$/app/contracts/Coin.sol.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="132" column="0" selection-start-line="132" selection-start-column="0" selection-end-line="143" selection-end-column="11" />
+        <state relative-caret-position="525">
+          <caret line="37" column="59" selection-start-line="37" selection-start-column="59" selection-end-line="37" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/coin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="36" column="16" selection-start-line="36" selection-start-column="16" selection-end-line="36" selection-end-column="75" />
+          <folding>
+            <marker date="1468967204000" expanded="true" signature="301:470" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/setup.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="41" column="58" selection-start-line="41" selection-start-column="58" selection-end-line="41" selection-end-column="58" />
+        <state relative-caret-position="480">
+          <caret line="82" column="59" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/customer-handler.js">
+    <entry file="file://$PROJECT_DIR$/contracts/Coin.sol">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="545">
-          <caret line="57" column="20" selection-start-line="57" selection-start-column="20" selection-end-line="57" selection-end-column="20" />
+        <state relative-caret-position="551">
+          <caret line="125" column="41" selection-start-line="125" selection-start-column="41" selection-end-line="125" selection-end-column="41" />
           <folding />
         </state>
       </provider>

@@ -30,12 +30,15 @@ contract Coin is owned {
     uint256 public sellPrice;
     uint256 public buyPrice;
 
+    uint fi = 1 finney;
+
+    event Amount(uint256 value);
 
     event TransferTokens(address indexed from, address indexed to, uint256 value);
 
     event BuyTokens(address indexed from, address indexed to, uint256 msgValue, uint256 buyPrice, uint256 value);
 
-    event SellTokens(address indexed from, address indexed to, uint256 revenue, uint256 sellPrice, uint256 value);
+    event SellTokens(address indexed from, address indexed to, uint256 rev_finney, uint256 sellPrice_finney, uint256 tokens);
 
     event GetBalance(address indexed addr, uint256 value);
 
@@ -55,10 +58,16 @@ contract Coin is owned {
 
         totalSupply = initialSupply;
 
-        balanceOf[msg.sender] = initialSupply;              // Give the creator all initial tokens
+        balanceOf[msg.sender] = initialSupply;
+
+        Amount(balanceOf[msg.sender]);
+
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
         decimals = decimalUnits;                            // Amount of decimals for display purposes
+
+        sellPrice = 10 finney;
+        buyPrice = 10 finney;
     }
 
 
@@ -100,6 +109,10 @@ contract Coin is owned {
 
     function buy() returns (uint amount){
         amount = msg.value / buyPrice;                     // calculates the amount
+
+        Amount(amount);
+        Amount(balanceOf[this]);
+
         if (balanceOf[this] < amount) throw;               // checks if it has enough to sell
         balanceOf[msg.sender] += amount;                   // adds the amount to buyer's balance
         balanceOf[this] -= amount;                         // subtracts amount from seller's balance
@@ -116,13 +129,15 @@ contract Coin is owned {
             balanceOf[msg.sender] += amount;
         }
 
-        SellTokens(this, msg.sender, revenue, sellPrice, amount);
+        SellTokens(this, msg.sender, revenue/fi, sellPrice/fi, amount);
 
         return revenue;                                    // ends function and returns
     }
 
     function getBalance(address addr) returns(uint) {
         GetBalance(addr, balanceOf[addr]);
+
+        Amount(balanceOf[addr]);
 
     	return balanceOf[addr];
     }
