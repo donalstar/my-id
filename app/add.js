@@ -1,55 +1,115 @@
 // 'use strict'
-
-var async = require("async");
-var fs = require('fs');
-
-var ipfsAPI = require('ipfs-api');
-var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'});
-
-console.log("add.js");
-
-var profile = [
-    {name: 'ssn', value: '444', access: 0},
-    {name: 'dl', value: '7655586', access: 1}
-];
-
-var out = JSON.stringify(profile);
+//
 
 
-ipfs.block.put(new Buffer(out), function (err, res) {
-    if (err || !res) return console.log(err);
+var Web3 = require('web3');
+var UserChain = require("./contracts/UserChain.sol.js");
+var Pudding = require("ether-pudding");
+var web3 = new Web3();
+var provider = new web3.providers.HttpProvider();
 
-    var key = res.Key;
+var utility = require('./server/utility.js');
 
-    ipfs.block.get(key)
-        .then(function (result) {
+web3.setProvider(provider);
+
+Pudding.setWeb3(web3);
+
+UserChain.load(Pudding);
+
+var Coin = require("./contracts/Coin.sol.js");
+Coin.load(Pudding);
+
+console.log("Connect to bank");
 
 
-            let buff = '';
+var owner = '0x6337ac72daa8566fad104f185be41b4200063e6d';
 
-            result
-                .on('data', function (data) {
+getUser();
 
-                    buff += data;
+// getBank();
 
-                })
-                .on('end', function () {
+var account = '0xffc87f4f89772b3de2ff5e89657769ad46924865';
 
-                    console.log("Got data 2 " + buff);
+utility.getTokens(account, function (error, balance) {
+    console.log("ACCOUNT BALANCE balance (tokens) " + balance);
+});
 
-                    var struct = JSON.parse(buff);
+function getUser() {
+    console.log("Get user");
 
-                    console.log("JSON");
-                })
-            ;
+    var contract_addr = '0xed2800326db27a1923b07e12e408c1e55314904b';
+    var contract = UserChain.at(contract_addr);
 
-        })
-        .catch(function (err) {
-            console.log("ERR " + err);
+    contract.the_name.call().then(
+        function (the_name) {
+            console.log("Contract name " + the_name);
+        });
+}
 
-        })
-})
-;
+function getBank() {
+    console.log("Get bank");
+
+
+    var contract_addr = '0xb257c4fdcb29c72356ed10556226aaacd39328f3';
+    var contract = Coin.at(contract_addr);
+
+    contract.name.call().then(
+        function (the_name) {
+            console.log("BANK name " + the_name);
+        });
+}
+
+
+// var async = require("async");
+// var fs = require('fs');
+//
+// var ipfsAPI = require('ipfs-api');
+// var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'});
+//
+
+//
+// var profile = [
+//     {name: 'ssn', value: '444', access: 0},
+//     {name: 'dl', value: '7655586', access: 1}
+// ];
+//
+// var out = JSON.stringify(profile);
+//
+//
+// ipfs.block.put(new Buffer(out), function (err, res) {
+//     if (err || !res) return console.log(err);
+//
+//     var key = res.Key;
+//
+//     ipfs.block.get(key)
+//         .then(function (result) {
+//
+//
+//             let buff = '';
+//
+//             result
+//                 .on('data', function (data) {
+//
+//                     buff += data;
+//
+//                 })
+//                 .on('end', function () {
+//
+//                     console.log("Got data 2 " + buff);
+//
+//                     var struct = JSON.parse(buff);
+//
+//                     console.log("JSON");
+//                 })
+//             ;
+//
+//         })
+//         .catch(function (err) {
+//             console.log("ERR " + err);
+//
+//         })
+// })
+// ;
 
 
 // async.map(['index.html','package.json','server.js'], fs.stat, function(err, results){

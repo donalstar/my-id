@@ -77,7 +77,7 @@ function createCoinBank(supply, masterAccount, callback) {
             console.log("Contract transaction send: TransactionHash: " + contract.transactionHash + " waiting to be mined...");
 
         } else {
-            console.log("Contract mined! Address: " + contract.address);
+            console.log("[ COIN BANK ] Contract mined! Address: " + contract.address);
 
 
             var block = web3.eth.getBlock('latest').number;

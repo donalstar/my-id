@@ -1,1 +1,16 @@
-[{"username":"donal1","first_name":"donal","last_name":"1","account":"0x539c5fcdfff1ada81e3b91d154939bf31226315d","contract":"0x166ddbe43c7d6cc6aaf7e28cba9c64fd5647551e"},{"username":"donal2","first_name":"donal","last_name":"2","account":"0x209872e07af9b3d86873800669c5c3f9f2372657","contract":"0xed2800326db27a1923b07e12e408c1e55314904b"}]
+[
+  {
+    "username": "donal1",
+    "first_name": "donal",
+    "last_name": "1",
+    "account": "0x539c5fcdfff1ada81e3b91d154939bf31226315d",
+    "contract": "0x166ddbe43c7d6cc6aaf7e28cba9c64fd5647551e"
+  },
+  {
+    "username": "donal2",
+    "first_name": "donal",
+    "last_name": "2",
+    "account": "0x209872e07af9b3d86873800669c5c3f9f2372657",
+    "contract": "0xed2800326db27a1923b07e12e408c1e55314904b"
+  }
+]

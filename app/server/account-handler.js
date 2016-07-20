@@ -128,36 +128,6 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
     });
 }
 
-/**
- *
- * @param address
- * @param callback
- */
-function addFunds(address, callback) {
-    web3.eth.getAccounts(function (err, accs) {
-        var amount = web3.toWei(10, "finney"); // decide how much to contribute
-
-        var transaction = web3.eth.sendTransaction({
-            from: accs[0],
-            to: address,
-            value: amount,
-            gas: 3000000
-        });
-
-        console.log("Sent funds to " + address);
-
-        console.log("NEW Balance: " + web3.eth.getBalance(address));
-
-        web3.eth.getTransactionReceipt(transaction, function (receipt) {
-            console.log("TXN receipt " + receipt);
-
-
-            callback();
-        });
-
-    });
-}
-
 module.exports = {
 
     /**
@@ -179,7 +149,9 @@ module.exports = {
                 if (balance < 5) {
                     console.log("Account Balance too low - top up...");
 
-                    addFunds(accountInfo.account, function () {
+                    var amount = 10;
+
+                    utility.addFundsFromMaster(accountInfo.account, amount, function () {
                         getAccountInfo(accountInfo, passphrase, contract, balance, res);
                     });
                 }
@@ -229,8 +201,7 @@ module.exports = {
     createAccount: function (username, first_name, last_name, passphrase, res) {
         console.log("createAccount - username " + username + " passphrase " + passphrase);
 
-
-        utility.createAccount(username, passphrase, function (err, accountAddress) {
+        utility.createAccount(username, passphrase).then(function (accountAddress) {
             web3.eth.getAccounts(function (err, accounts) {
                 var masterAccount = accounts[0];
 
@@ -253,6 +224,8 @@ module.exports = {
                     });
                 });
             });
+        }).catch(function (error) {
+            res.send(JSON.stringify({error: err}));
         });
     },
 

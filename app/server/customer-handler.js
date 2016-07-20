@@ -22,16 +22,19 @@ module.exports = {
             if (accountInfo) {
                 var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
 
-                console.log("Account Balance (finney): " + balance);
+                utility.getTokens(accountInfo.account, function (error, tokens) {
+                    console.log("Account Balance (finney): " + balance);
 
-                res.send(JSON.stringify(
-                    {
-                        result: true,
-                        balance: balance,
-                        first_name: accountInfo.first_name,
-                        last_name: accountInfo.last_name,
-                        error: error
-                    }));
+                    res.send(JSON.stringify(
+                        {
+                            result: true,
+                            balance: balance,
+                            tokens: tokens,
+                            first_name: accountInfo.first_name,
+                            last_name: accountInfo.last_name,
+                            error: error
+                        }));
+                });
             }
         });
     },
@@ -47,21 +50,37 @@ module.exports = {
      * @param res
      */
     createAccount: function (username, first_name, last_name, passphrase, res) {
-        console.log("createAccount - username " + username + " passphrase " + passphrase);
 
-        utility.createAccount(username, passphrase, function (err, accountAddress) {
-            if (!err) {
-                utility.addToCustomerFile(username, first_name, last_name, accountAddress, function () {
-                    console.log("Account creation complete");
+        // QUICK TEST -- GET COINS (100 finney)
+        var initialAccountBalance = 100;
+        
+        utility.createAccount(username, passphrase).then(function (accountAddress) {
+            utility.addFundsFromMaster(accountAddress, initialAccountBalance, function () {
 
-                    // QUICK TEST -- GET COINS
-                    
-                    res.send(JSON.stringify({value: "ok"}));
+                var balance = web3.eth.getBalance(accountAddress);
+
+                console.log("New account balance (finney): " + web3.fromWei(balance, 'finney'));
+
+                utility.unlockAccount(accountAddress, passphrase, function (err, result) {
+                    if (!err) {
+                        console.log("unlockAccount " + accountAddress + " - done: success " + result);
+
+                        // Buy tokens with $$$
+                        utility.buyTokens(accountAddress, function (error, tokens) {
+                            utility.addToCustomerFile(username, first_name, last_name, accountAddress, function () {
+                                console.log("Account creation complete");
+
+                                res.send(JSON.stringify({value: "ok"}));
+                            });
+                        });
+                    }
+                    else {
+                        console.log("Failed to unlock account");
+                    }
                 });
-            }
-            else {
-                res.send(JSON.stringify({error: err}));
-            }
+            });
+        }).catch(function (error) {
+            res.send(JSON.stringify({error: err}));
         });
     }
 };

@@ -4,7 +4,7 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
         $scope.loggedIn = false;
         $scope.accountCreateInProgress = false;
         $scope.accountBalance = 0.00;
-
+        $scope.accountTokens = 0;
         $scope.customerData = {};
 
         $scope.snapVersion = SNAP_VERSION.full;
@@ -32,6 +32,8 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
 
                         $scope.accountBalance = data.balance;
 
+                        $scope.accountTokens = data.tokens;
+
                         Account.getAll()
                             .success(function (data) {
                                 $scope.accounts = data;
@@ -49,7 +51,6 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
                 .error(function (error) {
                     console.log(":Error logging in " + error);
                 });
-
         };
 
         $scope.createAccount = function () {
@@ -77,7 +78,7 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
 
         $scope.requestData = function (account_name) {
             console.log("REQUEST DATA for " + account_name);
-            
+
             Account.getData($scope.user, account_name, "attrib")
                 .success(function (data) {
                     console.log("Got account data " + data.value);
@@ -89,7 +90,7 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
                 });
         };
 
-        $scope.gotAttribute = function(username) {
+        $scope.gotAttribute = function (username) {
             return $scope.accountAttributes.username;
         }
     }]);

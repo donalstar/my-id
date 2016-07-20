@@ -36,7 +36,7 @@ contract Coin is owned {
 
     event TransferTokens(address indexed from, address indexed to, uint256 value);
 
-    event BuyTokens(address indexed from, address indexed to, uint256 msgValue, uint256 buyPrice, uint256 value);
+    event BuyTokens(address indexed from, address indexed to, uint msgValue_finney, uint buyPrice_finney, uint tokens);
 
     event SellTokens(address indexed from, address indexed to, uint256 rev_finney, uint256 sellPrice_finney, uint256 tokens);
 
@@ -116,7 +116,7 @@ contract Coin is owned {
         if (balanceOf[this] < amount) throw;               // checks if it has enough to sell
         balanceOf[msg.sender] += amount;                   // adds the amount to buyer's balance
         balanceOf[this] -= amount;                         // subtracts amount from seller's balance
-        BuyTokens(this, msg.sender, msg.value, buyPrice, amount);                // execute an event reflecting the change
+        BuyTokens(this, msg.sender, msg.value/fi, buyPrice/fi, amount);                // execute an event reflecting the change
         return amount;                                     // ends function and returns
     }
 
