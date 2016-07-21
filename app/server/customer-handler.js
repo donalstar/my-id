@@ -51,36 +51,35 @@ module.exports = {
      */
     createAccount: function (username, first_name, last_name, passphrase, res) {
 
-        // QUICK TEST -- GET COINS (100 finney)
-        var initialAccountBalance = 100;
-        
+        // QUICK TEST -- GET COINS (110 finney)
+        var initialAccountBalance = 110;
+
         utility.createAccount(username, passphrase).then(function (accountAddress) {
-            utility.addFundsFromMaster(accountAddress, initialAccountBalance, function () {
 
-                var balance = web3.eth.getBalance(accountAddress);
+            return utility.addFundsFromMaster(accountAddress, initialAccountBalance);
+        }).then(function (amount) {
+            var balance = web3.eth.getBalance(accountAddress);
 
-                console.log("New account balance (finney): " + web3.fromWei(balance, 'finney'));
+            console.log("New account balance (finney): " + web3.fromWei(balance, 'finney'));
 
-                utility.unlockAccount(accountAddress, passphrase, function (err, result) {
-                    if (!err) {
-                        console.log("unlockAccount " + accountAddress + " - done: success " + result);
+            return utility.unlockAccount(username, passphrase);
 
-                        // Buy tokens with $$$
-                        utility.buyTokens(accountAddress, function (error, tokens) {
-                            utility.addToCustomerFile(username, first_name, last_name, accountAddress, function () {
-                                console.log("Account creation complete");
+        }).then(function (result) {
+            console.log("unlockAccount " + accountAddress + " - done: success " + result);
 
-                                res.send(JSON.stringify({value: "ok"}));
-                            });
-                        });
-                    }
-                    else {
-                        console.log("Failed to unlock account");
-                    }
-                });
+            // Buy tokens with $$$
+            return utility.buyTokens(accountAddress);
+
+        }).then(function (tokens) {
+            utility.addToCustomerFile(username, first_name, last_name, accountAddress, function () {
+                console.log("Account creation complete");
+
+                res.send(JSON.stringify({value: "ok"}));
             });
         }).catch(function (error) {
-            res.send(JSON.stringify({error: err}));
+            res.send(JSON.stringify({error: error}));
         });
     }
 };
+
+

@@ -77,54 +77,46 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
  */
 function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
 
-    utility.unlockAccount(accountInfo.account, passphrase, function (err, result) {
+    utility.unlockAccount(accountInfo.account, passphrase).then(function (result) {
+        console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
-        if (!err) {
-            console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
+        contract.the_name.call().then(function (the_name) {
+            attributesHandler.getAttributes(accountInfo, function (error, attributes) {
 
-            contract.the_name.call().then(
-                function (the_name) {
-                    attributesHandler.getAttributes(accountInfo, function (error, attributes) {
+                var profile = [
+                    {name: "ssn", value: "", access: 0},
+                    {name: "dl", value: "", access: 0},
+                    {name: "fico", value: "", access: 0}
+                ];
 
-                        var profile = [
-                            {name: "ssn", value: "", access: 0},
-                            {name: "dl", value: "", access: 0},
-                            {name: "fico", value: "", access: 0}
-                        ];
+                if (attributes != null) {
+                    profile = JSON.parse(attributes);
+                }
 
-                        if (attributes != null) {
-                            profile = JSON.parse(attributes);
-                        }
+                res.send(JSON.stringify(
+                    {
+                        result: true,
+                        balance: balance,
+                        first_name: the_name[0],
+                        last_name: the_name[1],
+                        profile: profile,
+                        error: err
+                    }));
+            });
+        });
+    }).catch(function (error) {
+        console.log("Failed to unlock account " + error);
 
-                        res.send(JSON.stringify(
-                            {
-                                result: true,
-                                balance: balance,
-                                first_name: the_name[0],
-                                last_name: the_name[1],
-                                profile: profile,
-                                error: err
-                            }));
-                    });
-                });
-        }
-        else {
-            console.log("Failed to unlock account " + err);
+        var message = 'system error';
 
-            var message = 'system error';
-
-            if (err.code == -32000) {
-                message = err.message;
-            }
-            else {
-
-            }
-            res.send(JSON.stringify(
-                {
-                    error: message
-                }));
+        if (error.code == -32000) {
+            message = error.message;
         }
 
+        res.send(JSON.stringify(
+            {
+                error: message
+            }));
     });
 }
 
@@ -151,6 +143,12 @@ module.exports = {
 
                     var amount = 10;
 
+                    utility.addFundsFromMaster(accountAddress, initialAccountBalance).then(function (amount) {
+                        getAccountInfo(accountInfo, passphrase, contract, balance, res);
+                    }).catch(function (error) {
+                        console.log("ERROR " + error);
+                    });
+                    
                     utility.addFundsFromMaster(accountInfo.account, amount, function () {
                         getAccountInfo(accountInfo, passphrase, contract, balance, res);
                     });

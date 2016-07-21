@@ -20,14 +20,14 @@ var customersFile = "../data/customers.json";
 var self = module.exports = {
 
         /**
-         * 
+         *
          * @param username
          * @param passphrase
          * @returns {Promise}
          */
         createAccount: function (username, passphrase) {
             console.log("createAccount - username " + username + " passphrase " + passphrase);
-            
+
             return new Promise(
                 function (resolve, reject) {
                     client.call("personal_newAccount", [passphrase], function (err, accountAddress) {
@@ -48,12 +48,22 @@ var self = module.exports = {
          *
          * @param address
          * @param passphrase
-         * @param callback
+         * @returns {Promise}
          */
-        unlockAccount: function (address, passphrase, callback) {
-            client.call("personal_unlockAccount", [address, passphrase, config.account_unlock_duration], function (err, result) {
-                callback(err, result);
-            });
+        unlockAccount: function (address, passphrase) {
+            return new Promise(
+                function (resolve, reject) {
+                    client.call("personal_unlockAccount", [address, passphrase, config.account_unlock_duration],
+                        function (err, result) {
+                            if (!err) {
+                                resolve(result);
+                            }
+                            else {
+                                reject(err);
+                            }
+                        });
+                }
+            );
         },
 
         /**
@@ -151,50 +161,66 @@ var self = module.exports = {
         /**
          *
          * @param account
-         * @param callback
+         * @returns {Promise}
          */
-        buyTokens: function (account, callback) {
-            var contract = Coin.at(config.coin_bank);
+        buyTokens: function (account) {
 
-            var block = web3.eth.getBlock('latest').number;
+            return new Promise(
+                function (resolve, reject) {
+                    var contract = Coin.at(config.coin_bank);
 
-            contract.BuyTokens().watch(function (error, result) {
-                if (result.blockNumber > block) {
-                    if (!error)
-                        console.log(" : BUY PRICE (finney) " + result.args.buyPrice_finney +
-                            " Msg Value (finney): " + result.args.msgValue_finney
-                            + " Purchased Tokens: " + result.args.tokens);
+                    var block = web3.eth.getBlock('latest').number;
+
+                    contract.BuyTokens().watch(function (error, result) {
+                        if (result.blockNumber > block) {
+                            if (!error)
+                                console.log(" : BUY PRICE (finney) " + result.args.buyPrice_finney +
+                                    " Msg Value (finney): " + result.args.msgValue_finney
+                                    + " Purchased Tokens: " + result.args.tokens);
+                        }
+                    });
+
+                    var finney = 1000000000000000;
+                    var work_balance = 5 * finney;
+
+                    var balance = web3.eth.getBalance(account);
+
+                    contract.buy({from: account, value: balance - work_balance}).then(function (amount) {
+                        console.log("Bought: " + amount);
+
+                        resolve(amount);
+                    }).catch(function (error) {
+                        console.log("Got error " + error);
+
+                        reject(error);
+                    });
                 }
-            });
-
-            var finney = 1000000000000000;
-            var work_balance = 5 * finney;
-
-            var balance = web3.eth.getBalance(account);
-
-            contract.buy({from: account, value: balance - work_balance }).then(function (amount) {
-                console.log("Bought: " + amount);
-
-                callback(null, amount);
-            }).catch(function (error) {
-                console.log("Got error " + error);
-
-                callback(error, null);
-            });
+            );
         },
 
         /**
-         *
+         * 
          * @param to_address
          * @param amount
-         * @param callback
+         * @returns {Promise}
          */
-        addFundsFromMaster: function (to_address, amount, callback) {
-            web3.eth.getAccounts(function (err, accounts) {
-                var masterAccount = accounts[0];
+        addFundsFromMaster: function (to_address, amount) {
+            return new Promise(
+                function (resolve, reject) {
+                    web3.eth.getAccounts(function (err, accounts) {
+                        if (!err) {
+                            var masterAccount = accounts[0];
 
-                self.addFunds(masterAccount, to_address, amount, callback);
-            });
+                            self.addFunds(masterAccount, to_address, amount, function () {
+                                resolve(amount);
+                            });
+                        }
+                        else {
+                            reject(err);
+                        }
+                    });
+                }
+            );
         },
 
         /**
