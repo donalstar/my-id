@@ -30,9 +30,7 @@ contract Coin is owned {
 
     uint fi = 1 finney;
 
-    event Amount(uint256 value);
-
-    event TransferTokens(address indexed from, address indexed to, uint256 value);
+    event TransferTokens(address from, address to, uint256 value);
 
     event BuyTokens(address indexed from, address indexed to, uint msgValue_finney, uint buyPrice_finney, uint tokens);
 
@@ -58,8 +56,6 @@ contract Coin is owned {
 
         balanceOf[msg.sender] = initialSupply;
 
-        Amount(balanceOf[msg.sender]);
-
         name = tokenName;                                   // Set the name for display purposes
         symbol = tokenSymbol;                               // Set the symbol for display purposes
         decimals = decimalUnits;                            // Amount of decimals for display purposes
@@ -71,18 +67,20 @@ contract Coin is owned {
 
 
     function transfer(address _to, uint256 _value) {
-        if (frozenAccount[msg.sender]) throw;
+        address sender = tx.origin;
+
+        if (frozenAccount[sender]) throw;
 
         /* Check if sender has balance and for overflows */
-        if (balanceOf[msg.sender] < _value || balanceOf[_to] + _value < balanceOf[_to])
+        if (balanceOf[sender] < _value || balanceOf[_to] + _value < balanceOf[_to])
             throw;
 
         /* Add and subtract new balances */
-        balanceOf[msg.sender] -= _value;
+        balanceOf[sender] -= _value;
         balanceOf[_to] += _value;
 
         /* Notify anyone listening that this transfer took place */
-        TransferTokens(msg.sender, _to, _value);
+        TransferTokens(sender, _to, _value);
     }
 
     function mintToken(address target, uint256 mintedAmount) onlyOwner {
@@ -108,9 +106,6 @@ contract Coin is owned {
     function buy() returns (uint amount){
         amount = msg.value / buyPrice;                     // calculates the amount
 
-        Amount(amount);
-        Amount(balanceOf[this]);
-
         if (balanceOf[this] < amount) throw;               // checks if it has enough to sell
         balanceOf[msg.sender] += amount;                   // adds the amount to buyer's balance
         balanceOf[this] -= amount;                         // subtracts amount from seller's balance
@@ -134,8 +129,6 @@ contract Coin is owned {
 
     function getBalance(address addr) returns(uint) {
         GetBalance(addr, balanceOf[addr]);
-
-        Amount(balanceOf[addr]);
 
     	return balanceOf[addr];
     }

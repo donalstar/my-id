@@ -62,101 +62,109 @@ contract('UserChain', function (accounts) {
     //         });
 
 
+    it("Should call coin contract", function (done) {
+        var bank = null;
 
-    // });
+        var coinbank;
+        var user;
 
-    // it("Should set DL", function (done) {
-    //
-    //     UserChain.new({from: owner_account}).then(
-    //         function (UserChain) {
-    //
-    //             var dl_address = "44444";
-    //
-    //             return UserChain.setDL(dl_address).then(
-    //                 function () {
-    //                     console.log("Get DL");
-    //
-    //                     return UserChain.getDL.call();
-    //                 }).then(
-    //                 function (dl) {
-    //                     console.log("Check DL");
-    //                     assert.equal(dl, dl_address, "DL is not correct!");
-    //                     // done();
-    //                 }).then(
-    //                 function () {
-    //                     console.log("Upd DL");
-    //                     return UserChain.setDL("22222");
-    //                 }).then(
-    //                 function () {
-    //                     console.log("Get Upd DL");
-    //                     return UserChain.getDL.call()
-    //                 }).then(
-    //                 function (dl) {
-    //                     assert.equal(dl, "22222", "Updated DL is not correct!");
-    //                     done();
-    //                 })
-    //                 .catch(done);
-    //         }).catch(done);
-    // });
+        Coin.new(500, 'TOK', 0, 'T', 0, {from: owner_account}).then(function (Coin) {
+            console.log("Created coin -- add " + Coin.address);
 
-    // it("Should set Attributes", function (done) {
-    //     var c = UserChain.at(UserChain.deployed_address);
-    //
-    //     UserChain.new({from: owner_account}).then(
-    //         function (UserChain) {
-    //
-    //
-    //             UserChain.setAttribute(1, "22222").then(
-    //                 function (attribute) {
-    //                     console.log("Set attrib 2 to " + attribute);
-    //                 }).then(
-    //                 function () {
-    //                     var ssn = "4321";
-    //
-    //                     console.log("Set attrib 1 to " + ssn);
-    //                     return UserChain.setAttribute(0, ssn);
-    //                 }).then(
-    //                 function () {
-    //                     return UserChain.the_attributes.call()
-    //                 }).then(
-    //                 function (the_attributes) {
-    //                     assert.equal(the_attributes[0], "4321", "New SSN is not correct!");
-    //                     assert.equal(the_attributes[1], "22222", "New DL is not correct!");
-    //                     done();
-    //                 }).catch(done);
-    //         });
-    // });
-    //
-    // it("Should get DL", function (done) {
-    //     var c = UserChain.at(UserChain.deployed_address);
-    //
-    //     UserChain.new({from: owner_account}).then(
-    //         function (UserChain) {
-    //             UserChain.setDL("11111").then(
-    //                 function (dl) {
-    //                     console.log("Set DL to " + dl);
-    //                 }).then(
-    //                 function () {
-    //                     return UserChain.the_attributes.call()
-    //                 }).then(
-    //                 function (the_attributes) {
-    //                     assert.equal(the_attributes[1], "11111", "New DL is not correct!");
-    //                     done();
-    //                 }).catch(done);
-    //
-    //             // .then(
-    //             // function () {
-    //             //     return UserChain.setDL("11112")
-    //             // }).then(
-    //             // function (the_attributes) {
-    //             //     assert.equal(the_attributes[1], "11111", "New DL (2) is not correct!");
-    //             //     done();
-    //             // })
-    //         }).catch(done);
-    //
-    //
-    // });
+            coinbank = Coin;
+
+            bank = Coin.address;
+
+            return Coin.balanceOf(owner_account)
+        }).then(function (balance) {
+
+            console.log("Owner Token Balance: " + balance);
+
+            return UserChain.new("John", "Smith", sender_account, bank, {from: owner_account});
+        }).then(function (UserChain) {
+            user = UserChain;
+
+            return UserChain.setAttrib(1, "22222");
+        }).then(function (attribute) {
+            console.log("Set attrib 1 to " + "22222");
+
+            return user.getAttrib(1, {from: owner_account});
+        }).then(function (result) {
+            return coinbank.balanceOf(owner_account);
+        }).then(function (balance) {
+            console.log("Owner Token Balance (updated): " + balance);
+
+            return coinbank.balanceOf(sender_account);
+        }).then(function (balance) {
+            console.log("User Token Balance --: " + balance);
+
+            assert.equal(balance, 10, "User balance incorrect");
+            done();
+        }).catch(done);
 
 
-});
+    });
+
+
+// it("Should set Attributes", function (done) {
+//     var c = UserChain.at(UserChain.deployed_address);
+//
+//     UserChain.new({from: owner_account}).then(
+//         function (UserChain) {
+//
+//
+//             UserChain.setAttribute(1, "22222").then(
+//                 function (attribute) {
+//                     console.log("Set attrib 2 to " + attribute);
+//                 }).then(
+//                 function () {
+//                     var ssn = "4321";
+//
+//                     console.log("Set attrib 1 to " + ssn);
+//                     return UserChain.setAttribute(0, ssn);
+//                 }).then(
+//                 function () {
+//                     return UserChain.the_attributes.call()
+//                 }).then(
+//                 function (the_attributes) {
+//                     assert.equal(the_attributes[0], "4321", "New SSN is not correct!");
+//                     assert.equal(the_attributes[1], "22222", "New DL is not correct!");
+//                     done();
+//                 }).catch(done);
+//         });
+// });
+//
+// it("Should get DL", function (done) {
+//     var c = UserChain.at(UserChain.deployed_address);
+//
+//     UserChain.new({from: owner_account}).then(
+//         function (UserChain) {
+//             UserChain.setDL("11111").then(
+//                 function (dl) {
+//                     console.log("Set DL to " + dl);
+//                 }).then(
+//                 function () {
+//                     return UserChain.the_attributes.call()
+//                 }).then(
+//                 function (the_attributes) {
+//                     assert.equal(the_attributes[1], "11111", "New DL is not correct!");
+//                     done();
+//                 }).catch(done);
+//
+//             // .then(
+//             // function () {
+//             //     return UserChain.setDL("11112")
+//             // }).then(
+//             // function (the_attributes) {
+//             //     assert.equal(the_attributes[1], "11111", "New DL (2) is not correct!");
+//             //     done();
+//             // })
+//         }).catch(done);
+//
+//
+// });
+
+
+})
+;
 

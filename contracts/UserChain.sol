@@ -24,7 +24,7 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     string public attributes;
 
 	event SetAttribute(uint id, string attribute);
-	event GetAttribute(address bank, uint id, string attribute);
+	event GetAttribute(address msg_sender, address bank, address contract_owner, uint id, string attribute);
 
 	function UserChain(string fname, string lname, address new_owner, address bank) {
 		owner = msg.sender;
@@ -49,15 +49,11 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
     function getAttrib(uint id) returns (string res) {
         string value = attribsMap[id];
 
-        GetAttribute(coinbank, id, value);
+        GetAttribute(msg.sender, coinbank, owner_address, id, value);
 
         Coin c = Coin(coinbank);
 
-
-
-        GetAttribute(coinbank, c.getBalance(owner), "BAL");
-
-     //   c.transfer(owner_address, 1);
+        c.transfer(owner_address, 10);
 
         return value;
     }
