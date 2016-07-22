@@ -18,27 +18,37 @@ module.exports = {
      */
     getAccount: function (username, passphrase, res) {
 
-        utility.getCustomerInfo(username, function (error, accountInfo) {
-            if (accountInfo) {
-                var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+        var accountInfo;
 
-                utility.getTokens(accountInfo.account, function (error, tokens) {
-                    console.log("Account Balance (finney): " + balance);
+        utility.getCustomerInfo(username).then(function (result) {
+            accountInfo = result;
 
-                    res.send(JSON.stringify(
-                        {
-                            result: true,
-                            balance: balance,
-                            tokens: tokens,
-                            first_name: accountInfo.first_name,
-                            last_name: accountInfo.last_name,
-                            error: error
-                        }));
-                });
-            }
+            return utility.unlockAccount(accountInfo.account, passphrase);
+        }).then(function (result) {
+            return utility.getTokens(accountInfo.account);
+        }).then(function (tokens) {
+            var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+
+            console.log("Account Balance (finney): " + balance);
+
+            res.send(JSON.stringify(
+                {
+                    result: true,
+                    balance: balance,
+                    tokens: tokens,
+                    first_name: accountInfo.first_name,
+                    last_name: accountInfo.last_name,
+                    error: null
+                }));
+        }).catch(function (error) {
+            console.log("Error " + error);
+
+            res.send(JSON.stringify(
+                {
+                    error: error.message
+                }));
         });
     },
-
 
     /**
      * Create Account
@@ -54,7 +64,10 @@ module.exports = {
         // QUICK TEST -- GET COINS (110 finney)
         var initialAccountBalance = 110;
 
-        utility.createAccount(username, passphrase).then(function (accountAddress) {
+        var accountAddress;
+
+        utility.createAccount(username, passphrase).then(function (result) {
+            accountAddress = result;
 
             return utility.addFundsFromMaster(accountAddress, initialAccountBalance);
         }).then(function (amount) {
@@ -62,7 +75,7 @@ module.exports = {
 
             console.log("New account balance (finney): " + web3.fromWei(balance, 'finney'));
 
-            return utility.unlockAccount(username, passphrase);
+            return utility.unlockAccount(accountAddress, passphrase);
 
         }).then(function (result) {
             console.log("unlockAccount " + accountAddress + " - done: success " + result);
@@ -80,6 +93,7 @@ module.exports = {
             res.send(JSON.stringify({error: error}));
         });
     }
-};
+}
+;
 
 

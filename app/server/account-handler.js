@@ -41,7 +41,9 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
     // TODO: How to correctly set gas
     var gas = gasEstimate * 10;
 
-    contract.new(firstName, lastName, accountAddress, {
+    var coinbank = config.coin_bank;
+
+    contract.new(firstName, lastName, accountAddress, coinbank, {
         from: masterAccount,
         data: code,
         gas: gas
@@ -100,7 +102,7 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
                         first_name: the_name[0],
                         last_name: the_name[1],
                         profile: profile,
-                        error: err
+                        error: error
                     }));
             });
         });
@@ -148,7 +150,7 @@ module.exports = {
                     }).catch(function (error) {
                         console.log("ERROR " + error);
                     });
-                    
+
                     utility.addFundsFromMaster(accountInfo.account, amount, function () {
                         getAccountInfo(accountInfo, passphrase, contract, balance, res);
                     });
@@ -168,22 +170,27 @@ module.exports = {
      * @param res
      */
     requestData: function (username, account_name, attribute, res) {
-        utility.getAccountInfo(account_name, function (error, accountInfo) {
-            if (accountInfo) {
-                attributesHandler.getAttribute(accountInfo, 0, function (err, result) {
-                    res.send(JSON.stringify(
-                        {
-                            result: true,
-                            attribute: attribute,
-                            value: result,
-                            error: err
-                        }));
+
+        utility.getAccountInfo(account_name, function (error, result) {
+            if (result) {
+                var contract_address = result.contract;
+                
+                utility.getCustomerInfo(username).then(function (accountInfo) {
+                    attributesHandler.getAttribute(accountInfo, contract_address, 0, function (err, result) {
+                        res.send(JSON.stringify(
+                            {
+                                result: true,
+                                attribute: attribute,
+                                value: result,
+                                error: err
+                            }));
+                    });
+                }).catch(function (error) {
+                    res.status(500).send({message: error.message});
                 });
             }
-            else {
-                res.status(500).send({message: error.message});
-            }
         });
+        
 
     },
 
@@ -197,7 +204,6 @@ module.exports = {
      * @param res
      */
     createAccount: function (username, first_name, last_name, passphrase, res) {
-        console.log("createAccount - username " + username + " passphrase " + passphrase);
 
         utility.createAccount(username, passphrase).then(function (accountAddress) {
             web3.eth.getAccounts(function (err, accounts) {
@@ -206,19 +212,16 @@ module.exports = {
                 createContract(first_name, last_name, accountAddress, masterAccount, function (err, contract) {
                     console.log("Created contract with address " + contract.address + " for account " + accountAddress);
 
-                    addFunds(accountAddress, function () {
-                        if (!err) {
-                            console.log("Successfully added funds to account " + accountAddress);
+                    utility.addFundsFromMaster(accountAddress, 10).then(function (amount) {
+                        console.log("Successfully added funds to account " + accountAddress);
 
-                            utility.addToFile(username, first_name, last_name, accountAddress, contract.address, function () {
-                                console.log("Account creation complete");
+                        utility.addToFile(username, first_name, last_name, accountAddress, contract.address, function () {
+                            console.log("Account creation complete");
 
-                                res.send(JSON.stringify({value: "ok"}));
-                            });
-                        }
-                        else {
-                            console.log('Failed to add funds : ', error);
-                        }
+                            res.send(JSON.stringify({value: "ok"}));
+                        });
+                    }).catch(function (error) {
+                        console.log('Failed to add funds : ', error);
                     });
                 });
             });

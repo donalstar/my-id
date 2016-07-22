@@ -1,3 +1,5 @@
+import "Coin.sol";
+
 contract UserChain {  // can be killed, so the owner gets sent the money in the end
 
     uint minBalance;
@@ -7,32 +9,24 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         string last;
     }
 
-    struct Attributes {
-        string ssn;
-        string dl;
-    }
-
 	address public owner;
 	address public owner_address;
 
-    uint TYPE_SSN = 0;
-    uint TYPE_DL = 1;
+	address coinbank;
 
     string public first_name;
     string public last_name;
 
     Name public the_name;
 
-    Attributes public the_attributes;
-
     mapping (uint => string) public attribsMap;
 
     string public attributes;
 
 	event SetAttribute(uint id, string attribute);
-	event GetAttribute(uint id, string attribute);
+	event GetAttribute(address bank, uint id, string attribute);
 
-	function UserChain(string fname, string lname, address new_owner) {
+	function UserChain(string fname, string lname, address new_owner, address bank) {
 		owner = msg.sender;
 
         first_name = fname;
@@ -42,7 +36,7 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
         the_name = Name(first_name, last_name);
 
-        attributes = "0";
+        coinbank = bank;
 	}
 
 
@@ -52,8 +46,20 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         attribsMap[id] = location;
     }
 
-    function getAttrib(uint id) constant returns (string res) {
-        return attribsMap[id];
+    function getAttrib(uint id) returns (string res) {
+        string value = attribsMap[id];
+
+        GetAttribute(coinbank, id, value);
+
+        Coin c = Coin(coinbank);
+
+
+
+        GetAttribute(coinbank, c.getBalance(owner), "BAL");
+
+     //   c.transfer(owner_address, 1);
+
+        return value;
     }
 
     // Attributes

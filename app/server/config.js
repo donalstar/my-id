@@ -10,5 +10,8 @@ module.exports = {
     
     account_unlock_duration: 1800,
     
-    coin_bank: '0xb257c4fdcb29c72356ed10556226aaacd39328f3'
+    coin_bank: '0xc92c78595594a375944b5df5e0b4c60949d84fa1'
 };
+
+
+ 

@@ -24,6 +24,11 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 // routes ======================================================================
 require('./server/routes.js')(app);
 
+var utility = require('./server/utility.js');
+
+// Logging
+utility.logTokenTransfer();
+
 // listen (start app with node server.js) ======================================
 app.listen(port);
 

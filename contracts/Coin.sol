@@ -15,8 +15,6 @@ contract owned {
     }
 }
 
-
-
 contract Coin is owned {
     uint256 public totalSupply;
 

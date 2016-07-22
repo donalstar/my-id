@@ -10,6 +10,11 @@ web3.setProvider(provider);
 Pudding.setWeb3(web3);
 UserChain.load(Pudding);
 
+var Coin = require("../contracts/Coin.sol.js");
+Coin.load(Pudding);
+
+var config = require('./config.js');
+
 var attributeTypes = ['ssn', 'dl', 'fico'];
 
 function contains(arr, obj) {
@@ -121,29 +126,55 @@ function getAttributeValue(attributes, requestType) {
 
 module.exports = {
 
+
     /**
-     * 
+     *
      * @param accountInfo
+     * @param contract_address
      * @param attributeId
      * @param callback
      */
-    getAttribute: function(accountInfo, attributeId, callback) {
-        var contract = UserChain.at(accountInfo.contract);
+    getAttribute: function (accountInfo, contract_address, attributeId, callback) {
+        var contract = UserChain.at(contract_address);
+
+        console.log("Get Attrib: (caller account) " + accountInfo.account);
+
+        var block = web3.eth.getBlock('latest').number;
+
+        var event = contract.GetAttribute();
+
+        event.watch(function (error, result) {
+            if (result.blockNumber > block) {
+                if (!error) {
+                    console.log(" : Bank " + result.args.bank +
+                        " Id: " + result.args.id
+                        + " Value: " + result.args.attribute);
+
+                 //   event.stopWatching();
+
+                    var attribute_value = result.args.attribute;
+
+                    if (attribute_value != "0") {
+                        file_store.readFromFile(attribute_value, function (error, data) {
+                            callback(error, data);
+                        });
+                    }
+                    else {
+                        callback(null, null);
+                    }
+                }
+            }
+        });
 
         contract.getAttrib(attributeId, {from: accountInfo.account}).then(function (result) {
             console.log("Got Attrib: " + result);
+        }).catch(function (error) {
+            console.log("Got error " + error);
 
-            if (result != "0") {
-                file_store.readFromFile(result, function (error, data) {
-                    callback(error, data);
-                });                
-            }
-            else {
-                callback(null, null);
-            }
+            callback(null, null);
         });
     },
-    
+
     getAttributes: function (accountInfo, callback) {
         var contract = UserChain.at(accountInfo.contract);
 
