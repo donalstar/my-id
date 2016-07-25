@@ -118,7 +118,9 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
                     $scope.accountAttributes[account_name] = data.value;
 
                     $scope.accountBalance = data.balance;
-                    
+
+                    $scope.accountTokens = data.token_balance;
+
                     $scope.queryInProgress = false;
                     $scope.queryStatus = '';
                 })

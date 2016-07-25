@@ -44,7 +44,7 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
     var coinbank = config.coin_bank;
 
     var transaction_price = 1;
-    
+
     contract.new(firstName, lastName, accountAddress, transaction_price, coinbank, {
         from: masterAccount,
         data: code,
@@ -180,16 +180,25 @@ module.exports = {
                 utility.getCustomerInfo(username).then(function (accountInfo) {
                     attributesHandler.getAttribute(accountInfo, contract_address, 0, function (err, result) {
 
-                        var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+                        if (!err) {
+                            var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
 
-                        res.send(JSON.stringify(
-                            {
-                                result: true,
-                                balance: balance,
-                                attribute: attribute,
-                                value: result,
-                                error: err
-                            }));
+                            var tokens = result.tokens;
+
+                            res.send(JSON.stringify(
+                                {
+                                    result: true,
+                                    balance: balance,
+                                    token_balance: tokens,
+                                    attribute: attribute,
+                                    value: result.data,
+                                    error: err
+                                }));
+                        }
+                        else {
+                            res.status(500).send({message: err.message});
+                        }
+
                     });
                 }).catch(function (error) {
                     res.status(500).send({message: error.message});
@@ -253,18 +262,13 @@ module.exports = {
 
     /**
      * Get all account token balances
-     * 
+     *
      * @param res
      */
     getBalances: function (res) {
-        var result =
 
-            [
-                {name: 'acc1', balance: 100},
-                {name: 'acc2', balance: 200}
-            ];
-
-
-        res.send(JSON.stringify(result));
+        utility.getTokenBalances().then(function (result) {
+            res.send(JSON.stringify(result));
+        });
     }
 };

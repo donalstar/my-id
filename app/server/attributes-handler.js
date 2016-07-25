@@ -134,20 +134,6 @@ var self = module.exports = {
      * @param callback
      */
     getAttribute: function (accountInfo, contract_address, attributeId, callback) {
-      //  for (var i=0; i<4; i++) {
-            self.getAttribute2(accountInfo, contract_address, attributeId, callback);
-     //   }
-
-    },
-
-    /**
-     *
-     * @param accountInfo
-     * @param contract_address
-     * @param attributeId
-     * @param callback
-     */
-    getAttribute2: function (accountInfo, contract_address, attributeId, callback) {
         var contract = IdStore.at(contract_address);
 
         console.log("Get Attribute: (caller account) " + accountInfo.account);
@@ -155,6 +141,16 @@ var self = module.exports = {
         var block = web3.eth.getBlock('latest').number;
 
         var event = contract.GetAttribute();
+
+        var result = {};
+
+        var data_value = "";
+        var tokens_value = "";
+
+        var got_attribute = false;
+        var got_tokens = false;
+
+        // really need async in parallel here....
 
         event.watch(function (error, result) {
             if (result.blockNumber > block) {
@@ -169,13 +165,53 @@ var self = module.exports = {
 
                     if (attribute_value != "0") {
                         file_store.readFromFile(attribute_value, function (error, data) {
-                            callback(error, data);
+
+                            got_attribute = true;
+
+                            data_value = data;
+
+                            if (got_tokens == true && got_attribute == true) {
+                                result.data = data_value;
+
+                                result.tokens = tokens_value;
+
+                                callback(error, result);
+                            }
                         });
                     }
                     else {
                         callback(null, null);
                     }
                 }
+            }
+        });
+
+        utility.listenOnTokenTransfer(function (error, result) {
+            if (!error) {
+                console.log("getAttribute : transfer to: " + result.to + " from: " + result.from
+                    + " val: " + result.value);
+
+                utility.getTokens(accountInfo.account).then(function (tokens) {
+                    console.log("got tokens bal (new) " + tokens);
+
+                    tokens_value = tokens;
+
+                    got_tokens = true;
+
+                    if (got_tokens == true && got_attribute == true) {
+                        result.data = data_value;
+
+                        result.tokens = tokens_value;
+
+                        callback(error, result);
+                    }
+
+                });
+            }
+            else {
+                console.log("Error processing token transfer: " + error);
+
+                callback(error, null);
             }
         });
 

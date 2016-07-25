@@ -278,24 +278,25 @@
                     <h4 class="panel-title">Account Balances</h4>
                 </div>
 
+
+                <div class="row-fluid"
+                     style="background-color: #f0f0f0; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                    <label class="col-sm-3 control-label">Account</label>
+
+                    <label class="col-sm-6">Token Balance</label>
+                </div>
+
+                <div class="panel-heading">
+
+                </div>
+
+
                 <div class="panel-body">
                     <div class="row" style="margin-bottom:10px;"
-                         ng-repeat="accountBalance in accountBalances">
-                        <div class="col-sm-3 control-label">{{accountBalance}}</div>
+                         ng-repeat="account in accountBalances">
+                        <div class="col-sm-3 control-label">{{account.account.username}}</div>
 
-                        <!--<div class="col-sm-6">{{account.first_name}} {{account.last_name}}-->
-                        <!--</div>-->
-
-                        <!--<div class="col-sm-3">-->
-                            <!--<button type="submit" ng-click="requestData(account.username)"-->
-                                    <!--class="btn btn-primary"-->
-                                    <!--style="width:100px">Get SSN-->
-                            <!--</button>-->
-                        <!--</div>-->
-
-                        <!--<div ng-show="gotAttribute(account.username)" class="col-md-10">-->
-                            <!--<div>RESULT: {{gotAttribute(account.username)}}</div>-->
-                        <!--</div>-->
+                        <div class="col-sm-3 control-label">{{account.tokens}}</div>
                     </div>
                 </div>
             </div>

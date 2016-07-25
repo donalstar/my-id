@@ -17,6 +17,34 @@ Coin.load(Pudding);
 var accountsFile = "../data/accounts.json";
 var customersFile = "../data/customers.json";
 
+/**
+ *
+ * @param accounts
+ * @param index
+ * @param result
+ * @param callback
+ */
+function getNextToken(accounts, index, result, callback) {
+    if (index < accounts.length) {
+        self.getTokens(accounts[index].account).then(function (tokens) {
+            var token_value = {};
+
+            token_value.account = accounts[index];
+            token_value.tokens = tokens;
+
+            result.push(token_value);
+
+            if (index < accounts.length) {
+                getNextToken(accounts, index + 1, result, callback);
+            }
+        });
+    }
+    else {
+        callback();
+    }
+
+}
+
 var self = module.exports = {
 
     /**
@@ -153,7 +181,7 @@ var self = module.exports = {
     },
 
     /**
-     * 
+     *
      * @param account
      * @returns {Promise}
      */
@@ -171,6 +199,26 @@ var self = module.exports = {
     },
 
     /**
+     * 
+     * @returns {Promise}
+     */
+    getTokenBalances: function () {
+
+        return new Promise(
+            function (resolve, reject) {
+                self.getUserAccounts(function (error, accounts) {
+                    var result = [];
+
+                    getNextToken(accounts, 0, result, function () {
+                        resolve(result);
+                    });
+                });
+            }
+        );
+
+    },
+
+    /**
      *
      * @param account
      * @returns {Promise}
@@ -180,7 +228,7 @@ var self = module.exports = {
         return new Promise(
             function (resolve, reject) {
                 var addr = config.coin_bank;
-                
+
                 var contract = Coin.at(addr);
 
                 var block = web3.eth.getBlock('latest').number;
@@ -363,6 +411,24 @@ var self = module.exports = {
                     " To: " + result.args.to
                     + " Value: " + result.args.value);
             }
+        });
+    },
+
+    listenOnTokenTransfer: function (callback) {
+        var contract = Coin.at(config.coin_bank);
+
+        var event = contract.TransferTokens();
+
+        event.watch(function (error, result) {
+
+            if (!error) {
+                callback(null, result.args);
+            }
+            else {
+                callback(error, null);
+            }
+
+            event.stopWatching();
         });
     }
 };
