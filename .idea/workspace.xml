@@ -2,12 +2,32 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e40cf0e-1887-4463-aab9-cebf05c2f6c9" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/id-store.js" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/app/contracts/UserChain.sol.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/environments/development/contracts/UserChain.sol.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/environments/test/contracts/UserChain.sol.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/test/user-chain.js" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/contracts/UserChain.sol" afterPath="$PROJECT_DIR$/contracts/IdStore.sol" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/add.js" afterPath="$PROJECT_DIR$/app/add.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/admin.html" afterPath="$PROJECT_DIR$/app/admin.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/contracts/Coin.sol.js" afterPath="$PROJECT_DIR$/app/contracts/Coin.sol.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/admin_controller.js" afterPath="$PROJECT_DIR$/app/js/admin_controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/controller.js" afterPath="$PROJECT_DIR$/app/js/controller.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/js/services.js" afterPath="$PROJECT_DIR$/app/js/services.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/account-handler.js" afterPath="$PROJECT_DIR$/app/server/account-handler.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/attributes-handler.js" afterPath="$PROJECT_DIR$/app/server/attributes-handler.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/config.js" afterPath="$PROJECT_DIR$/app/server/config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/customer-handler.js" afterPath="$PROJECT_DIR$/app/server/customer-handler.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/routes.js" afterPath="$PROJECT_DIR$/app/server/routes.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/server/utility.js" afterPath="$PROJECT_DIR$/app/server/utility.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/contracts/Coin.sol" afterPath="$PROJECT_DIR$/contracts/Coin.sol" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/contracts/UserChain.sol" afterPath="$PROJECT_DIR$/contracts/UserChain.sol" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/accounts.json" afterPath="$PROJECT_DIR$/data/accounts.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/customers.json" afterPath="$PROJECT_DIR$/data/customers.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/environments/development/contracts/Coin.sol.js" afterPath="$PROJECT_DIR$/environments/development/contracts/Coin.sol.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/environments/test/contracts/Coin.sol.js" afterPath="$PROJECT_DIR$/environments/test/contracts/Coin.sol.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/environments/test/contracts/UserChain.sol.js" afterPath="$PROJECT_DIR$/environments/test/contracts/UserChain.sol.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/coin.js" afterPath="$PROJECT_DIR$/test/coin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/user-chain.js" afterPath="$PROJECT_DIR$/test/user-chain.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/truffle.js" afterPath="$PROJECT_DIR$/truffle.js" />
     </list>
     <ignored path="my-id.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,11 +48,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/server/config.js">
+      <file leaf-file-name="IdStore.sol" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/contracts/IdStore.sol">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="58" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+            <state relative-caret-position="788">
+              <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Coin.sol.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/contracts/Coin.sol.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -41,58 +71,18 @@
       <file leaf-file-name="attributes-handler.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/server/attributes-handler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="152" column="11" selection-start-line="152" selection-start-column="11" selection-end-line="152" selection-end-column="11" />
+            <state relative-caret-position="242">
+              <caret line="156" column="44" selection-start-line="156" selection-start-column="27" selection-end-line="156" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserChain.sol" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/contracts/UserChain.sol">
+      <file leaf-file-name="accounts.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/accounts.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="563">
-              <caret line="55" column="36" selection-start-line="55" selection-start-column="36" selection-end-line="55" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="user-chain.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test/user-chain.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="100" column="61" selection-start-line="100" selection-start-column="61" selection-end-line="100" selection-end-column="61" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Coin.sol.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/environments/development/contracts/Coin.sol.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="coin.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/coin.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="89" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Coin.sol" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/contracts/Coin.sol">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="79" column="8" selection-start-line="79" selection-start-column="8" selection-end-line="79" selection-end-column="8" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -102,17 +92,57 @@
         <entry file="file://$PROJECT_DIR$/data/customers.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="115" selection-start-line="0" selection-start-column="115" selection-end-line="0" selection-end-column="115" />
+              <caret line="0" column="229" selection-start-line="0" selection-start-column="229" selection-end-line="0" selection-end-column="229" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="accounts.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/accounts.json">
+      <file leaf-file-name="account-handler.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/server/account-handler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+            <state relative-caret-position="-2227">
+              <caret line="60" column="38" selection-start-line="60" selection-start-column="38" selection-end-line="60" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/server/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="customer-handler.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/server/customer-handler.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="668">
+              <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utility.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/server/utility.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="668">
+              <caret line="353" column="20" selection-start-line="353" selection-start-column="4" selection-end-line="353" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/server.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="540">
+              <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -126,8 +156,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/angular-app.js" />
-        <option value="$PROJECT_DIR$/environments/development/build/index.html" />
         <option value="$PROJECT_DIR$/app/javascripts/app.js" />
         <option value="$PROJECT_DIR$/app/requestHandlers.js" />
         <option value="$PROJECT_DIR$/app/public/services.js" />
@@ -153,30 +181,32 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="internal/net.js" />
         <option value="$PROJECT_DIR$/app/server/file-store.js" />
-        <option value="$PROJECT_DIR$/app/js/controller.js" />
-        <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/kill.js" />
         <option value="$PROJECT_DIR$/admin.html" />
-        <option value="$PROJECT_DIR$/app/js/services.js" />
-        <option value="$PROJECT_DIR$/app/server/routes.js" />
         <option value="$PROJECT_DIR$/environments/development/contracts/Coin.sol.js" />
-        <option value="$PROJECT_DIR$/app/js/admin_controller.js" />
         <option value="$PROJECT_DIR$/app/setup.js" />
         <option value="$PROJECT_DIR$/app/add.js" />
         <option value="$PROJECT_DIR$/app/server.js" />
-        <option value="$PROJECT_DIR$/app/admin.html" />
-        <option value="$PROJECT_DIR$/app/server/customer-handler.js" />
-        <option value="$PROJECT_DIR$/app/server/account-handler.js" />
-        <option value="$PROJECT_DIR$/truffle.js" />
-        <option value="$PROJECT_DIR$/app/server/utility.js" />
-        <option value="$PROJECT_DIR$/app/server/config.js" />
-        <option value="$PROJECT_DIR$/data/customers.json" />
-        <option value="$PROJECT_DIR$/app/server/attributes-handler.js" />
-        <option value="$PROJECT_DIR$/data/accounts.json" />
         <option value="$PROJECT_DIR$/test/coin.js" />
-        <option value="$PROJECT_DIR$/contracts/Coin.sol" />
         <option value="$PROJECT_DIR$/contracts/UserChain.sol" />
         <option value="$PROJECT_DIR$/test/user-chain.js" />
+        <option value="$PROJECT_DIR$/truffle.js" />
+        <option value="$PROJECT_DIR$/app/js/controller.js" />
+        <option value="$PROJECT_DIR$/app/index.html" />
+        <option value="$PROJECT_DIR$/app/server/routes.js" />
+        <option value="$PROJECT_DIR$/app/js/services.js" />
+        <option value="$PROJECT_DIR$/app/admin.html" />
+        <option value="$PROJECT_DIR$/test/id-store.js" />
+        <option value="$PROJECT_DIR$/contracts/Coin.sol" />
+        <option value="$PROJECT_DIR$/app/js/admin_controller.js" />
+        <option value="$PROJECT_DIR$/app/server/account-handler.js" />
+        <option value="$PROJECT_DIR$/app/server/attributes-handler.js" />
+        <option value="$PROJECT_DIR$/app/server/customer-handler.js" />
+        <option value="$PROJECT_DIR$/contracts/IdStore.sol" />
+        <option value="$PROJECT_DIR$/data/accounts.json" />
+        <option value="$PROJECT_DIR$/data/customers.json" />
+        <option value="$PROJECT_DIR$/app/server/config.js" />
+        <option value="$PROJECT_DIR$/app/server/utility.js" />
       </list>
     </option>
   </component>
@@ -187,8 +217,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1474" />
-    <option name="y" value="-100" />
+    <option name="x" value="1455" />
+    <option name="y" value="-110" />
     <option name="width" value="1443" />
     <option name="height" value="1095" />
   </component>
@@ -217,6 +247,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -401,8 +433,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -415,19 +445,19 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/contracts" />
-      <recent name="$PROJECT_DIR$/test" />
-      <recent name="$PROJECT_DIR$/contracts" />
-      <recent name="$PROJECT_DIR$/data" />
-      <recent name="$PROJECT_DIR$/app/server" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$/contracts" />
       <recent name="$PROJECT_DIR$/environments/development/contracts" />
       <recent name="$PROJECT_DIR$/app/js" />
       <recent name="$PROJECT_DIR$/app/public" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/contracts" />
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$/contracts" />
+      <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/app/server" />
     </key>
   </component>
   <component name="RunManager" selected="Node.js.server.js">
@@ -533,15 +563,16 @@
       <workItem from="1467410100916" duration="89121000" />
       <workItem from="1468259747203" duration="59474000" />
       <workItem from="1468607357811" duration="12780000" />
-      <workItem from="1468692954678" duration="95425000" />
+      <workItem from="1468692954678" duration="118236000" />
+      <workItem from="1469392305205" duration="11286000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="274042000" />
+    <option name="totallyTimeSpent" value="308139000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1474" y="-100" width="1443" height="1095" extended-state="0" />
+    <frame x="1455" y="-110" width="1443" height="1095" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24255024" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -584,7 +615,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/js/controller.js</url>
-          <line>73</line>
+          <line>89</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -609,7 +640,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/js/controller.js</url>
-          <line>39</line>
+          <line>42</line>
           <option name="timeStamp" value="141" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -623,11 +654,6 @@
           <option name="timeStamp" value="144" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/app/server/attributes-handler.js</url>
-          <line>183</line>
-          <option name="timeStamp" value="146" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/kill.js</url>
           <line>23</line>
           <option name="timeStamp" value="148" />
@@ -635,94 +661,84 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/setup.js</url>
           <line>25</line>
-          <properties />
           <option name="timeStamp" value="156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/setup.js</url>
           <line>26</line>
-          <properties />
           <option name="timeStamp" value="157" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/setup.js</url>
           <line>117</line>
-          <properties />
           <option name="timeStamp" value="159" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/setup.js</url>
           <line>85</line>
-          <properties />
           <option name="timeStamp" value="160" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/routes.js</url>
           <line>43</line>
-          <properties />
           <option name="timeStamp" value="170" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/attributes-handler.js</url>
-          <line>137</line>
-          <properties />
+          <line>150</line>
           <option name="timeStamp" value="172" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/attributes-handler.js</url>
-          <line>146</line>
-          <properties />
+          <line>159</line>
           <option name="timeStamp" value="173" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/attributes-handler.js</url>
-          <line>145</line>
-          <properties />
+          <line>158</line>
           <option name="timeStamp" value="175" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/utility.js</url>
           <line>206</line>
-          <properties />
           <option name="timeStamp" value="181" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/customer-handler.js</url>
           <line>83</line>
-          <properties />
           <option name="timeStamp" value="182" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/utility.js</url>
           <line>183</line>
-          <properties />
           <option name="timeStamp" value="183" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/utility.js</url>
           <line>207</line>
-          <properties />
           <option name="timeStamp" value="184" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/app/server/utility.js</url>
           <line>211</line>
-          <properties />
           <option name="timeStamp" value="185" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/app/js/admin_controller.js</url>
+          <line>133</line>
+          <option name="timeStamp" value="187" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/app/server/account-handler.js</url>
+          <line>47</line>
+          <option name="timeStamp" value="188" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="187" />
+      <option name="time" value="190" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/node_modules/web3/lib/web3/method.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="141" column="23" selection-start-line="141" selection-start-column="23" selection-end-line="141" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/node_modules/web3/lib/web3/function.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
@@ -882,45 +898,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="73" column="30" selection-start-line="73" selection-start-column="30" selection-end-line="73" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/services.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="90" selection-start-line="16" selection-start-column="90" selection-end-line="16" selection-end-column="90" />
-          <folding>
-            <marker date="1468879081000" expanded="true" signature="288:805" ph="{...}" />
-            <marker date="1468879081000" expanded="true" signature="301:803" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="34" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/kill.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/js/admin_controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="52" column="19" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -930,7 +911,7 @@
         <state relative-caret-position="825">
           <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="58" selection-end-column="11" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -939,135 +920,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/admin.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="719">
-          <caret line="248" column="34" selection-start-line="248" selection-start-column="34" selection-end-line="248" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/contracts/UserChain.sol.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/routes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="43" column="20" selection-start-line="43" selection-start-column="20" selection-end-line="43" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/account-handler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="178" column="46" selection-start-line="178" selection-start-column="46" selection-end-line="178" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/contracts/UserChain.sol.js" />
     <entry file="file://$PROJECT_DIR$/app/server/file-store.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
           <caret line="35" column="6" selection-start-line="35" selection-start-column="6" selection-end-line="35" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/truffle.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/customer-handler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="83" column="11" selection-start-line="83" selection-start-column="11" selection-end-line="83" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/utility.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="207" column="19" selection-start-line="207" selection-start-column="19" selection-end-line="207" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/setup.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="5" selection-start-line="33" selection-start-column="5" selection-end-line="33" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/contracts/Coin.sol.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="28" column="49" selection-start-line="28" selection-start-column="49" selection-end-line="28" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="58" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/customers.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="115" selection-start-line="0" selection-start-column="115" selection-end-line="0" selection-end-column="115" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/server/attributes-handler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="152" column="11" selection-start-line="152" selection-start-column="11" selection-end-line="152" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/accounts.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/coin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="89" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1079,26 +939,177 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/contracts/Coin.sol">
+    <entry file="file://$PROJECT_DIR$/truffle.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="79" column="8" selection-start-line="79" selection-start-column="8" selection-end-line="79" selection-end-column="8" />
+        <state relative-caret-position="135">
+          <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="773">
+          <caret line="55" column="8" selection-start-line="55" selection-start-column="8" selection-end-line="55" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/contracts/UserChain.sol">
+    <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="55" column="36" selection-start-line="55" selection-start-column="36" selection-end-line="55" selection-end-column="36" />
+        <state relative-caret-position="570">
+          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/user-chain.js">
+    <entry file="file://$PROJECT_DIR$/app/js/services.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="14" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/admin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="677">
+          <caret line="283" column="76" selection-start-line="283" selection-start-column="76" selection-end-line="283" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/setup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/coin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="795">
+          <caret line="53" column="47" selection-start-line="53" selection-start-column="19" selection-end-line="53" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/id-store.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="645">
-          <caret line="100" column="61" selection-start-line="100" selection-start-column="61" selection-end-line="100" selection-end-column="61" />
+          <caret line="43" column="66" selection-start-line="43" selection-start-column="19" selection-end-line="43" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/admin_controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="641">
+          <caret line="120" column="20" selection-start-line="120" selection-start-column="20" selection-end-line="120" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/routes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="43" column="7" selection-start-line="43" selection-start-column="7" selection-end-line="43" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environments/development/contracts/IdStore.sol.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contracts/Coin.sol">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="698">
+          <caret line="111" column="41" selection-start-line="111" selection-start-column="41" selection-end-line="111" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/attributes-handler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="156" column="44" selection-start-line="156" selection-start-column="27" selection-end-line="156" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contracts/IdStore.sol">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="788">
+          <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/contracts/Coin.sol.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="26" column="12" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/accounts.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/customers.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="229" selection-start-line="0" selection-start-column="229" selection-end-line="0" selection-end-column="229" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="1" selection-start-line="17" selection-start-column="1" selection-end-line="17" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/account-handler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2227">
+          <caret line="60" column="38" selection-start-line="60" selection-start-column="38" selection-end-line="60" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/customer-handler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="668">
+          <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server/utility.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="668">
+          <caret line="353" column="20" selection-start-line="353" selection-start-column="4" selection-end-line="353" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding />
         </state>
       </provider>

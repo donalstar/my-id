@@ -125,7 +125,7 @@ function getBank() {
 //
 //
 //
-// var UserChain = require("./contracts/UserChain.sol.js");
+// var UserChain = require("./contracts/IdStore.sol.js");
 // // var ipfsAPI = require('ipfs-api');
 // //
 // // var ipfs = ipfsAPI({host: 'localhost', port: '5001', procotol: 'http'});

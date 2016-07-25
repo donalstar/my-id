@@ -20,6 +20,9 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
         $scope.fullName = '';
 
+        $scope.showLogin = true;
+        $scope.showSignUp = false;
+
         snapRemote.getSnapper().then(function (snapper) {
             snapper.open('left');
         });
@@ -49,6 +52,19 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                     console.log(":Error logging in " + error);
                 });
 
+        };
+        
+        $scope.doSignUp = function (show) {
+            if (show == true) {
+                console.log("Sign Up!");
+
+                $scope.showLogin = false;
+                $scope.showSignUp = true;
+            }
+            else {
+                $scope.showLogin = true;
+                $scope.showSignUp = false;
+            }
         };
 
         $scope.createAccount = function () {

@@ -200,7 +200,7 @@ var self = module.exports = {
                 });
 
                 var finney = 1000000000000000;
-                var work_balance = 5 * finney;
+                var work_balance = 10 * finney;
 
                 var balance = web3.eth.getBalance(account);
 

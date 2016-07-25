@@ -62,7 +62,7 @@ module.exports = {
     createAccount: function (username, first_name, last_name, passphrase, res) {
 
         // QUICK TEST -- GET COINS (110 finney)
-        var initialAccountBalance = 110;
+        var initialAccountBalance = 210;
 
         var accountAddress;
 

@@ -1,6 +1,6 @@
 var Web3 = require('web3');
 var async = require("async");
-var UserChain = require("../contracts/UserChain.sol.js");
+var IdStore = require("../contracts/IdStore.sol.js");
 var Pudding = require("ether-pudding");
 var config = require('./config.js');
 var attributesHandler = require('./attributes-handler.js');
@@ -13,7 +13,7 @@ web3.setProvider(provider);
 
 Pudding.setWeb3(web3);
 
-UserChain.load(Pudding);
+IdStore.load(Pudding);
 
 /**
  * Create Contract
@@ -26,9 +26,9 @@ UserChain.load(Pudding);
  */
 function createContract(firstName, lastName, accountAddress, masterAccount, callback) {
 
-    code = UserChain.binary;
+    code = IdStore.binary;
 
-    abi = UserChain.abi;
+    abi = IdStore.abi;
 
     var contract = web3.eth.contract(abi);
 
@@ -43,7 +43,9 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
 
     var coinbank = config.coin_bank;
 
-    contract.new(firstName, lastName, accountAddress, coinbank, {
+    var transaction_price = 1;
+    
+    contract.new(firstName, lastName, accountAddress, transaction_price, coinbank, {
         from: masterAccount,
         data: code,
         gas: gas
@@ -134,11 +136,11 @@ module.exports = {
 
         utility.getAccountInfo(username, function (error, accountInfo) {
             if (accountInfo) {
-                var contract = UserChain.at(accountInfo.contract);
+                var contract = IdStore.at(accountInfo.contract);
 
                 var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
 
-                console.log("Account Balance (finney): " + balance);
+                console.log("Account " + accountInfo.account + " Balance (wei): " + balance);
 
                 if (balance < 5) {
                     console.log("Account Balance too low - top up...");
@@ -174,12 +176,16 @@ module.exports = {
         utility.getAccountInfo(account_name, function (error, result) {
             if (result) {
                 var contract_address = result.contract;
-                
+
                 utility.getCustomerInfo(username).then(function (accountInfo) {
                     attributesHandler.getAttribute(accountInfo, contract_address, 0, function (err, result) {
+
+                        var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+
                         res.send(JSON.stringify(
                             {
                                 result: true,
+                                balance: balance,
                                 attribute: attribute,
                                 value: result,
                                 error: err
@@ -190,7 +196,7 @@ module.exports = {
                 });
             }
         });
-        
+
 
     },
 
@@ -243,5 +249,22 @@ module.exports = {
                 res.send(result);
             }
         });
+    },
+
+    /**
+     * Get all account token balances
+     * 
+     * @param res
+     */
+    getBalances: function (res) {
+        var result =
+
+            [
+                {name: 'acc1', balance: 100},
+                {name: 'acc2', balance: 200}
+            ];
+
+
+        res.send(JSON.stringify(result));
     }
 };

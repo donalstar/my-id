@@ -65,6 +65,13 @@ module.exports = function (app) {
         customer.getAccount(req.params.username, req.params.password, response);
     });
 
+    /**
+     * Get coinbank balances
+     */
+    app.get('/api/coinbank', function (req, response) {
+        account.getBalances(response);
+    });
+    
     // application -------------------------------------------------------------
     app.get('*', function (req, res) {
         console.log("send to " + __dirname + '/public/index.html');

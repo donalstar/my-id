@@ -68,7 +68,7 @@
         <div style="padding-left: 40px;">
             <div ng-hide="loggedIn" class="row centered-form">
                 <div>
-                    <div class="panel panel-default" style="width:500px">
+                    <div ng-show="showLogin" class="panel panel-default" style="width:500px">
                         <div class="panel-heading">
                             <h4 class="panel-title">Log in to Your Account</h4>
                         </div>
@@ -103,7 +103,12 @@
                                         <div ng-message="required">{{loginErrorMessage}}</div>
                                     </div>
 
+
                                     <div class="well" style="margin: 0 auto 5px; text-align:right">
+                                        <button type="button" ng-click="doSignUp(true)" class="btn btn-primary"
+                                                style="width:100px">Sign Up
+                                        </button>
+
                                         <button type="submit" class="btn btn-primary"
                                                 style="width:100px">Sign In
                                         </button>
@@ -115,7 +120,7 @@
                     </div>
 
 
-                    <div class="panel panel-default" style="width:500px">
+                    <div ng-show="showSignUp" class="panel panel-default" style="width:500px">
                         <div class="panel-heading">
                             <h4 class="panel-title">Create a New Account</h4>
                         </div>

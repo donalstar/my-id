@@ -38,6 +38,12 @@ contract Coin is owned {
 
     event GetBalance(address indexed addr, uint256 value);
 
+    event Amount(string name, uint256 value);
+
+    event TopUp(address addr, uint amount);
+
+    event TokenBalance(string addr, uint amount);
+
     /* Initializes contract with initial supply tokens to the creator of the contract */
 
     mapping (address => bool) public frozenAccount;
@@ -106,6 +112,9 @@ contract Coin is owned {
     function buy() returns (uint amount){
         amount = msg.value / buyPrice;                     // calculates the amount
 
+        Amount("amount", amount);
+        Amount("coinbank bal", balanceOf[this]);
+
         if (balanceOf[this] < amount) throw;               // checks if it has enough to sell
         balanceOf[msg.sender] += amount;                   // adds the amount to buyer's balance
         balanceOf[this] -= amount;                         // subtracts amount from seller's balance
@@ -131,6 +140,16 @@ contract Coin is owned {
         GetBalance(addr, balanceOf[addr]);
 
     	return balanceOf[addr];
+    }
+
+    function topUp(uint amount) {
+
+        // TODO: Make sure msg.sender is on customer white list
+
+        TokenBalance("tx.origin", balanceOf[tx.origin]);
+        TokenBalance("msg.sender", balanceOf[msg.sender]);
+
+        tx.origin.send(amount);
     }
 }
 

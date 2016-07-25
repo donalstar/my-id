@@ -1,6 +1,6 @@
 import "Coin.sol";
 
-contract UserChain {  // can be killed, so the owner gets sent the money in the end
+contract IdStore {  // can be killed, so the owner gets sent the money in the end
 
     uint minBalance;
 
@@ -14,6 +14,8 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
 	address coinbank;
 
+	uint price;
+
     string public first_name;
     string public last_name;
 
@@ -23,10 +25,17 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
 
     string public attributes;
 
+    uint fi = 1 finney;
+
 	event SetAttribute(uint id, string attribute);
 	event GetAttribute(address msg_sender, address bank, address contract_owner, uint id, string attribute);
 
-	function UserChain(string fname, string lname, address new_owner, address bank) {
+    event GetBalance(address owner_address, uint256 balance);
+
+    event AccountBalance(string addr_name, address addr, uint amount);
+
+    // Constructor
+	function IdStore(string fname, string lname, address new_owner, uint transaction_price, address bank) {
 		owner = msg.sender;
 
         first_name = fname;
@@ -37,23 +46,32 @@ contract UserChain {  // can be killed, so the owner gets sent the money in the 
         the_name = Name(first_name, last_name);
 
         coinbank = bank;
+
+        price = transaction_price;
 	}
 
-
-    function setAttrib(uint id, string location) {
+    function setAttribute(uint id, string location) {
         SetAttribute(id, location);
 
         attribsMap[id] = location;
     }
 
-    function getAttrib(uint id) returns (string res) {
+    function getAttribute(uint id) returns (string res) {
+        AccountBalance("tx.origin", tx.origin, tx.origin.balance);
+
         string value = attribsMap[id];
 
         GetAttribute(msg.sender, coinbank, owner_address, id, value);
 
         Coin c = Coin(coinbank);
 
-        c.transfer(owner_address, 10);
+        if (tx.origin.balance < 5 finney) {
+            AccountBalance("TOP UP!!", tx.origin, tx.origin.balance);
+
+            c.topUp(10 finney);
+        }
+
+        c.transfer(owner_address, price);
 
         return value;
     }

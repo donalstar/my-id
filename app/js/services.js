@@ -16,7 +16,12 @@ services.factory('Account', ['$http', function ($http) {
         getData: function (username, account_name, attribute) {
             return $http.get('/api/account_data/' + username + "/" + account_name + "/" + attribute);
         },
-        getAll: function() {
+
+        getBalances: function () {
+            return $http.get('/api/coinbank/');
+        },
+
+        getAll: function () {
             return $http.get('/api/accounts/');
         },
         create: function (value) {
@@ -35,5 +40,7 @@ services.factory('Customer', ['$http', function ($http) {
         }
     }
 }]);
+
+
 
 

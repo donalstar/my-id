@@ -1,6 +1,6 @@
 var Web3 = require('web3');
 var web3 = new Web3();
-var UserChain = require("../contracts/UserChain.sol.js");
+var IdStore = require("../contracts/IdStore.sol.js");
 var Pudding = require("ether-pudding");
 var provider = new web3.providers.HttpProvider();
 var utility = require('./utility.js');
@@ -8,7 +8,7 @@ var file_store = require('./file-store.js');
 
 web3.setProvider(provider);
 Pudding.setWeb3(web3);
-UserChain.load(Pudding);
+IdStore.load(Pudding);
 
 var Coin = require("../contracts/Coin.sol.js");
 Coin.load(Pudding);
@@ -34,7 +34,7 @@ function getAttributeId(attributeType) {
 
 function saveAttributesLocationToContract(username, location, callback) {
     utility.getAccountInfo(username, function (error, accountInfo) {
-        var contract = UserChain.at(accountInfo.contract);
+        var contract = IdStore.at(accountInfo.contract);
 
         contract.setAttributes(location, {from: accountInfo.account}).then(function (result) {
             console.log("Set location addr - " + location + " : " + result);
@@ -59,9 +59,9 @@ function saveAttributesLocationToContract(username, location, callback) {
  */
 function saveValueToContract(username, requestType, value, callback) {
     utility.getAccountInfo(username, function (error, accountInfo) {
-        var contract = UserChain.at(accountInfo.contract);
+        var contract = IdStore.at(accountInfo.contract);
 
-        contract.setAttrib(requestType, value, {from: accountInfo.account}).then(function (result) {
+        contract.setAttribute(requestType, value, {from: accountInfo.account}).then(function (result) {
             console.log("Set location addr - " + value + " : " + result);
 
             callback(null, result);
@@ -124,8 +124,7 @@ function getAttributeValue(attributes, requestType) {
     return value;
 }
 
-module.exports = {
-
+var self = module.exports = {
 
     /**
      *
@@ -135,9 +134,23 @@ module.exports = {
      * @param callback
      */
     getAttribute: function (accountInfo, contract_address, attributeId, callback) {
-        var contract = UserChain.at(contract_address);
+      //  for (var i=0; i<4; i++) {
+            self.getAttribute2(accountInfo, contract_address, attributeId, callback);
+     //   }
 
-        console.log("Get Attrib: (caller account) " + accountInfo.account);
+    },
+
+    /**
+     *
+     * @param accountInfo
+     * @param contract_address
+     * @param attributeId
+     * @param callback
+     */
+    getAttribute2: function (accountInfo, contract_address, attributeId, callback) {
+        var contract = IdStore.at(contract_address);
+
+        console.log("Get Attribute: (caller account) " + accountInfo.account);
 
         var block = web3.eth.getBlock('latest').number;
 
@@ -150,7 +163,7 @@ module.exports = {
                         " Id: " + result.args.id
                         + " Value: " + result.args.attribute);
 
-                 //   event.stopWatching();
+                    event.stopWatching();
 
                     var attribute_value = result.args.attribute;
 
@@ -166,7 +179,7 @@ module.exports = {
             }
         });
 
-        contract.getAttrib(attributeId, {from: accountInfo.account}).then(function (result) {
+        contract.getAttribute(attributeId, {from: accountInfo.account}).then(function (result) {
             console.log("Got Attrib: " + result);
         }).catch(function (error) {
             console.log("Got error " + error);
@@ -176,18 +189,7 @@ module.exports = {
     },
 
     getAttributes: function (accountInfo, callback) {
-        var contract = UserChain.at(accountInfo.contract);
-
-        // quick test -- get attrib #1
-
-        contract.getAttrib(0, {from: accountInfo.account}).then(function (result) {
-            console.log("Got Attrib: " + result);
-
-            file_store.readFromFile(result, function (error, data) {
-                console.log("Got Attrib VALUE: " + data);
-            });
-        });
-
+        var contract = IdStore.at(accountInfo.contract);
 
         contract.attributes.call().then(
             function (attributes_location) {

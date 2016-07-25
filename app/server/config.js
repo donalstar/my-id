@@ -10,7 +10,8 @@ module.exports = {
     
     account_unlock_duration: 1800,
     
-    coin_bank: '0xc92c78595594a375944b5df5e0b4c60949d84fa1'
+    // run 'node setup.js' to generate coin bank address
+    coin_bank: '0x54efcacbc7fab6fcf04848d982047363a2ce8957'
 };
 
 

@@ -3,7 +3,7 @@ module.exports = {
         "index.html": "index.html"
     },
     deploy: [
-        "UserChain",
+        "IdStore",
         "Coin"
     ],
     rpc: {
