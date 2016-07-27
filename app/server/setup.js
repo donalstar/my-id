@@ -3,7 +3,7 @@ var web3 = new Web3();
 
 var Pudding = require("ether-pudding");
 
-var Coin = require("./contracts/Coin.sol.js");
+var Coin = require("./../contracts/Coin.sol.js");
 
 var provider = new web3.providers.HttpProvider();
 

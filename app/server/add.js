@@ -8,7 +8,7 @@ var Pudding = require("ether-pudding");
 var web3 = new Web3();
 var provider = new web3.providers.HttpProvider();
 
-var utility = require('./server/utility.js');
+var utility = require('./utility.js');
 
 web3.setProvider(provider);
 
@@ -16,7 +16,7 @@ Pudding.setWeb3(web3);
 
 UserChain.load(Pudding);
 
-var Coin = require("./contracts/Coin.sol.js");
+var Coin = require("./../contracts/Coin.sol.js");
 Coin.load(Pudding);
 
 console.log("Connect to bank");

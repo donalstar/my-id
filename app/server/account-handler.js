@@ -225,23 +225,28 @@ module.exports = {
                 var masterAccount = accounts[0];
 
                 createContract(first_name, last_name, accountAddress, masterAccount, function (err, contract) {
-                    console.log("Created contract with address " + contract.address + " for account " + accountAddress);
+                    if (!err) {
+                        console.log("Created contract with address " + contract.address + " for account " + accountAddress);
 
-                    utility.addFundsFromMaster(accountAddress, 10).then(function (amount) {
-                        console.log("Successfully added funds to account " + accountAddress);
+                        utility.addFundsFromMaster(accountAddress, 10).then(function (amount) {
+                            console.log("Successfully added funds to account " + accountAddress);
 
-                        utility.addToFile(username, first_name, last_name, accountAddress, contract.address, function () {
-                            console.log("Account creation complete");
+                            utility.addToFile(username, first_name, last_name, accountAddress, contract.address, function () {
+                                console.log("Account creation complete");
 
-                            res.send(JSON.stringify({value: "ok"}));
+                                res.send(JSON.stringify({value: "ok"}));
+                            });
+                        }).catch(function (error) {
+                            console.log('Failed to add funds : ', error);
                         });
-                    }).catch(function (error) {
-                        console.log('Failed to add funds : ', error);
-                    });
+                    }
+                    else {
+                        res.status(500).send(JSON.stringify({message: err.message}));
+                    }
                 });
             });
         }).catch(function (error) {
-            res.send(JSON.stringify({error: err}));
+            res.status(500).send(JSON.stringify({message: error.message}));
         });
     },
 

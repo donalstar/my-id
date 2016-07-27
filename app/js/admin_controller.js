@@ -94,8 +94,6 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
 
                     $scope.accountCreateStatus = 'account created!';
                     $scope.accountCreateInProgress = false;
-
-                    $scope.doSignUp(false);
                 })
                 .error(function (error) {
                     console.log("error creating customer account " + error);

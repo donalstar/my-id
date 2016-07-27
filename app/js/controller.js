@@ -1,13 +1,43 @@
-application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Account', 'SNAP_VERSION', 'snapRemote',
-    function ($scope, $rootScope, Attributes, Account, SNAP_VERSION, snapRemote) {
+application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Account',
+    'SNAP_VERSION', 'snapRemote',
+    '$modal', '$log',
+    function ($scope, $rootScope,
+              Attributes, Account, SNAP_VERSION, snapRemote, $modal, $log) {
 
-        $scope.loggedIn = false;
+        $scope.openSignIn = function (size) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'signIn',
+                controller: 'modalController',
+                size: size
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.openSignUp = function (size) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'signUp',
+                controller: 'modalController',
+                size: size
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
         $scope.accountCreateInProgress = false;
-        $scope.accountBalance = 0.00;
+        $rootScope.accountCreateSuccess = false;
 
         $scope.loginFormData = {};
-
-        $scope.attributes = {};
 
         $scope.accountFormData = {};
 
@@ -27,6 +57,7 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
             snapper.open('left');
         });
 
+
         $scope.logIn = function () {
 
             Account.get($scope.loginFormData.username, $scope.loginFormData.password)
@@ -34,13 +65,19 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                     if (data.result == true) {
                         console.log("Login successful " + data.result + " err " + data.error);
 
-                        $scope.loggedIn = true;
-                        $scope.user = $scope.loginFormData.username;
-                        $scope.fullName = data.first_name + ' ' + data.last_name;
+                        $rootScope.loggedIn = true;
 
-                        $scope.accountBalance = data.balance;
+                        $rootScope.user = $scope.loginFormData.username;
+                        $rootScope.fullName = data.first_name + ' ' + data.last_name;
 
-                        $scope.attributes.profile = data.profile;
+                        $rootScope.accountBalance = data.balance;
+
+                        $rootScope.attributes = {};
+                        $rootScope.attributes.profile = data.profile;
+
+                        window.location = "#main";
+
+                        $scope.ok();
                     }
                     else {
                         console.log("Login error " + data.error);
@@ -51,20 +88,11 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                 .error(function (error) {
                     console.log(":Error logging in " + error);
                 });
-
         };
-        
-        $scope.doSignUp = function (show) {
-            if (show == true) {
-                console.log("Sign Up!");
 
-                $scope.showLogin = false;
-                $scope.showSignUp = true;
-            }
-            else {
-                $scope.showLogin = true;
-                $scope.showSignUp = false;
-            }
+        $scope.showSignUpDialog = function () {
+            $scope.cancel();
+            $scope.openSignUp();
         };
 
         $scope.createAccount = function () {
@@ -80,7 +108,14 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
                     $scope.accountCreateStatus = 'account created!';
                     $scope.accountCreateInProgress = false;
-                });
+                    $rootScope.accountCreateSuccess = true;
+
+                    $scope.ok();
+                }).error(function (error) {
+                $scope.accountCreateStatus = "Create error: " + error.message;
+
+                $scope.accountCreateInProgress = false;
+            });
         };
 
         $scope.updateValues = function (type) {
@@ -102,7 +137,7 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                     .success(function (data) {
                         console.log("Updating... success -- new balance " + data.balance);
 
-                        $scope.accountBalance = data.balance;
+                        $rootScope.accountBalance = data.balance;
 
                         $scope.loading = false;
 
@@ -118,4 +153,21 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
             }
         };
     }]);
+
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+application.controller('modalController', function ($scope, $modalInstance) {
+
+
+    $scope.ok = function () {
+        console.log("OK!!");
+        $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+});
 
