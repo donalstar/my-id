@@ -1,8 +1,7 @@
 application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Account',
-    'SNAP_VERSION', 'snapRemote',
     '$modal', '$log',
     function ($scope, $rootScope,
-              Attributes, Account, SNAP_VERSION, snapRemote, $modal, $log) {
+              Attributes, Account, $modal, $log) {
 
         $scope.openSignIn = function (size) {
 
@@ -41,22 +40,14 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
         $scope.accountFormData = {};
 
-        $scope.snapVersion = SNAP_VERSION.full;
-
         $scope.accountCreateStatus = '';
 
         $scope.dataUpdateInProgress = false;
         $scope.updateStatus = '';
 
-        $scope.fullName = '';
 
         $scope.showLogin = true;
         $scope.showSignUp = false;
-
-        snapRemote.getSnapper().then(function (snapper) {
-            snapper.open('left');
-        });
-
 
         $scope.logIn = function () {
 
@@ -88,6 +79,10 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                 .error(function (error) {
                     console.log(":Error logging in " + error);
                 });
+        };
+
+        $scope.showAdmin = function () {
+            window.location = "#admin_home";
         };
 
         $scope.showSignUpDialog = function () {

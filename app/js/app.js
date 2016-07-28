@@ -1,8 +1,7 @@
 var application = angular.module('appname', [
     'ngRoute',
     'service',
-    'ui.bootstrap',
-    'snap'
+    'ui.bootstrap'
 ]);
 
 application.config(['$routeProvider', function ($routeProvider) {
@@ -12,6 +11,12 @@ application.config(['$routeProvider', function ($routeProvider) {
     }).when('/main', {
         templateUrl: 'partials/main.html',
         controller: 'controller'
+    }).when('/admin_home', {
+        templateUrl: 'partials/admin_home.html',
+        controller: 'admin_controller'
+    }).when('/admin_main', {
+        templateUrl: 'partials/admin_main.html',
+        controller: 'admin_controller'
     }).otherwise({
         redirectTo: '/home'
     });

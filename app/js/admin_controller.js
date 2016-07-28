@@ -1,30 +1,54 @@
-application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 'Account', 'SNAP_VERSION', 'snapRemote',
-    function ($scope, $rootScope, Customer, Account, SNAP_VERSION, snapRemote) {
+application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 'Account',
+    '$modal', '$log',
+    function ($scope, $rootScope, Customer, Account, $modal, $log) {
 
-        $scope.loggedIn = false;
+
         $scope.accountCreateInProgress = false;
         $scope.queryInProgress = false;
         $scope.queryStatus = '';
-        $scope.accountBalance = 0.00;
-        $scope.accountTokens = 0;
-        $scope.customerData = {};
 
-        $scope.snapVersion = SNAP_VERSION.full;
+        $scope.customerData = {};
 
         $scope.accountCreateStatus = '';
         $scope.loginFormData = {};
-        $scope.fullName = '';
 
         $scope.accountAttributes = {};
 
         $scope.showLogin = true;
         $scope.showSignUp = false;
 
-        $scope.accountBalances = {};
 
-        snapRemote.getSnapper().then(function (snapper) {
-            snapper.open('left');
-        });
+
+        $scope.openSignIn = function (size) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'signIn',
+                controller: 'modalController',
+                size: size
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.openSignUp = function (size) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'signUp',
+                controller: 'modalController',
+                size: size
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
 
         $scope.logIn = function () {
 
@@ -33,17 +57,22 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
                     if (data.result == true) {
                         console.log("Login successful " + data.result + " err " + data.error);
 
-                        $scope.loggedIn = true;
-                        $scope.user = $scope.customerData.username;
-                        $scope.fullName = data.first_name + ' ' + data.last_name;
+                        $rootScope.loggedIn = true;
+                        $rootScope.user = $scope.customerData.username;
+                        $rootScope.fullName = data.first_name + ' ' + data.last_name;
 
-                        $scope.accountBalance = data.balance;
+                        $rootScope.accountBalance = data.balance;
 
-                        $scope.accountTokens = data.tokens;
+                        $rootScope.accountTokens = data.tokens;
 
                         Account.getAll()
                             .success(function (data) {
-                                $scope.accounts = data;
+                                $rootScope.accounts = data;
+
+
+                                window.location = "#admin_main";
+
+                                $scope.ok();
                             })
                             .error(function (error) {
                                 console.log("Accounts error " + error);
@@ -61,25 +90,13 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
 
             Account.getBalances()
                 .success(function (data) {
-                    $scope.accountBalances = data;
+                    $rootScope.accountBalances = data;
                 })
                 .error(function (error) {
                     console.log(":Error getting account balances " + error);
                 });
         };
 
-        $scope.doSignUp = function (show) {
-            if (show == true) {
-                console.log("Sign Up!");
-
-                $scope.showLogin = false;
-                $scope.showSignUp = true;
-            }
-            else {
-                $scope.showLogin = true;
-                $scope.showSignUp = false;
-            }
-        };
 
         $scope.createAccount = function () {
             console.log("Create account... ");
@@ -94,6 +111,10 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
 
                     $scope.accountCreateStatus = 'account created!';
                     $scope.accountCreateInProgress = false;
+
+                    window.location = "#admin_main";
+
+                    $scope.ok();
                 })
                 .error(function (error) {
                     console.log("error creating customer account " + error);
