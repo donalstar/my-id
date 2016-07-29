@@ -45,6 +45,7 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
         $scope.dataUpdateInProgress = false;
         $scope.updateStatus = '';
 
+        $scope.vals = ['one', 'two', 'three'];
 
         $scope.showLogin = true;
         $scope.showSignUp = false;
@@ -111,6 +112,38 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
                 $scope.accountCreateInProgress = false;
             });
+        };
+
+        $scope.getValues = function (key) {
+            var result;
+
+            var value_attributes = attributes.getValueAttributes();
+            
+            for (index in value_attributes) {
+                var value = value_attributes[index];
+
+                if (value.name == key.toLowerCase()) {
+                    result = value.values;
+                }
+            }
+
+            return result;
+        };
+
+        $scope.getAttributes = function () {
+            var result = [];
+
+            for (index in $scope.attributes.profile) {
+                if (index % 3 == 0) {
+                    var row = [];
+                    
+                    result.push(row);
+                }
+                
+                row.push($scope.attributes.profile[index]);
+            }
+
+            return result;
         };
 
         $scope.updateValues = function (type) {

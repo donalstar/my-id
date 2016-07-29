@@ -87,11 +87,7 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
         contract.the_name.call().then(function (the_name) {
             attributesHandler.getAttributes(accountInfo, function (error, attributes) {
 
-                var profile = [
-                    {name: "ssn", value: "", access: 0},
-                    {name: "dl", value: "", access: 0},
-                    {name: "fico", value: "", access: 0}
-                ];
+                var profile = getDefaultProfile();
 
                 if (attributes != null) {
                     profile = JSON.parse(attributes);
@@ -122,6 +118,20 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
                 error: message
             }));
     });
+}
+
+function getDefaultProfile() {
+    var profile = [];
+
+    var attribute_types = utility.getAttributeTypes();
+    
+    for (index in attribute_types) {
+        var type = attribute_types[index];
+        
+        profile.push({name: type, value: "", access: 0});
+    }
+
+    return profile;
 }
 
 module.exports = {

@@ -17,6 +17,8 @@ Coin.load(Pudding);
 var accountsFile = "../data/accounts.json";
 var customersFile = "../data/customers.json";
 
+var attributes = require('../data/attributes.js');
+
 /**
  *
  * @param accounts
@@ -430,6 +432,21 @@ var self = module.exports = {
 
             event.stopWatching();
         });
+    },
+    
+    getAttributeTypes: function() {
+        var types = [];
+
+        var value_attributes = attributes.getValueAttributes();
+        
+
+        for (index in value_attributes) {
+            var value = value_attributes[index];
+            
+            types.push(value.name);
+        }
+        
+        return types;
     }
 };
 

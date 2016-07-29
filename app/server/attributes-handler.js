@@ -15,12 +15,12 @@ Coin.load(Pudding);
 
 var config = require('./config.js');
 
-var attributeTypes = ['ssn', 'dl', 'fico'];
+var attributeTypes = utility.getAttributeTypes();
+
 
 function contains(arr, obj) {
     return (arr.indexOf(obj) != -1);
 }
-
 
 /**
  *

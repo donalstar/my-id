@@ -1,4 +1,408 @@
-<div class="mainContainer" ng-controller="controller">
+<div id="wrapper">
+
+
+    <div class="mainContainer" ng-controller="controller">
+
+        <div id="page-wrapper">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-lg-9">
+                    <h2 class="page-header">User: {{fullName}}</h2>
+                </div>
+                <div class="col-lg-3 text-right">
+                    <h2 class="page-header">{{user}}</h2>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-meh-o fa-fw"></i> Attributes
+
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+                            <div class="row">
+
+                                <div ng-repeat="(key, value) in getAttributes()">
+                                    <div> &nbsp;</div>
+                                    <!--Group name: {{ key }}-->
+
+                                    <div ng-repeat="item in value">
+                                        <div class="col-lg-4 col-md-8">
+                                            <div class="panel {{getValues(item.name).panel}}">
+                                                <div class="panel-heading">
+                                                    <div class="row">
+                                                        <div class="col-xs-3">
+                                                            <i class="fa {{getValues(item.name).icon}} fa-3x"></i>
+                                                        </div>
+                                                        <div class="col-xs-9 text-right">
+                                                            <div class="big">{{getValues(item.name).long_name}}</div>
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="row">
+                                                        <div class="col-xs-12 text-center">
+                                                            <div class="huge">{{item.value}}</div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <a href="#">
+                                                    <div class="panel-footer">
+                                                        <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i
+                                                            class="fa fa-arrow-circle-right"></i></span>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-plus fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-center">
+                                                    <div class="huge">Add...</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-meh-o fa-fw"></i> Attributes (dummy)
+
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-legal fa-3x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="big">Social Security #</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-center">
+                                                    <div class="huge">918-92-1982</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i
+                                                            class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="panel panel-green">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bank fa-3x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="big">FICO Score</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div class="huge">762</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i
+                                                            class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="panel panel-yellow">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-car fa-3x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="big">Drivers License</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div class="huge">B6752187</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div>California</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i
+                                                            class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="panel panel-red">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-bank fa-3x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="big">Checking Account #</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div class="huge">67127-18762</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div>Bank of America</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i
+                                                            class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="panel panel-green">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-facebook-square fa-3x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="big">Facebook ID</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div class="huge">johnsmith</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i
+                                                            class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-8">
+                                    <div class="panel panel-red">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-map-marker fa-3x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="big">Current Address</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div class="huge">11 Cedar Ln.</div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 text-right">
+                                                    <div>Boston MA 02144</div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">View Details</span>
+                                                    <span class="pull-right"><i
+                                                            class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+
+
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-cog fa-fw"></i> My Account
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item">
+                                    <i class="fa fa-money fa-fw"></i> Balance
+                                    <span class="pull-right"><em>{{accountBalance}}&#402;</em>
+                                    </span>
+                                </a>
+
+                                <a href="#" class="list-group-item">
+                                    <i class="fa fa-money fa-fw"></i> Token Balance
+                                    <span class="pull-right"><em>{{accountTokens}} &#8366;</em>
+                                    </span>
+                                </a>
+
+                            </div>
+
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                    <!-- /.panel -->
+                    <div class="chat-panel panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comments fa-fw"></i>
+                            Notification Log
+
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <ul class="chat">
+                                <li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar"
+                                             class="img-circle"/>
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">Data request</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
+                                            </small>
+                                        </div>
+                                        <p>
+                                            data request details
+                                        </p>
+                                    </div>
+                                </li>
+
+                                <li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar"
+                                             class="img-circle"/>
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">Data request</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="fa fa-clock-o fa-fw"></i> 56 mins ago
+                                            </small>
+                                        </div>
+                                        <p>
+                                            data request details
+                                        </p>
+                                    </div>
+                                </li>
+
+
+                            </ul>
+                        </div>
+
+                        <!-- /.panel-footer -->
+                    </div>
+                    <!-- /.panel .chat-panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
 
 
     <div ng-show="loggedIn">
