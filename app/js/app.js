@@ -5,6 +5,7 @@ var application = angular.module('appname', [
 ]);
 
 application.config(['$routeProvider', function ($routeProvider) {
+
     $routeProvider.when('/home', {
         templateUrl: 'partials/home.html',
         controller: 'controller'

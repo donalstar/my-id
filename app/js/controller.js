@@ -33,8 +33,31 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
             });
         };
 
+
+        $scope.viewDetails = function (item) {
+            $scope.selectedItem = item;
+
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/attribute_view.html',
+                backdrop: false,
+                scope: $scope,
+                controller: 'modalController',
+                size: 'md'
+            });
+
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+
         $scope.accountCreateInProgress = false;
         $rootScope.accountCreateSuccess = false;
+
+        $rootScope.accountTokens = 0;
 
         $scope.loginFormData = {};
 
@@ -45,7 +68,6 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
         $scope.dataUpdateInProgress = false;
         $scope.updateStatus = '';
 
-        $scope.vals = ['one', 'two', 'three'];
 
         $scope.showLogin = true;
         $scope.showSignUp = false;
@@ -118,7 +140,7 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
             var result;
 
             var value_attributes = attributes.getValueAttributes();
-            
+
             for (index in value_attributes) {
                 var value = value_attributes[index];
 
@@ -133,14 +155,23 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
         $scope.getAttributes = function () {
             var result = [];
 
-            for (index in $scope.attributes.profile) {
-                if (index % 3 == 0) {
-                    var row = [];
-                    
-                    result.push(row);
+            if ($scope.all_attributes == undefined) {
+
+
+                for (index in $scope.attributes.profile) {
+                    if (index % 3 == 0) {
+                        var row = [];
+
+                        result.push(row);
+                    }
+
+                    row.push($scope.attributes.profile[index]);
                 }
-                
-                row.push($scope.attributes.profile[index]);
+
+                $scope.all_attributes = result;
+            }
+            else {
+                result = $scope.all_attributes;
             }
 
             return result;
@@ -172,11 +203,15 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                         $scope.updateStatus = "update successful";
 
                         $scope.dataUpdateInProgress = false;
+
+                        $scope.ok();
                     })
                     .error(function (error) {
                         $scope.updateStatus = "Update error: " + error.message;
 
                         $scope.dataUpdateInProgress = false;
+
+                        $scope.ok();
                     });
             }
         };

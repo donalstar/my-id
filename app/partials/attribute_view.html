@@ -1,0 +1,84 @@
+<div ng-controller="controller">
+
+    <form name="form" ng-submit="updateValues(selectedItem.name)">
+
+        <div class="row" style="margin: 5px;">
+
+            <div class="panel {{getValues(selectedItem.name).panel}}">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa {{getValues(selectedItem.name).icon}} fa-3x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="big">{{getValues(selectedItem.name).long_name}}</div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel-footer">
+
+                    <div class="row centered-form" style="margin: 2px;">
+                        <div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">Edit or Delete Value</h4>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">{{getValues(selectedItem.name).long_name}}:</label>
+
+                                            <div class="col-sm-8">
+                                                <input type="text" name="name" class="form-control input-sm"
+                                                       ng-model="selectedItem.value" placeholder="Value"
+                                                       tabindex="1"
+                                                       required/>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row centered-form" style="margin: 2px;">
+
+                        <div class="progress progress-striped active"
+                             ng-show="dataUpdateInProgress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="100"
+                                 aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                Updating ...
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="center-block">{{updateStatus}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary"
+                    style="width:100px">Save
+            </button>
+
+            <button type="button" class="btn btn-info"
+                    style="width:100px">Delete
+            </button>
+
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+
+    </form>
+</div>
