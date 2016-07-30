@@ -369,3 +369,9 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+.green-font {
+    border: 1px solid;
+    clear:both;
+    color: #90C695;
+}

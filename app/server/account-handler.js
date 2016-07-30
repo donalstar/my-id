@@ -81,42 +81,60 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
  */
 function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
 
-    utility.unlockAccount(accountInfo.account, passphrase).then(function (result) {
-        console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
+    // need to check if account is unlocked
+    if (passphrase) {
+        utility.unlockAccount(accountInfo.account, passphrase).then(function (result) {
+            console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
-        contract.the_name.call().then(function (the_name) {
-            attributesHandler.getAttributes(accountInfo, function (error, attributes) {
+            getAccountData(accountInfo, contract, balance, res);
+        }).catch(function (error) {
+            console.log("Failed to unlock account " + error);
 
-                var profile = getDefaultProfile();
+            var message = 'system error';
 
-                if (attributes != null) {
-                    profile = JSON.parse(attributes);
-                }
+            if (error.code == -32000) {
+                message = error.message;
+            }
 
-                res.send(JSON.stringify(
-                    {
-                        result: true,
-                        balance: balance,
-                        first_name: the_name[0],
-                        last_name: the_name[1],
-                        profile: profile,
-                        error: error
-                    }));
-            });
+            res.send(JSON.stringify(
+                {
+                    error: message
+                }));
         });
-    }).catch(function (error) {
-        console.log("Failed to unlock account " + error);
+    }
+    else {
+        // assume account is unlocked already
+        getAccountData(accountInfo, contract, balance, res);
+    }
+}
 
-        var message = 'system error';
+/**
+ * 
+ * @param accountInfo
+ * @param contract
+ * @param balance
+ * @param res
+ */
+function getAccountData(accountInfo, contract, balance, res) {
+    contract.the_name.call().then(function (the_name) {
+        attributesHandler.getAttributes(accountInfo, function (error, attributes) {
 
-        if (error.code == -32000) {
-            message = error.message;
-        }
+            var profile = getDefaultProfile();
 
-        res.send(JSON.stringify(
-            {
-                error: message
-            }));
+            if (attributes != null) {
+                profile = JSON.parse(attributes);
+            }
+
+            res.send(JSON.stringify(
+                {
+                    result: true,
+                    balance: balance,
+                    first_name: the_name[0],
+                    last_name: the_name[1],
+                    profile: profile,
+                    error: error
+                }));
+        });
     });
 }
 
@@ -125,11 +143,13 @@ function getDefaultProfile() {
 
     var attribute_types = utility.getAttributeTypes();
     
-    for (index in attribute_types) {
-        var type = attribute_types[index];
-        
-        profile.push({name: type, value: "", access: 0});
-    }
+    // for (index in attribute_types) {
+    //     var type = attribute_types[index];
+    //
+    //     profile.push({name: type, value: "", access: 0});
+    // }
+
+    //profile.push({name: 'ssn', value: "", access: 0});
 
     return profile;
 }

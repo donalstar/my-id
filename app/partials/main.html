@@ -76,7 +76,7 @@
                                     <div class="col-lg-4 col-md-8">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <div class="row">
+                                                <div class="row" ng-click="toggleAttributesPanel()">
                                                     <div class="col-xs-3">
                                                         <i class="fa fa-plus fa-5x"></i>
                                                     </div>
@@ -91,6 +91,61 @@
                                 </div>
                             </div>
                         </div>
+
+
+                        <div class="panel panel-default" ng-show="showAttributes">
+                            <div class="panel-heading">
+                                <i class="fa fa-meh-o fa-fw"></i> Add Attributes
+                                <span class="pull-right">
+
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                            data-toggle="dropdown" ng-click="toggleAttributesPanel()">
+                                Hide <i class="fa fa-chevron-up"></i>
+                            </button>
+                                </span>
+                            </div>
+
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+
+                                <div class="row">
+                                    <div ng-repeat="(key, value) in getRemainingAttributes()">
+                                        <div> &nbsp;</div>
+
+                                        <div ng-repeat="item in value">
+                                            <div class="col-lg-4 col-md-8">
+                                                <div class="panel {{getValues(item.name).panel}}">
+                                                    <div class="panel-heading">
+                                                        <div class="row">
+                                                            <div class="col-xs-3">
+                                                                <i class="fa {{getValues(item.name).icon}} fa-3x"></i>
+                                                            </div>
+                                                            <div class="col-xs-9 text-right">
+                                                                <div class="big">{{getValues(item.name).long_name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <a href="#main">
+                                                        <div class="panel-footer" ng-click="addItem(item)">
+                                                            <span class="pull-left">Add</span>
+                                                            <span class="pull-right"><i
+                                                                    class="fa fa-arrow-circle-right"></i></span>
+                                                            <div class="clearfix"></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
 
                         <div class="panel panel-default">
                             <div class="panel-heading">

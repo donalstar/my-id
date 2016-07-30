@@ -53,6 +53,25 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
             });
         };
 
+        $scope.addItem = function (item) {
+            $scope.selectedItem = item;
+
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/attribute_add.html',
+                backdrop: false,
+                scope: $scope,
+                controller: 'modalController',
+                size: 'md'
+            });
+
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
 
         $scope.accountCreateInProgress = false;
         $rootScope.accountCreateSuccess = false;
@@ -63,6 +82,8 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
         $scope.accountFormData = {};
 
+        $scope.assigned_attributes = [];
+
         $scope.accountCreateStatus = '';
 
         $scope.dataUpdateInProgress = false;
@@ -70,7 +91,8 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
 
         $scope.showLogin = true;
-        $scope.showSignUp = false;
+
+        $scope.showAttributes = false;
 
         $scope.logIn = function () {
 
@@ -81,7 +103,9 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
                         $rootScope.loggedIn = true;
 
+    
                         $rootScope.user = $scope.loginFormData.username;
+                      
                         $rootScope.fullName = data.first_name + ' ' + data.last_name;
 
                         $rootScope.accountBalance = data.balance;
@@ -102,6 +126,10 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                 .error(function (error) {
                     console.log(":Error logging in " + error);
                 });
+        };
+
+        $scope.toggleAttributesPanel = function () {
+            $scope.showAttributes = !$scope.showAttributes;
         };
 
         $scope.showAdmin = function () {
@@ -165,6 +193,8 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                         result.push(row);
                     }
 
+                    $scope.assigned_attributes.push($scope.attributes.profile[index].name);
+
                     row.push($scope.attributes.profile[index]);
                 }
 
@@ -177,7 +207,50 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
             return result;
         };
 
+        $scope.getRemainingAttributes = function () {
+            var result = [];
+
+            // start with all attribs
+            if ($scope.remaining_attributes == undefined) {
+                var values = attributes.getValueAttributes();
+
+                for (index in values) {
+                    if (index % 3 == 0) {
+                        var row = [];
+
+                        result.push(row);
+                    }
+
+                    if (!$scope.attributeIsAssigned(values[index])) {
+                        row.push(values[index]);
+                    }
+                }
+
+                $scope.remaining_attributes = result;
+            }
+
+            return $scope.remaining_attributes;
+        };
+
+        $scope.attributeIsAssigned = function (value) {
+            return ($scope.assigned_attributes.indexOf(value.name) != -1);
+        };
+
+        $scope.addValue = function (type, value) {
+            console.log("Add value " + type);
+
+            var attributes = [];
+
+            attributes.push({name: type, value: value, access: 0});
+
+            $scope.setValues(type, attributes);
+        };
+
         $scope.updateValues = function (type) {
+            $scope.setValues(type, $scope.attributes.profile);
+        };
+
+        $scope.setValues = function (type, attributes) {
 
             // validate the formData to make sure that something is there
             // if form is empty, nothing will happen
@@ -186,11 +259,17 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
                 $scope.dataUpdateInProgress = true;
 
-                $scope.attributes.user = $scope.user;
-                $scope.attributes.requestType = type;
+                // $scope.attributes.user = $scope.user;
+                // $scope.attributes.requestType = type;
+
+                var request_data = {};
+
+                request_data.user = $scope.user;
+                request_data.requestType = type;
+                request_data.profile = attributes;
 
                 // call the create function from our service (returns a promise object)
-                Attributes.update($scope.attributes)
+                Attributes.update(request_data)
 
                 // if successful creation, call our get function to get all the new todos
                     .success(function (data) {
