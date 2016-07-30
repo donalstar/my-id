@@ -94,24 +94,34 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
         $scope.showAttributes = false;
 
-        $scope.logIn = function () {
+        $rootScope.attributesLoaded = false;
 
-            Account.get($scope.loginFormData.username, $scope.loginFormData.password)
+
+        $scope.logIn = function () {
+            $scope.loadAccountData($scope.loginFormData.username, $scope.loginFormData.password);
+        };
+
+        $scope.loadAccountData = function ($username, $password) {
+            Account.get($username, $password)
                 .success(function (data) {
-                    if (data.result == true) {
+                    // if (data.result == true) {
+
+                    if ($rootScope.attributesLoaded == false) {
                         console.log("Login successful " + data.result + " err " + data.error);
 
                         $rootScope.loggedIn = true;
 
-    
+
                         $rootScope.user = $scope.loginFormData.username;
-                      
+
                         $rootScope.fullName = data.first_name + ' ' + data.last_name;
 
                         $rootScope.accountBalance = data.balance;
 
                         $rootScope.attributes = {};
                         $rootScope.attributes.profile = data.profile;
+
+                        $rootScope.attributesLoaded = true;
 
                         window.location = "#main";
 
@@ -239,7 +249,7 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
         $scope.addValue = function (type, value) {
             console.log("Add value " + type);
 
-            var attributes = [];
+            var attributes = $scope.attributes.profile
 
             attributes.push({name: type, value: value, access: 0});
 
@@ -282,6 +292,8 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                         $scope.updateStatus = "update successful";
 
                         $scope.dataUpdateInProgress = false;
+
+                        $scope.loadAccountData($scope.user, $scope.loginFormData.password);
 
                         $scope.ok();
                     })

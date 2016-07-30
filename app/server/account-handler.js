@@ -71,6 +71,8 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
     })
 }
 
+
+
 /**
  *
  * @param accountInfo
@@ -81,8 +83,10 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
  */
 function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
 
+    var logged_in = (passphrase != undefined && passphrase != null);
+    
     // need to check if account is unlocked
-    if (passphrase) {
+    if (!logged_in) {
         utility.unlockAccount(accountInfo.account, passphrase).then(function (result) {
             console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
@@ -156,6 +160,7 @@ function getDefaultProfile() {
 
 module.exports = {
 
+
     /**
      *
      * @param username
@@ -175,16 +180,12 @@ module.exports = {
                 if (balance < 5) {
                     console.log("Account Balance too low - top up...");
 
-                    var amount = 10;
+                    var initialAccountBalance = 20;
 
-                    utility.addFundsFromMaster(accountAddress, initialAccountBalance).then(function (amount) {
+                    utility.addFundsFromMaster(accountInfo.account, initialAccountBalance).then(function (amount) {
                         getAccountInfo(accountInfo, passphrase, contract, balance, res);
                     }).catch(function (error) {
                         console.log("ERROR " + error);
-                    });
-
-                    utility.addFundsFromMaster(accountInfo.account, amount, function () {
-                        getAccountInfo(accountInfo, passphrase, contract, balance, res);
                     });
                 }
                 else {
