@@ -1,6 +1,6 @@
-application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Account',
+application.controller('controller', ['$scope', '$rootScope', '$window', 'Attributes', 'Account',
     '$modal', '$log',
-    function ($scope, $rootScope,
+    function ($scope, $rootScope, $window,
               Attributes, Account, $modal, $log) {
 
         $scope.openSignIn = function (size) {
@@ -98,16 +98,42 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
 
         $scope.logIn = function () {
-            $scope.loadAccountData($scope.loginFormData.username, $scope.loginFormData.password);
+            $scope.loadAccountData($scope.loginFormData.username, $scope.loginFormData.password, true);
         };
 
-        $scope.loadAccountData = function ($username, $password) {
+        $scope.init_main = function () {
+            if ($rootScope.loggedIn == undefined) {
+                $scope.setLoginStatus();
+            }
+        };
+
+        $scope.setLoginStatus = function () {
+            Account.checkLogin()
+                .success(function (result) {
+
+                    $rootScope.loggedIn = result.logged_in;
+
+                    if (!$rootScope.loggedIn) {
+                        $window.location.href = '#home';
+                    }
+                    else {
+                        console.log("User " + result.username + " logged in");
+
+                        $scope.loadAccountData(result.username, $scope.loginFormData.password, false);
+                    }
+                })
+                .error(function (error) {
+                    console.log(":Error checking login status " + error);
+                });
+        };
+
+        $scope.loadAccountData = function ($username, $password, dismiss_dialog) {
             Account.get($username, $password)
                 .success(function (data) {
                     // if (data.result == true) {
 
                     console.log("Account get successful!");
-                    
+
                     if ($rootScope.attributesLoaded == false) {
                         console.log("Login successful " + data.result + " err " + data.error);
 
@@ -127,7 +153,9 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
                         window.location = "#main";
 
-                        $scope.ok();
+                       if (dismiss_dialog == true) {
+                            $scope.ok();
+                       }
                     }
                     else {
                         console.log("Login error " + data.error);
@@ -200,20 +228,22 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
             if ($scope.all_attributes == undefined) {
 
+                if ($scope.attributes != undefined) {
+                    for (index in $scope.attributes.profile) {
+                        if (index % 3 == 0) {
+                            var row = [];
 
-                for (index in $scope.attributes.profile) {
-                    if (index % 3 == 0) {
-                        var row = [];
+                            result.push(row);
+                        }
 
-                        result.push(row);
+                        $scope.assigned_attributes.push($scope.attributes.profile[index].name);
+
+                        row.push($scope.attributes.profile[index]);
                     }
 
-                    $scope.assigned_attributes.push($scope.attributes.profile[index].name);
-
-                    row.push($scope.attributes.profile[index]);
+                    $scope.all_attributes = result;
                 }
 
-                $scope.all_attributes = result;
             }
             else {
                 result = $scope.all_attributes;
@@ -251,12 +281,12 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
             return ($scope.assigned_attributes.indexOf(value.name) != -1);
         };
 
-        $scope.addValue = function (type, value) {
-            console.log("Add value " + type);
+        $scope.addValue = function (type, value, line2) {
+            console.log("Add value " + type + " line2: " + line2);
 
-            var attributes = $scope.attributes.profile
+            var attributes = $scope.attributes.profile;
 
-            attributes.push({name: type, value: value, access: 0});
+            attributes.push({name: type, value: value, line2: line2, access: 0});
 
             $scope.setValues(type, attributes);
         };
@@ -298,9 +328,8 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
 
                         $scope.dataUpdateInProgress = false;
 
-                        $scope.loadAccountData($scope.user, $scope.loginFormData.password);
+                        $scope.loadAccountData($scope.user, $scope.loginFormData.password, true);
 
-                        $scope.ok();
                     })
                     .error(function (error) {
                         $scope.updateStatus = "Update error: " + error.message;
@@ -311,7 +340,8 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                     });
             }
         };
-    }]);
+    }])
+;
 
 
 // Please note that $modalInstance represents a modal window (instance) dependency.

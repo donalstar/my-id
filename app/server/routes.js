@@ -18,8 +18,20 @@ module.exports = function (app) {
      * Account
      */
     app.get('/api/account/:username/:password', function (req, response) {
-        account.getAccount(req.params.username, req.params.password, response);
+
+        account.getAccount(req.session, req.params.username, req.params.password, response);
     });
+
+    app.get('/api/check_login', function (req, response) {
+        console.log("check login! - from session: " +  req.session.logged_in );
+
+        response.send(JSON.stringify(
+            {
+                logged_in: req.session.logged_in,
+                username: req.session.username
+            }));
+    });
+
 
     /**
      * Get Accounts
@@ -36,12 +48,12 @@ module.exports = function (app) {
 
     /**
      * Account data
-     * 
+     *
      */
     app.get('/api/account_data/:username/:account_name/:attribute', function (req, response) {
         account.requestData(req.params.username, req.params.account_name, req.params.attribute, response);
     });
-    
+
     // Customer
 
     /**
@@ -69,7 +81,7 @@ module.exports = function (app) {
     app.get('/api/coinbank', function (req, response) {
         account.getBalances(response);
     });
-    
+
     // application -------------------------------------------------------------
     app.get('*', function (req, res) {
         console.log("send to " + __dirname + '/public/index.html');

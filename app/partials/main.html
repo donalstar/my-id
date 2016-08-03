@@ -1,7 +1,7 @@
 <div id="wrapper">
 
 
-    <div class="mainContainer" ng-controller="controller">
+    <div class="mainContainer" ng-controller="controller" data-ng-init="init_main()">
 
         <div ng-show="loggedIn">
 
@@ -49,8 +49,16 @@
 
 
                                                         <div class="row">
-                                                            <div class="col-xs-12 text-center">
+                                                            <div class="col-xs-12 text-right">
                                                                 <div class="huge">{{item.value}}</div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="row">
+                                                            <div class="col-xs-12 text-right">
+                                                                <div ng-show="item.line2">{{item.line2}}</div>
+                                                                <div ng-hide="item.line2">&nbsp;</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -110,7 +118,7 @@
 
                                 <div class="row">
                                     <div ng-repeat="(key, value) in getRemainingAttributes()">
-                                        <div> &nbsp;</div>
+                                        <!--<div> &nbsp;</div>-->
 
                                         <div ng-repeat="item in value">
                                             <div class="col-lg-4 col-md-8">
@@ -123,6 +131,7 @@
                                                             <div class="col-xs-9 text-right">
                                                                 <div class="big">{{getValues(item.name).long_name}}
                                                                 </div>
+
                                                             </div>
                                                         </div>
 
@@ -145,228 +154,6 @@
                             </div>
 
                         </div>
-
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <i class="fa fa-meh-o fa-fw"></i> Attributes (dummy)
-
-                            </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-8">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-3">
-                                                        <i class="fa fa-legal fa-3x"></i>
-                                                    </div>
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="big">Social Security #</div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-center">
-                                                        <div class="huge">918-92-1982</div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <a href="#">
-                                                <div class="panel-footer">
-                                                    <span class="pull-left">View Details</span>
-                                                    <span class="pull-right"><i
-                                                            class="fa fa-arrow-circle-right"></i></span>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-8">
-                                        <div class="panel panel-green">
-                                            <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-3">
-                                                        <i class="fa fa-bank fa-3x"></i>
-                                                    </div>
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="big">FICO Score</div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div class="huge">762</div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <a href="#">
-                                                <div class="panel-footer">
-                                                    <span class="pull-left">View Details</span>
-                                                    <span class="pull-right"><i
-                                                            class="fa fa-arrow-circle-right"></i></span>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-lg-4 col-md-8">
-                                        <div class="panel panel-yellow">
-                                            <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-3">
-                                                        <i class="fa fa-car fa-3x"></i>
-                                                    </div>
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="big">Drivers License</div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div class="huge">B6752187</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div>California</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="#">
-                                                <div class="panel-footer">
-                                                    <span class="pull-left">View Details</span>
-                                                    <span class="pull-right"><i
-                                                            class="fa fa-arrow-circle-right"></i></span>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-8">
-                                        <div class="panel panel-red">
-                                            <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-3">
-                                                        <i class="fa fa-bank fa-3x"></i>
-                                                    </div>
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="big">Checking Account #</div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div class="huge">67127-18762</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div>Bank of America</div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <a href="#">
-                                                <div class="panel-footer">
-                                                    <span class="pull-left">View Details</span>
-                                                    <span class="pull-right"><i
-                                                            class="fa fa-arrow-circle-right"></i></span>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-8">
-                                        <div class="panel panel-green">
-                                            <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-3">
-                                                        <i class="fa fa-facebook-square fa-3x"></i>
-                                                    </div>
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="big">Facebook ID</div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div class="huge">johnsmith</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div></div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <a href="#">
-                                                <div class="panel-footer">
-                                                    <span class="pull-left">View Details</span>
-                                                    <span class="pull-right"><i
-                                                            class="fa fa-arrow-circle-right"></i></span>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-8">
-                                        <div class="panel panel-red">
-                                            <div class="panel-heading">
-                                                <div class="row">
-                                                    <div class="col-xs-3">
-                                                        <i class="fa fa-map-marker fa-3x"></i>
-                                                    </div>
-                                                    <div class="col-xs-9 text-right">
-                                                        <div class="big">Current Address</div>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div class="huge">11 Cedar Ln.</div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xs-12 text-right">
-                                                        <div>Boston MA 02144</div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <a href="#">
-                                                <div class="panel-footer">
-                                                    <span class="pull-left">View Details</span>
-                                                    <span class="pull-right"><i
-                                                            class="fa fa-arrow-circle-right"></i></span>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-                            <!-- /.panel-body -->
-                        </div>
-                        <!-- /.panel -->
 
 
                     </div>

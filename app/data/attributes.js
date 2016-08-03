@@ -8,7 +8,7 @@
             },
             {
                 name: "dl",
-                values: {long_name: "Drivers License #", icon: "fa-car", panel: "panel-green"}
+                values: {long_name: "Drivers License #", line2: "state", icon: "fa-car", panel: "panel-green"}
             },
             {
                 name: "fico",
@@ -20,7 +20,7 @@
             },
             {
                 name: "address",
-                values: {long_name: "Current Address", icon: "fa-user", panel: "panel-green"}
+                values: {long_name: "Current Address",  line2: "state", icon: "fa-user", panel: "panel-green"}
             },
             {
                 name: "linkedin",

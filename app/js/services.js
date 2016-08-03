@@ -10,6 +10,10 @@ services.factory('Attributes', ['$http', function ($http) {
 
 services.factory('Account', ['$http', function ($http) {
     return {
+        checkLogin: function() {
+            return $http.get('/api/check_login/');
+        },
+        
         get: function (username, password) {
             return $http.get('/api/account/' + username + "/" + password);
         },

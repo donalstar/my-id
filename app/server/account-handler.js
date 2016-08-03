@@ -72,43 +72,83 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
 }
 
 
+
 /**
  *
  * @param accountInfo
  * @param passphrase
  * @param contract
  * @param balance
- * @param res
+ * @returns {Promise}
  */
-function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
+function getAccountInfo(accountInfo, passphrase, contract, balance) {
 
-    var logged_in = (passphrase == 'undefined' || passphrase == null);
+    return new Promise(
+        function (resolve, reject) {
 
-    console.log("account unlock required: " + !logged_in);
+            var logged_in = (passphrase == 'undefined' || passphrase == null);
 
-    // need to check if account is unlocked
-    if (!logged_in) {
-        utility.unlockAccount(accountInfo.account, passphrase).then(function (result) {
-            console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
+            console.log("account unlock required: " + !logged_in);
 
-            getAccountData(accountInfo, contract, balance, res);
-        }).catch(function (error) {172
+            // need to check if account is unlocked
+            if (!logged_in) {
+                utility.unlockAccount(accountInfo.account, passphrase).then(function (result) {
+                    console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
-            console.log("Failed to unlock account " + error.message);
+                    return getAccountData(accountInfo, contract, balance);
+                }).then(function (result) {
+                    resolve(result);
+                }).catch(function (error) {
+                    reject(error);
+                });
+            }
+            else {
+                // assume account is unlocked already
+                getAccountData(accountInfo, contract, balance).then(function (result) {
+                    resolve(result);
+                }).catch(function (error) {
+                    reject(error);
+                });
+            }
+        }
+    );
+}
 
-            var message = 'system error';
+/**
+ *
+ * @param accountInfo
+ * @returns {Promise}
+ */
+function topUpAccount(accountInfo) {
 
-            if (error.code == -32000) {
-                message = error.message;
+    return new Promise(
+        function (resolve, reject) {
+
+            try {
+                var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+
+                console.log("account " + accountInfo.account + " : balance (finney): " + balance);
+
+                if (balance < 5) {
+                    console.log("Account Balance too low - top up...");
+
+                    var initialAccountBalance = 20;
+
+                    utility.addFundsFromMaster(accountInfo.account, initialAccountBalance).then(function (amount) {
+                        resolve(balance);
+                    }).catch(function (error) {
+                        reject(error);
+                    });
+                }
+                else {
+                    resolve(balance);
+                }
+            } catch (e) {
+                reject(e);
             }
 
-            sendErrorResponse(res, message);
-        });
-    }
-    else {
-        // assume account is unlocked already
-        getAccountData(accountInfo, contract, balance, res);
-    }
+        }
+    );
 }
 
 /**
@@ -116,34 +156,40 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
  * @param accountInfo
  * @param contract
  * @param balance
- * @param res
+ * @returns {Promise}
  */
-function getAccountData(accountInfo, contract, balance, res) {
-    contract.the_name.call().then(function (the_name) {
-        attributesHandler.getAttributes(accountInfo, function (error, attributes) {
+function getAccountData(accountInfo, contract, balance) {
 
-            if (!error) {
-                var profile = getDefaultProfile();
+    return new Promise(
+        function (resolve, reject) {
+            contract.the_name.call().then(function (the_name) {
+                attributesHandler.getAttributes(accountInfo, function (error, attributes) {
 
-                if (attributes != null) {
-                    profile = JSON.parse(attributes);
-                }
+                    if (!error) {
+                        var profile = getDefaultProfile();
 
-                res.send(JSON.stringify(
-                    {
-                        result: true,
-                        balance: balance,
-                        first_name: the_name[0],
-                        last_name: the_name[1],
-                        profile: profile,
-                        error: error
-                    }));
-            }
-            else {
-                sendErrorResponse(error.message);
-            }
-        });
-    });
+                        if (attributes != null) {
+                            profile = JSON.parse(attributes);
+                        }
+
+                        var result = {
+                            result: true,
+                            balance: balance,
+                            first_name: the_name[0],
+                            last_name: the_name[1],
+                            profile: profile,
+                            error: error
+                        };
+
+                        resolve(result);
+                    }
+                    else {
+                        reject(error);
+                    }
+                });
+            });
+        }
+    );
 }
 
 function getDefaultProfile() {
@@ -178,14 +224,14 @@ function sendErrorResponse(res, message) {
 
 module.exports = {
 
-
     /**
      *
+     * @param session
      * @param username
      * @param passphrase
      * @param res
      */
-    getAccount: function (username, passphrase, res) {
+    getAccount: function (session, username, passphrase, res) {
 
         console.log("getAccount - " + username);
 
@@ -193,34 +239,22 @@ module.exports = {
             if (accountInfo) {
                 var contract = IdStore.at(accountInfo.contract);
 
-                try {
-                    var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+                topUpAccount(accountInfo).then(function (balance) {
+                    return getAccountInfo(accountInfo, passphrase, contract, balance);
+                }).then(function (result) {
+                    session.logged_in = true;
+                    session.username = username;
+                    
+                    res.send(JSON.stringify(result));
+                }).catch(function (error) {
+                    console.log("ERROR " + error);
 
-                    console.log("account " + accountInfo.account + " : balance (finney): " + balance);
-
-                    if (balance < 5) {
-                        console.log("Account Balance too low - top up...");
-
-                        var initialAccountBalance = 20;
-
-                        utility.addFundsFromMaster(accountInfo.account, initialAccountBalance).then(function (amount) {
-                            getAccountInfo(accountInfo, passphrase, contract, balance, res);
-                        }).catch(function (error) {
-                            console.log("ERROR " + error);
-                        });
-                    }
-                    else {
-                        getAccountInfo(accountInfo, passphrase, contract, balance, res);
-                    }
-                } catch (e) {
-                    console.log("Error " + e);
-
-                    sendErrorResponse(res, e.message);
-                }
+                    sendErrorResponse(res, error.message);
+                });
             }
         });
     },
-
+    
     /**
      *
      * @param username
