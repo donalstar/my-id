@@ -61,6 +61,8 @@ module.exports = {
      */
     createAccount: function (username, first_name, last_name, passphrase, res) {
 
+        var response = null;
+        
         // QUICK TEST -- GET COINS (110 finney)
         var initialAccountBalance = 210;
 
@@ -84,14 +86,16 @@ module.exports = {
             return utility.buyTokens(accountAddress);
 
         }).then(function (tokens) {
-            utility.addToCustomerFile(username, first_name, last_name, accountAddress, function () {
-                console.log("Account creation complete");
+            return utility.addToCustomerFile(username, first_name, last_name, accountAddress);
+        }).then(function () {
+            console.log("Account creation complete");
 
-                res.send(JSON.stringify({value: "ok"}));
-            });
+            response = JSON.stringify({value: "ok"});
         }).catch(function (error) {
-            res.send(JSON.stringify({error: error}));
+            response = JSON.stringify({error: error});
         });
+
+        res.send(response);
     }
 }
 ;

@@ -47,6 +47,41 @@ function getNextToken(accounts, index, result, callback) {
 
 }
 
+/**
+ *
+ * @param filename
+ * @param value
+ * @returns {Promise}
+ */
+function addValueToFile(filename, value) {
+
+    return new Promise(
+        function (resolve, reject) {
+            fs.readFile(filename, 'utf8', function (err, data) {
+                if (!err) {
+                    var result = JSON.parse(data);
+
+                    result.push(value);
+
+                    fs.writeFile(filename, JSON.stringify(result), function (err) {
+                        if (!err) {
+                            console.log("The file was saved!");
+
+                            resolve();
+                        }
+                        else {
+                            reject(err);
+                        }
+                    });
+                }
+                else {
+                    reject(err);
+                }
+            });
+        }
+    );
+}
+
 var self = module.exports = {
 
     /**
@@ -83,14 +118,17 @@ var self = module.exports = {
     unlockAccount: function (address, passphrase) {
         return new Promise(
             function (resolve, reject) {
+                console.log("unlock account " + address + " PP " + passphrase);
+
+                console.log("Use client " + client + " " + client.host + " " + client.port);
+
                 client.call("personal_unlockAccount", [address, passphrase, config.account_unlock_duration],
                     function (err, result) {
                         if (!err) {
-                            console.log("Unlocked account: " + address);
                             resolve(result);
                         }
                         else {
-                            console.log("Failed to unlock account: " + address);
+                            console.log("failed to unlock account: " + address + " : " + err);
 
                             reject(err);
                         }
@@ -105,24 +143,21 @@ var self = module.exports = {
      * @param callback
      */
     getAccountInfo: function (username, callback) {
-        self.getAccounts(accountsFile, function (err, result) {
-            if (err) {
-                callback(err, null);
-            }
-
+        self.getAccounts(accountsFile).then(function (result) {
             var account;
 
             for (index in result) {
 
                 if (username == result[index].username) {
-                    console.log("matched username! - contract = " + result[index].contract);
+                    console.log("checked accounts file - username " + username + " valid");
                     account = result[index];
                     break;
                 }
             }
 
             callback(null, account);
-
+        }).catch(function (error) {
+            callback(error, null);
         });
     },
 
@@ -132,17 +167,13 @@ var self = module.exports = {
      * @returns {Promise}
      */
     getCustomerInfo: function (username) {
+
         return new Promise(
             function (resolve, reject) {
-                self.getAccounts(customersFile, function (err, result) {
-                    if (err) {
-                        reject(err);
-                    }
-
+                self.getAccounts(accountsFile).then(function (result) {
                     var account;
 
                     for (index in result) {
-
                         if (username == result[index].username) {
                             account = result[index];
                             break;
@@ -150,6 +181,8 @@ var self = module.exports = {
                     }
 
                     resolve(account);
+                }).catch(function (error) {
+                    reject(error);
                 });
             }
         );
@@ -157,29 +190,35 @@ var self = module.exports = {
 
     /**
      *
-     * @param callback
+     * @returns {*|Promise}
      */
-    getUserAccounts: function (callback) {
-        self.getAccounts(accountsFile, callback);
+    getUserAccounts: function () {
+        return self.getAccounts(accountsFile);
     },
 
     /**
      *
      * @param fileName
-     * @param callback
+     * @returns {Promise}
      */
-    getAccounts: function (fileName, callback) {
-        var result;
+    getAccounts: function (fileName) {
 
-        fs.readFile(fileName, 'utf8', function (err, data) {
-            if (err) {
-                callback(err, null);
+        return new Promise(
+            function (resolve, reject) {
+                var result;
+
+                fs.readFile(fileName, 'utf8', function (err, data) {
+                    if (!err) {
+                        result = JSON.parse(data);
+
+                        resolve(result);
+                    }
+                    else {
+                        reject(err);
+                    }
+                });
             }
-
-            result = JSON.parse(data);
-
-            callback(null, result);
-        });
+        );
     },
 
     /**
@@ -201,23 +240,25 @@ var self = module.exports = {
     },
 
     /**
-     * 
+     *
      * @returns {Promise}
      */
     getTokenBalances: function () {
 
         return new Promise(
             function (resolve, reject) {
-                self.getUserAccounts(function (error, accounts) {
+
+                self.getUserAccounts().then(function (accounts) {
                     var result = [];
 
                     getNextToken(accounts, 0, result, function () {
                         resolve(result);
                     });
+                }).catch(function (error) {
+                    reject(error);
                 });
             }
         );
-
     },
 
     /**
@@ -280,7 +321,7 @@ var self = module.exports = {
                     if (!err) {
                         var masterAccount = accounts[0];
 
-                        self.addFunds(masterAccount, to_address, amount, function () {
+                        self.addFunds(masterAccount, to_address, amount).then(function () {
                             resolve(amount);
                         });
                     }
@@ -297,37 +338,40 @@ var self = module.exports = {
      * @param from_address
      * @param to_address
      * @param amount
-     * @param callback
      */
-    addFunds: function (from_address, to_address, amount, callback) {
-        var quantity = web3.toWei(amount, "finney");
+    addFunds: function (from_address, to_address, amount) {
 
-        var transaction = web3.eth.sendTransaction({
-            from: from_address,
-            to: to_address,
-            value: quantity,
-            gas: 3000000
-        });
+        return new Promise(
+            function (resolve, reject) {
+                var quantity = web3.toWei(amount, "finney");
 
-        console.log("CREATED TXN " + transaction);
+                var transaction = web3.eth.sendTransaction({
+                    from: from_address,
+                    to: to_address,
+                    value: quantity,
+                    gas: 3000000
+                });
 
-        // TODO: How to handle when transaction is mined
-        // For now, wait for 1st pending transaction
+                console.log("CREATED TXN " + transaction);
 
-        var filter = web3.eth.filter('pending');
+                // TODO: How to handle when transaction is mined
+                // For now, wait for 1st pending transaction
 
-        filter.watch(function (error, result) {
-            var balance = web3.eth.getBalance(to_address);
+                var filter = web3.eth.filter('pending');
 
-            if (balance > 0) {
-                console.log("Sent funds to " + to_address);
+                filter.watch(function (error, result) {
+                    var balance = web3.eth.getBalance(to_address);
 
-                filter.stopWatching();
+                    if (balance > 0) {
+                        console.log("Sent funds to " + to_address);
 
-                callback();
+                        filter.stopWatching();
+
+                        resolve();
+                    }
+                });
             }
-
-        });
+        );
     },
 
     /**
@@ -337,35 +381,20 @@ var self = module.exports = {
      * @param last_name
      * @param accountAddress
      * @param contractAddress
-     * @param callback
      */
-    addToFile: function (username, first_name, last_name, accountAddress, contractAddress, callback) {
-        var result;
+    addToFile: function (username, first_name, last_name, accountAddress, contractAddress) {
 
-        fs.readFile(accountsFile, 'utf8', function (err, data) {
-            if (err) throw err;
-            result = JSON.parse(data);
+        var account =
+        {
+            username: username,
+            first_name: first_name,
+            last_name: last_name,
+            account: accountAddress,
+            contract: contractAddress
+        };
 
-            result.push({
-                username: username,
-                first_name: first_name,
-                last_name: last_name,
-                account: accountAddress,
-                contract: contractAddress
-            });
-
-            fs.writeFile(accountsFile, JSON.stringify(result), function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-
-                console.log("The file was saved!");
-
-                callback();
-            });
-        });
-    }
-    ,
+        addValueToFile(accountsFile, account);
+    },
 
     /**
      *
@@ -373,32 +402,18 @@ var self = module.exports = {
      * @param first_name
      * @param last_name
      * @param accountAddress
-     * @param callback
+     * @returns {Promise}
      */
-    addToCustomerFile: function (username, first_name, last_name, accountAddress, callback) {
-        var result;
+    addToCustomerFile: function (username, first_name, last_name, accountAddress) {
 
-        fs.readFile(customersFile, 'utf8', function (err, data) {
-            if (err) throw err;
-            result = JSON.parse(data);
+        var customer = {
+            username: username,
+            first_name: first_name,
+            last_name: last_name,
+            account: accountAddress
+        };
 
-            result.push({
-                username: username,
-                first_name: first_name,
-                last_name: last_name,
-                account: accountAddress
-            });
-
-            fs.writeFile(customersFile, JSON.stringify(result), function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-
-                console.log("The file was saved!");
-
-                callback();
-            });
-        });
+        addValueToFile(customersFile, customer);
     },
 
     logTokenTransfer: function () {
@@ -416,36 +431,40 @@ var self = module.exports = {
         });
     },
 
-    listenOnTokenTransfer: function (callback) {
-        var contract = Coin.at(config.coin_bank);
+    listenOnTokenTransfer: function () {
 
-        var event = contract.TransferTokens();
+        return new Promise(
+            function (resolve, reject) {
+                var contract = Coin.at(config.coin_bank);
 
-        event.watch(function (error, result) {
+                var event = contract.TransferTokens();
 
-            if (!error) {
-                callback(null, result.args);
+                event.watch(function (error, result) {
+
+                    event.stopWatching();
+
+                    if (!error) {
+                        resolve(result.args);
+                    }
+                    else {
+                        reject(error);
+                    }
+                });
             }
-            else {
-                callback(error, null);
-            }
-
-            event.stopWatching();
-        });
+        );
     },
-    
-    getAttributeTypes: function() {
+
+    getAttributeTypes: function () {
         var types = [];
 
         var value_attributes = attributes.getValueAttributes();
-        
 
         for (index in value_attributes) {
             var value = value_attributes[index];
-            
+
             types.push(value.name);
         }
-        
+
         return types;
     }
 };

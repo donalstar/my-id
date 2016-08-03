@@ -186,36 +186,29 @@ var self = module.exports = {
             }
         });
 
-        utility.listenOnTokenTransfer(function (error, result) {
-            if (!error) {
-                console.log("getAttribute : transfer to: " + result.to + " from: " + result.from
-                    + " val: " + result.value);
+        utility.listenOnTokenTransfer().then(function (result) {
+            console.log("getAttribute : transfer to: " + result.to + " from: " + result.from
+                + " val: " + result.value);
 
-                utility.getTokens(accountInfo.account).then(function (tokens) {
-                    console.log("got tokens bal (new) " + tokens);
+            return utility.getTokens(accountInfo.account);
+        }).then(function (tokens) {
 
-                    tokens_value = tokens;
+            console.log("got tokens bal (new) " + tokens);
 
-                    got_tokens = true;
+            tokens_value = tokens;
 
-                    if (got_tokens == true && got_attribute == true) {
-                        result.data = data_value;
+            got_tokens = true;
 
-                        result.tokens = tokens_value;
+            if (got_tokens == true && got_attribute == true) {
+                result.data = data_value;
 
-                        callback(error, result);
-                    }
+                result.tokens = tokens_value;
 
-                });
+                callback(error, result);
             }
-            else {
-                console.log("Error processing token transfer: " + error);
 
-                callback(error, null);
-            }
-        });
-
-        contract.getAttribute(attributeId, {from: accountInfo.account}).then(function (result) {
+            return contract.getAttribute(attributeId, {from: accountInfo.account});
+        }).then(function (result) {
             console.log("Got Attrib: " + result);
         }).catch(function (error) {
             console.log("Got error " + error);
@@ -225,15 +218,17 @@ var self = module.exports = {
     },
 
     getAttributes: function (accountInfo, callback) {
+        console.log("get attributes for account " + accountInfo.username);
+
         var contract = IdStore.at(accountInfo.contract);
 
         contract.attributes.call().then(
             function (attributes_location) {
-                console.log("Got Attribs Loc: " + attributes_location);
+                console.log("got attributes location: " + attributes_location);
 
-                if (attributes_location != "0") {
+                if (attributes_location != "") {
                     file_store.readFromFile(attributes_location, function (error, data) {
-                        callback(null, data);
+                        callback(error, data);
                     });
                 }
                 else {

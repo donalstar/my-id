@@ -11,8 +11,12 @@ module.exports = {
      */
     readFromFile: function (file_id, callback) {
 
+        console.log("ipfs : read from file " + file_id);
+
         ipfs.block.get(file_id)
             .then(function (result) {
+
+                console.log("ipfs : read successful");
 
                 let buff = '';
 
@@ -21,14 +25,21 @@ module.exports = {
                         buff += data;
                     })
                     .on('end', function () {
+                        console.log("ipfs : file data " + buff);
+
                         callback(null, buff);
                     })
                 ;
 
             })
             .catch(function (err) {
-                callback(err, null);
+                console.log("ipfs : read error " + err);
 
+                if (err.code == 'ECONNREFUSED') {
+                    err.message = "Failed to connect to IPFS";
+                }
+
+                callback(err, null);
             })
     },
 

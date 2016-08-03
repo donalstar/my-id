@@ -72,7 +72,6 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
 }
 
 
-
 /**
  *
  * @param accountInfo
@@ -83,16 +82,19 @@ function createContract(firstName, lastName, accountAddress, masterAccount, call
  */
 function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
 
-    var logged_in = (passphrase != undefined && passphrase != null);
-    
+    var logged_in = (passphrase == 'undefined' || passphrase == null);
+
+    console.log("account unlock required: " + !logged_in);
+
     // need to check if account is unlocked
     if (!logged_in) {
         utility.unlockAccount(accountInfo.account, passphrase).then(function (result) {
             console.log("unlockAccount " + accountInfo.account + " - done: success " + result);
 
             getAccountData(accountInfo, contract, balance, res);
-        }).catch(function (error) {
-            console.log("Failed to unlock account " + error);
+        }).catch(function (error) {172
+
+            console.log("Failed to unlock account " + error.message);
 
             var message = 'system error';
 
@@ -100,10 +102,7 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
                 message = error.message;
             }
 
-            res.send(JSON.stringify(
-                {
-                    error: message
-                }));
+            sendErrorResponse(res, message);
         });
     }
     else {
@@ -113,7 +112,7 @@ function getAccountInfo(accountInfo, passphrase, contract, balance, res) {
 }
 
 /**
- * 
+ *
  * @param accountInfo
  * @param contract
  * @param balance
@@ -123,21 +122,26 @@ function getAccountData(accountInfo, contract, balance, res) {
     contract.the_name.call().then(function (the_name) {
         attributesHandler.getAttributes(accountInfo, function (error, attributes) {
 
-            var profile = getDefaultProfile();
+            if (!error) {
+                var profile = getDefaultProfile();
 
-            if (attributes != null) {
-                profile = JSON.parse(attributes);
+                if (attributes != null) {
+                    profile = JSON.parse(attributes);
+                }
+
+                res.send(JSON.stringify(
+                    {
+                        result: true,
+                        balance: balance,
+                        first_name: the_name[0],
+                        last_name: the_name[1],
+                        profile: profile,
+                        error: error
+                    }));
             }
-
-            res.send(JSON.stringify(
-                {
-                    result: true,
-                    balance: balance,
-                    first_name: the_name[0],
-                    last_name: the_name[1],
-                    profile: profile,
-                    error: error
-                }));
+            else {
+                sendErrorResponse(error.message);
+            }
         });
     });
 }
@@ -146,7 +150,7 @@ function getDefaultProfile() {
     var profile = [];
 
     var attribute_types = utility.getAttributeTypes();
-    
+
     // for (index in attribute_types) {
     //     var type = attribute_types[index];
     //
@@ -156,6 +160,20 @@ function getDefaultProfile() {
     //profile.push({name: 'ssn', value: "", access: 0});
 
     return profile;
+}
+
+/**
+ *
+ * @param res
+ * @param message
+ */
+function sendErrorResponse(res, message) {
+    console.log("sendErrorResponse - " + message);
+
+    res.status(500).send(JSON.stringify(
+        {
+            message: message
+        }));
 }
 
 module.exports = {
@@ -169,27 +187,35 @@ module.exports = {
      */
     getAccount: function (username, passphrase, res) {
 
+        console.log("getAccount - " + username);
+
         utility.getAccountInfo(username, function (error, accountInfo) {
             if (accountInfo) {
                 var contract = IdStore.at(accountInfo.contract);
 
-                var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
+                try {
+                    var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
 
-                console.log("Account " + accountInfo.account + " Balance (wei): " + balance);
+                    console.log("account " + accountInfo.account + " : balance (finney): " + balance);
 
-                if (balance < 5) {
-                    console.log("Account Balance too low - top up...");
+                    if (balance < 5) {
+                        console.log("Account Balance too low - top up...");
 
-                    var initialAccountBalance = 20;
+                        var initialAccountBalance = 20;
 
-                    utility.addFundsFromMaster(accountInfo.account, initialAccountBalance).then(function (amount) {
+                        utility.addFundsFromMaster(accountInfo.account, initialAccountBalance).then(function (amount) {
+                            getAccountInfo(accountInfo, passphrase, contract, balance, res);
+                        }).catch(function (error) {
+                            console.log("ERROR " + error);
+                        });
+                    }
+                    else {
                         getAccountInfo(accountInfo, passphrase, contract, balance, res);
-                    }).catch(function (error) {
-                        console.log("ERROR " + error);
-                    });
-                }
-                else {
-                    getAccountInfo(accountInfo, passphrase, contract, balance, res);
+                    }
+                } catch (e) {
+                    console.log("Error " + e);
+
+                    sendErrorResponse(res, e.message);
                 }
             }
         });
@@ -227,12 +253,12 @@ module.exports = {
                                 }));
                         }
                         else {
-                            res.status(500).send({message: err.message});
+                            sendErrorResponse(res, err.message);
                         }
 
                     });
                 }).catch(function (error) {
-                    res.status(500).send({message: error.message});
+                    sendErrorResponse(res, error.message);
                 });
             }
         });
@@ -262,22 +288,21 @@ module.exports = {
                         utility.addFundsFromMaster(accountAddress, 10).then(function (amount) {
                             console.log("Successfully added funds to account " + accountAddress);
 
-                            utility.addToFile(username, first_name, last_name, accountAddress, contract.address, function () {
-                                console.log("Account creation complete");
+                            return utility.addToFile(username, first_name, last_name, accountAddress, contract.address);
+                        }).then(function () {
 
-                                res.send(JSON.stringify({value: "ok"}));
-                            });
+                            res.send(JSON.stringify({value: "ok"}));
                         }).catch(function (error) {
                             console.log('Failed to add funds : ', error);
                         });
                     }
                     else {
-                        res.status(500).send(JSON.stringify({message: err.message}));
+                        sendErrorResponse(res, err.message);
                     }
                 });
             });
         }).catch(function (error) {
-            res.status(500).send(JSON.stringify({message: error.message}));
+            sendErrorResponse(res, error.message);
         });
     },
 
@@ -286,13 +311,10 @@ module.exports = {
      * @param res
      */
     getAllAccounts: function (res) {
-        utility.getUserAccounts(function (err, result) {
-            if (err) {
-                res.status(500).send({message: err.message});
-            }
-            else {
-                res.send(result);
-            }
+        utility.getUserAccounts().then(function (result) {
+            res.send(result);
+        }).catch(function (error) {
+            sendErrorResponse(res, error.message);
         });
     },
 

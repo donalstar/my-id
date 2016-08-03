@@ -18,8 +18,6 @@ module.exports = function (app) {
      * Account
      */
     app.get('/api/account/:username/:password', function (req, response) {
-        console.log("Get account " + req.params.username);
-
         account.getAccount(req.params.username, req.params.password, response);
     });
 

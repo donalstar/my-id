@@ -106,6 +106,8 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                 .success(function (data) {
                     // if (data.result == true) {
 
+                    console.log("Account get successful!");
+                    
                     if ($rootScope.attributesLoaded == false) {
                         console.log("Login successful " + data.result + " err " + data.error);
 
@@ -135,6 +137,9 @@ application.controller('controller', ['$scope', '$rootScope', 'Attributes', 'Acc
                 })
                 .error(function (error) {
                     console.log(":Error logging in " + error);
+
+                    $scope.loginFailed = true;
+                    $scope.loginErrorMessage = error.message;
                 });
         };
 
