@@ -170,7 +170,7 @@ var self = module.exports = {
 
         return new Promise(
             function (resolve, reject) {
-                self.getAccounts(accountsFile).then(function (result) {
+                self.getAccounts(customersFile).then(function (result) {
                     var account;
 
                     for (index in result) {
@@ -431,27 +431,26 @@ var self = module.exports = {
         });
     },
 
-    listenOnTokenTransfer: function () {
 
-        return new Promise(
-            function (resolve, reject) {
-                var contract = Coin.at(config.coin_bank);
 
-                var event = contract.TransferTokens();
+    listenOnTokenTransfer: function (callback) {
+        var contract = Coin.at(config.coin_bank);
 
-                event.watch(function (error, result) {
+        var event = contract.TransferTokens();
 
-                    event.stopWatching();
+        event.watch(function (error, result) {
 
-                    if (!error) {
-                        resolve(result.args);
-                    }
-                    else {
-                        reject(error);
-                    }
-                });
+            event.stopWatching();
+            
+            if (!error) {
+                callback(null, result.args);
             }
-        );
+            else {
+                callback(error, null);
+            }
+
+            
+        });
     },
 
     getAttributeTypes: function () {

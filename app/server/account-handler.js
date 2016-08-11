@@ -271,7 +271,11 @@ module.exports = {
                 utility.getCustomerInfo(username).then(function (accountInfo) {
                     attributesHandler.getAttribute(accountInfo, contract_address, 0, function (err, result) {
 
+
+
                         if (!err) {
+                            console.log("requestData - success " + result.data);
+
                             var balance = web3.fromWei(web3.eth.getBalance(accountInfo.account), 'finney');
 
                             var tokens = result.tokens;
@@ -287,6 +291,7 @@ module.exports = {
                                 }));
                         }
                         else {
+                            console.log("requestData - error " + err);
                             sendErrorResponse(res, err.message);
                         }
 

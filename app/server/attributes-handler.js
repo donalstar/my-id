@@ -5,6 +5,7 @@ var Pudding = require("ether-pudding");
 var provider = new web3.providers.HttpProvider();
 var utility = require('./utility.js');
 var file_store = require('./file-store.js');
+var async = require("async");
 
 web3.setProvider(provider);
 Pudding.setWeb3(web3);
@@ -147,68 +148,63 @@ var self = module.exports = {
         var data_value = "";
         var tokens_value = "";
 
-        var got_attribute = false;
-        var got_tokens = false;
+        async.parallel([
 
-        // really need async in parallel here....
+            function (callback) {
+                event.watch(function (error, result) {
+                    if (result.blockNumber > block) {
+                        if (!error) {
+                            console.log(" : Bank " + result.args.bank +
+                                " Id: " + result.args.id
+                                + " Value: " + result.args.attribute);
 
-        event.watch(function (error, result) {
-            if (result.blockNumber > block) {
-                if (!error) {
-                    console.log(" : Bank " + result.args.bank +
-                        " Id: " + result.args.id
-                        + " Value: " + result.args.attribute);
+                            event.stopWatching();
 
-                    event.stopWatching();
+                            var attribute_value = result.args.attribute;
 
-                    var attribute_value = result.args.attribute;
-
-                    if (attribute_value != "0") {
-                        file_store.readFromFile(attribute_value, function (error, data) {
-
-                            got_attribute = true;
-
-                            data_value = data;
-
-                            if (got_tokens == true && got_attribute == true) {
-                                result.data = data_value;
-
-                                result.tokens = tokens_value;
-
-                                callback(error, result);
+                            if (attribute_value != "0") {
+                                file_store.readFromFile(attribute_value, function (error, data) {
+                                    callback(error, data);
+                                });
                             }
-                        });
+                            else {
+                                callback(null, null);
+                            }
+                        }
+                    }
+                });
+            },
+
+
+            function (callback) {
+                utility.listenOnTokenTransfer(function (error, result) {
+                    if (!error) {
+                        console.log("getAttribute : transfer to: " + result.to + " from: " + result.from
+                            + " val: " + result.value);
+
+                        utility.getTokens(accountInfo.account).then(function (tokens) {
+                            console.log("got tokens bal (new) " + tokens);
+
+                            callback(error, tokens);
+                        })
                     }
                     else {
-                        callback(null, null);
+                        console.log("Error processing token transfer: " + error);
+
+                        callback(error, null);
                     }
-                }
+                });
             }
+        ], function (err, results) {
+            result.data = results[0];
+
+            result.tokens = results[1];
+
+            callback(err, result);
         });
 
-        utility.listenOnTokenTransfer().then(function (result) {
-            console.log("getAttribute : transfer to: " + result.to + " from: " + result.from
-                + " val: " + result.value);
 
-            return utility.getTokens(accountInfo.account);
-        }).then(function (tokens) {
-
-            console.log("got tokens bal (new) " + tokens);
-
-            tokens_value = tokens;
-
-            got_tokens = true;
-
-            if (got_tokens == true && got_attribute == true) {
-                result.data = data_value;
-
-                result.tokens = tokens_value;
-
-                callback(error, result);
-            }
-
-            return contract.getAttribute(attributeId, {from: accountInfo.account});
-        }).then(function (result) {
+        contract.getAttribute(attributeId, {from: accountInfo.account}).then(function (result) {
             console.log("Got Attrib: " + result);
         }).catch(function (error) {
             console.log("Got error " + error);
@@ -216,6 +212,7 @@ var self = module.exports = {
             callback(null, null);
         });
     },
+
 
     getAttributes: function (accountInfo, callback) {
         console.log("get attributes for account " + accountInfo.username);

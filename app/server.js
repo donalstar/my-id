@@ -29,7 +29,7 @@ require('./server/routes.js')(app);
 var utility = require('./server/utility.js');
 
 // Logging
-utility.logTokenTransfer();
+// utility.logTokenTransfer();
 
 // listen (start app with node server.js) ======================================
 app.listen(port);
