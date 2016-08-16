@@ -5,6 +5,7 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
 
         $scope.accountCreateInProgress = false;
         $scope.queryInProgress = false;
+
         $scope.queryStatus = '';
 
         $scope.customerData = {};
@@ -112,7 +113,7 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
                     $scope.accountCreateStatus = 'account created!';
                     $scope.accountCreateInProgress = false;
 
-                    window.location = "#admin_main";
+                    window.location = "#admin_home";
 
                     $scope.ok();
                 })
@@ -125,10 +126,31 @@ application.controller('admin_controller', ['$scope', '$rootScope', 'Customer', 
                 });
         };
 
+        $scope.getTokenBalance = function(username) {
+            var balance = null;
+
+            var tokenBalances = $rootScope.accountBalances;
+
+            for (var index in tokenBalances) {
+                var item = tokenBalances[index];
+                
+                if (item.account.username == username) {
+                    balance = item.tokens;
+                }
+            }
+            
+            return balance;
+        };
+
+        $scope.userQueryInProgress = function(account_name) {
+            return $scope.queryInProgress && (account_name == $scope.queryAccount);
+        };
+
         $scope.requestData = function (account_name) {
             console.log("REQUEST DATA for " + account_name);
 
             $scope.queryInProgress = true;
+            $scope.queryAccount = account_name;
 
             Account.getData($scope.user, account_name, "attrib")
                 .success(function (data) {

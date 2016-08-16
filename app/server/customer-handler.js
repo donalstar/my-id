@@ -91,11 +91,15 @@ module.exports = {
             console.log("Account creation complete");
 
             response = JSON.stringify({value: "ok"});
+
+            res.send(response);
         }).catch(function (error) {
             response = JSON.stringify({error: error});
+
+            res.send(response);
         });
 
-        res.send(response);
+
     }
 }
 ;
