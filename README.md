@@ -1,4 +1,4 @@
 # my-id
-ID Store
+My ID Store
 
-See: http://my-id.store/#/home
+See: http://my-id.store/
