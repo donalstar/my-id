@@ -3,7 +3,7 @@ My ID Store
 
 See: http://my-id.store/
 
-![Alt text](https://github.com/donalstar/my-id/blob/master/assets/my-id-store.png| width=100 "Title")
 
-<img src="https://github.com/donalstar/my-id/blob/master/assets/my-id-store.png">
+
+<img src="https://github.com/donalstar/my-id/blob/master/assets/my-id-store.png" width="100">
 
