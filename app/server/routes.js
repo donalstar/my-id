@@ -1,6 +1,10 @@
 var account = require('./account-handler.js');
 var customer = require('./customer-handler.js');
 var attributes = require('./attributes-handler.js');
+var mail = require('./mail.js');
+
+var cors = require('cors');
+
 
 module.exports = function (app) {
 
@@ -23,7 +27,7 @@ module.exports = function (app) {
     });
 
     app.get('/api/check_login', function (req, response) {
-        console.log("check login! - from session: " +  req.session.logged_in );
+        console.log("check login! - from session: " + req.session.logged_in);
 
         response.send(JSON.stringify(
             {
@@ -44,6 +48,12 @@ module.exports = function (app) {
 
     app.post('/api/account', function (req, response) {
         account.createAccount(req.body.username, req.body.firstName, req.body.lastName, req.body.password, response);
+    });
+
+    app.options('/api/mail', cors()); // enable pre-flight request for POST request
+
+    app.post('/api/mail', cors(), function (req, response) {
+        mail.sendMail(req.body.name, req.body.email_address, req.body.message, response);
     });
 
     /**

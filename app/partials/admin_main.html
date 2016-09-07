@@ -65,7 +65,7 @@
                                                             <button type="submit"
                                                                     ng-click="requestData(account.username)"
                                                                     class="btn btn-primary"
-                                                                    style="width:100px">Get SSN
+                                                                    style="width:100px">Get Data
                                                             </button>
                                                         </div>
 
@@ -99,6 +99,58 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-cog fa-fw"></i> My Account
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item">
+                                        <i class="fa fa-money fa-fw"></i> Balance
+                                    <span class="pull-right"><em>{{accountBalance}}&#402;</em>
+                                    </span>
+                                    </a>
+
+                                    <a href="#" class="list-group-item">
+                                        <i class="fa fa-money fa-fw"></i> Token Balance
+                                    <span class="pull-right"><em>{{accountTokens}} &#8366;</em>
+                                    </span>
+                                    </a>
+
+                                </div>
+
+
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+
+                        <!-- /.panel -->
+                        <div class="chat-panel panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-comments fa-fw"></i>
+                                Actions
+
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+
+                                <button type="submit"
+                                        ng-click="requestTokens()"
+                                        class="btn btn-primary"
+                                        style="width:300px">Request More Tokens [test]
+                                </button>
+
+                            </div>
+
+                            <!-- /.panel-footer -->
+                        </div>
+                        <!-- /.panel .chat-panel -->
+                    </div>
+                    <!-- /.col-lg-4 -->
 
                 </div>
 

@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 
 
+
 // configuration ===============================================================
 
 mongoose.connect(database.remoteUrl);
@@ -22,6 +23,26 @@ app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse applicati
 app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-Method-Override header in the request
 
 app.use(session({secret: 'ssshhhhh'}));
+
+
+
+// // // Add headers
+// app.use(function (req, res, next) {
+// // // Website you wish to allow to connect
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+// //
+// // // Request methods you wish to allow
+// //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+// //
+// // // Request headers you wish to allow
+// //     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+// // //
+// // // // Set to true if you need the website to include cookies in the requests sent
+// // // // to the API (e.g. in case you use sessions)
+// // //     res.setHeader('Access-Control-Allow-Credentials', true);
+// //
+// });
+
 
 // routes ======================================================================
 require('./server/routes.js')(app);
